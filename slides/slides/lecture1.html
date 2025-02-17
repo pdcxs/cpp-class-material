@@ -13,7 +13,7 @@
 
 	<link rel="stylesheet" href="../dist/reset.css">
 	<link rel="stylesheet" href="../dist/reveal.css">
-	<link rel="stylesheet" href="../dist/theme/blood.css" id="theme">
+	<link rel="stylesheet" href="../dist/theme/dracula.css" id="theme">
 
 	<!-- Theme used for syntax highlighting of code -->
 	<link rel="stylesheet" href="../plugin/highlight/monokai.css">
@@ -33,7 +33,614 @@
 				<p><small>24课时教学内容</small></p>
 				<p style="color:red">成绩分布</p>
 				<p><small>80%卷面成绩，20%平时成绩</small></br>
-				<small>平时成绩：回答问题、作业</small></p>
+					<small>平时成绩：回答问题、作业</small>
+				</p>
+			</section>
+
+			<section style="text-align:left">
+				<h3>课程资料</h3>
+				<p><a href="https://github.com/pdcxs/cpp-class-material">https://github.com/pdcxs/cpp-class-material</a>
+					</br>
+					QQ群：1034981027</p>
+					<img src="./imgs/lec1/qq.jpg" alt="QQ群" style="height: 400px;">
+
+			</section>
+
+			<!-- <section style="text-align:left">
+				<h3>目录</h3>
+
+			</section> -->
+			<section data-markdown style="text-align: left;">
+				<textarea data-template>
+					### 第一课
+
+					   1.1 软件与硬件
+
+					   1.2 编程工具介绍
+
+					   1.3 开发环境搭建
+
+					   1.4 编程语言派系与历史
+
+					   1.5 最简单的程序
+
+				</textarea>
+			</section>
+
+			<section style="text-align: left">
+				<section data-auto-animate>
+					<h3>1.1 软件与硬件</h3>
+					<h4>硬件</h4>
+					<ul>
+						<li>输入设备：<br>
+							<ol>
+								<li>键盘</li>
+								<li>鼠标</li>
+								<li>摄像头</li>
+								<li>……</li>
+							</ol>
+						</li>
+						<li>输出设备:<br>
+							<ol>
+								<li>显示器</li>
+								<li>打印机</li>
+								<li>……</li>
+							</ol>
+						</li>
+					</ul>
+				</section>
+				<section data-auto-animate>
+					<h3>1.1 软件与硬件</h3>
+					<h4>硬件</h4>
+					<ul>
+						<li>计算机体系架构:<br>
+							<ol>
+								<li>内存</li>
+								<li>硬盘</li>
+								<li>CPU</li>
+								<li>GPU</li>
+								<li>……</li>
+							</ol>
+						</li>
+					</ul>
+				</section>
+				<section data-auto-animate>
+					<h3>1.1 软件与硬件</h3>
+					<h4>软件</h4>
+					<ul>
+						<li>
+							操作系统：<br>
+							<ol>
+								<li>Windows</li>
+								<li>Linux</li>
+								<li>Mac</li>
+							</ol>
+						</li>
+						<li>
+							编程相关：<br>
+							<ol>
+								<li>编译器</li>
+								<li>解释器</li>
+								<li>编辑器</li>
+								<li>IDE</li>
+							</ol>
+						</li>
+						<li>其他（办公、通信、娱乐……）</li>
+					</ul>
+				</section>
+			</section>
+
+			<section style="text-align: left;">
+				<section data-auto-animate>
+					<h3>1.2 编程工具介绍</h3>
+					<h4>编程语言分类</h4>
+					<ul>
+						<li class="fragment">编译型语言</li>
+						<li class="fragment">解释型语言</li>
+						<li class="fragment">静态类型语言</li>
+						<li class="fragment">动态类型语言</li>
+						<li class="fragment">强类型语言</li>
+						<li class="fragment">弱类型语言</li>
+					</ul>
+				</section>
+
+				<section data-auto-animate>
+					<h3>1.2 编程工具介绍</h3>
+					<h4>编程语言分类</h4>
+					<ul>
+						<li class="fragment highlight-red">过程式语言</li>
+						<li class="fragment highlight-red">面向对象语言</li>
+						<li class="fragment highlight-red">函数式语言</li>
+						<li class="fragment highlight-red">声明式语言</li>
+						<li class="fragment highlight-red">标记语言</li>
+					</ul>
+				</section>
+
+				<section data-auto-animate>
+					<h3>1.2 编程工具介绍</h3>
+					<h4>C++</h4>
+					<p>C++是一种静态类型语言</p>
+					<p>C++是一种弱类型语言</p>
+					<p>C++是一种编译型语言</p>
+					<p>C++是一种多范式语言</p>
+				</section>
+			</section>
+
+			<section style="text-align: left;">
+				<section data-auto-animate>
+					<h3>1.3 开发环境搭建</h3>
+
+					<p>参考视频:</p>
+					<p><a href="https://www.bilibili.com/video/BV1beNfepExE">
+							环境搭建： https://www.bilibili.com/video/BV1beNfepExE
+						</a></p>
+				</section>
+
+				<section data-auto-animate>
+					<h3>1.3 开发环境搭建</h3>
+
+					<p>1、使用 <code>xboxdownload</code> 访问 <a href="https://github.com">Github</a></p>
+				</section>
+
+				<section data-auto-animate>
+					<h3>1.3 开发环境搭建</h3>
+
+					<p>2、使用 <a href="https://scoop.sh/"><code>scoop</code></a> 集中管理软件</p>
+					<p><small>环境变量设置</small></p>
+					<p><small>添加软件源</small></p>
+					<p><small>安装vscode、mingw、cmake、xmake</small></p>
+				</section>
+
+				<section data-auto-animate>
+					<h3>1.3 开发环境搭建</h3>
+					<p>3、配置vscode</p>
+					<p><small>安装 <code>C/C++ 插件</code></small></p>
+					<p><small>安装 Xmake </small></p>
+					<p><small>安装简体中文 </small></p>
+				</section>
+
+				<section data-auto-animate>
+					<h3>1.3 开发环境搭建</h3>
+					<p>传统编译过程</p>
+					<p><small>手动设置第三方库</small></p>
+					<p><small>g++ -c source.cpp</small></p>
+					<p><small>g++ source.o</small></p>
+					<p><small>手写 Makefile</small></p>
+				</section>
+
+				<section data-auto-animate>
+					<h3>1.3 开发环境搭建</h3>
+					<p>现代化编译过程</p>
+					<p><small>cmake</small></p>
+					<p><small>xmake</small></p>
+					<p><small>……</small></p>
+				</section>
+
+				<section data-auto-animate>
+					<h3>1.3 开发环境搭建</h3>
+					<p>作业</p>
+					<p>在任意平台上搭建好C++开发环境，编译并运行Hello World程序。</p>
+				</section>
+			</section>
+
+			<section style="text-align: left;">
+				<section data-auto-animate>
+					<h3>1.4 编程语言派系与历史</h3>
+
+					<div style="display: flex; justify-content: space-around; align-items: center;">
+						<div>
+							<img src="./imgs/lec1/比雅尼.png" alt="Bjame" style="width: 200px;">
+							<p style="text-align: center; width:200px"><small>C++创始人 <br> Bjarne Stroustrup
+								</small></p>
+						</div>
+						<div>
+							<img src="./imgs/lec1/James.png" alt="James" style="width: 200px;">
+							<p style="text-align: center; width:200px"><small>Java 创始人 <br> James Gosling</small></p>
+						</div>
+						<div>
+							<img src="./imgs/lec1/Guido.jpg" alt="Guido" style="width: 200px;">
+							<p style="text-align: center; width:200px"><small>Python 创始人 <br> Guido van Rossum</small>
+							</p>
+						</div>
+					</div>
+
+				</section>
+
+				<section data-auto-animate>
+					<h3>1.4 编程语言派系与历史</h3>
+
+					<h4>古早时期：机器语言</h4>
+
+					<div style="display: flex; justify-content: space-around; align-items: center;">
+						<div>
+							<img src="./imgs/lec1/拜伦.png" alt="拜伦" style="width: 200px;">
+							<p style="text-align: center; width:200px"><small>英国浪漫主义诗人 - 拜伦</small></p>
+						</div>
+						<div>
+							<img src="./imgs/lec1/埃达.png" alt="埃达" style="width: 200px;">
+							<p style="text-align: center; width:200px"><small>埃达·洛夫莱斯</small></p>
+						</div>
+						<div>
+							<img src="./imgs/lec1/巴贝奇.png" alt="巴贝奇" style="width: 200px;">
+							<p style="text-align: center; width:200px"><small>查尔斯·巴贝奇</small></p>
+						</div>
+					</div>
+
+				</section>
+
+				<section data-auto-animate>
+
+					<h3>1.4 编程语言派系与历史</h3>
+
+					<h4>古早时期：机器语言</h4>
+
+					<div style="display: flex; justify-content: space-around; align-items: center;">
+						<div>
+							<img src="./imgs/lec1/分析机.png" alt="分析机" style="width: 200px;">
+							<p style="text-align: center; width:200px"><small>分析机</small></p>
+						</div>
+						<div>
+							<img src="./imgs/lec1/第一段程序.png" alt="第一段程序" style="width: 500px;">
+							<p style="text-align: center; width:500px"><small>第一段程序</small></p>
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<h3>1.4 编程语言派系与历史</h3>
+					<h3>20世纪30年代</h3>
+
+					<div style="display: flex; justify-content: space-around; align-items: center;">
+						<div>
+							<img src="./imgs/lec1/haskell_curry.png" alt="Haskell Curry" style="width: 200px;">
+							<p style="text-align: center; width:200px"><small>Haskell Brooks
+									Curry</br>美国数理学家<br>组合逻辑</small></p>
+						</div>
+						<div>
+							<img src="./imgs/lec1/church.png" alt="Alonzo Church" style="width: 200px;">
+							<p style="text-align: center; width:200px"><small>Alonzo Church <br>阿隆佐·邱奇 <br> Lambda
+									演算</small></p>
+						</div>
+					</div>
+				</section>
+
+				<section style="text-align: center;" data-auto-animate>
+					<h3>1.4 编程语言派系与历史</h3>
+					<img src="./imgs/lec1/图灵.png" />
+					<p>
+						<small>
+							艾伦·麦席森·图灵 <br> <br>
+							1937年 提出图灵机理论 <br>
+							1939年 破译德军密码
+						</small>
+					</p>
+				</section>
+
+				<section style="text-align: center;" data-auto-animate>
+					<h3>1.4 编程语言派系与历史</h3>
+					<img src="./imgs/lec1/冯诺依曼.png" />
+					<p>
+						<small>
+							约翰·冯·诺依曼 <br> <br>
+							1945年 提出冯诺依曼结构
+						</small>
+					</p>
+
+				</section>
+
+				<section data-auto-animate>
+					<h3>1.4 编程语言派系与历史</h3>
+					<div style="display: flex; justify-content: space-around; align-items: center;">
+						<div>
+							<img src="./imgs/lec1/凯瑟琳.png" alt="凯瑟琳" style="width: 200px;">
+							<p style="text-align: center; width:200px"><small>凯瑟琳·布恩 <br>1947年创造汇编语言</small></p>
+						</div>
+						<div>
+							<img src="./imgs/lec1/汇编语言.jpg" alt="汇编语言" style="width: 500px;">
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<h3>1.4 编程语言派系与历史</h3>
+					<div style="display: flex; justify-content: space-around; align-items: center;">
+						<div>
+							<img src="./imgs/lec1/约翰巴科斯.png" alt="约翰巴科斯" style="width: 200px;">
+							<p style="text-align: center; width:200px"><small>约翰巴科斯 <br>
+									IBM 公司</small></p>
+						</div>
+						<div style="width: 500px;">
+							<pre><code>
+PROGRAM TRIVIAL
+    INTEGER I
+	I = 2
+	IF(I .GE. 2) CALL PRINTIT
+	STOP
+END
+SUBROUTINE PRINTIT
+    PRINT *. 'Hola Mundo'
+	RETURN
+END
+							</code></pre>
+							<p style="text-align: center; width: 500px;"><small>Fortran语言 <br> 1966年：Fortran66 <br>
+									Latest: Fortran 2023</small></p>
+						</div>
+					</div>
+				</section>
+
+
+				<section data-auto-animate>
+					<h3>1.4 编程语言派系与历史</h3>
+					<div style="display: flex; justify-content: space-around; align-items: center;">
+						<div>
+							<img src="./imgs/lec1/约翰麦卡锡.png" alt="约翰麦卡锡" style="width: 200px;">
+							<p style="text-align: center; width:200px"><small>约翰麦卡锡 <br>
+									IBM 公司</small></p>
+						</div>
+						<div style="width: 500px;">
+							<pre><code>
+(defun all-pairs (M N)
+  (if (null M) nil
+      (append (distl (car M) N)
+	          (all-pairs (cdr M) N))))
+
+(defun distl (x N)
+  (if (null N) nil
+      (cons (list x (car N))
+	  (distl x (cdr N)))))
+							</code></pre>
+							<p style="text-align: center; width:500px;"><small>Lisp语言</small></p>
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<h3>1.4 编程语言派系与历史</h3>
+					<ol>
+						<li>1958年</li>
+						<li>美国美国计算机协会、联邦德国应用数学和力学协会</li>
+						<li>ALGOL58</li>
+						<li>ALGOL60中，引入递归、作用域、代码块等概念</li>
+					</ol>
+					<pre><code>
+BEGIN
+FILE F(KIND=REMOTE);
+  EBCDIC ARRAY E[0:11];
+  REPLACE E BY "HELLO WORLD!";
+  WRITE(F, *, E);
+END.
+					</code></pre>
+					<pre><code>
+begin
+    printf(($gl$, "Hello, World!"))
+end
+					</code></pre>
+				</section>
+
+				<section data-auto-animate>
+					<h3>1.4 编程语言派系与历史</h3>
+					<h4>1958年</h4>
+					<div style="display: flex; justify-content: space-around; align-items: center;">
+						<div>
+							<img src="./imgs/lec1/格蕾丝.png" alt="格蕾丝" style="width: 200px;">
+							<p style="text-align: center; width:200px"><small>格蕾丝·赫柏 <br>
+									IBM 公司</small></p>
+						</div>
+						<div>
+							<pre style="width: 700px; align-content: center;"><code>
+IDENTIFICATION DIVISION.
+PROGRAM-ID. MAIN.
+
+DATA DIVISION.
+	WORKING-STORAGE SECTION.
+	01 WS-STUDENT-ID PIC 9(4) VALUE 1000.
+	01 WS-STUDENT-NAME PIC A(15) VALUE 'Tim'.
+
+PROCEDURE DIVISION.
+	CALL 'UTIL' USING WS-STUDENT-ID, WS-STUDENT-NAME.
+	DISPLAY 'Student Id : ' WS-STUDENT-ID
+	DISPLAY 'Student Name : ' WS-STUDENT-NAME
+STOP RUN.
+							</code></pre>
+							<p style="text-align: center; width: 700px;"><small>COBOL语言，宏、数据结构、Bug</small></p>
+						</div>
+					</div>
+				</section>
+
+				<section style="text-align: center;" data-auto-animate>
+					<h3>1.4 编程语言派系与历史</h3>
+					<h4>1966年</h4>
+					<div>
+						<img src="./imgs/lec1/艾伦.png" alt="艾伦·凯">
+						<p><small>艾伦·凯 <br>
+								面向对象编程概念</small></p>
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<h3>1.4 编程语言派系与历史</h3>
+					<h4>1970年</h4>
+					<p>尼克劳斯维尔特: Pascal语言</p>
+					<p>肯·汤普逊: B语言、Unix操作系统 </p>
+				</section>
+
+				<section data-auto-animate>
+					<h3>1.4 编程语言派系与历史</h3>
+					<h4>1972年</h4>
+					<p><small>艾伦·凯 <br>
+							Smalltalk</small></p>
+					<pre><code>
+m1 := MyClass new.
+m2 := MyClass new.
+(m1 equals: m2) ifTrue: [
+	Transcript show: 'They are equal'
+] else: [
+	Transcript show: 'They are not equal'
+]
+						</code></pre>
+				</section>
+
+				<section data-auto-animate>
+					<h3>1.4 编程语言派系与历史</h3>
+					<h4>1973年</h4>
+
+					<div style="display: flex; justify-content: space-around; align-items: center;">
+						<div>
+							<img src="./imgs/lec1/c-author.png" alt="C语言作者" style="height: 200px;">
+							<p style="text-align: center; width: 300px;"><small>肯·汤普逊 <br>丹尼斯·里奇</small></p>
+						</div>
+						<div style="width: 400px;">
+							<pre><code>
+#include &lt;stdio&gt
+int main(void)
+{
+	printf("Hello, world!\n");
+	return 0;
+}
+</code>
+							</pre>
+							<p style="text-align: center; width: 400px;"><small>C 语言</small></p>
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<h3>1.4 编程语言派系与历史</h3>
+					<h4>1975年</h4>
+
+					<div style="display: flex; justify-content: space-around; align-items: center;">
+						<div>
+							<img src="./imgs/lec1/杰拉德.png" alt="杰拉德" style="width: 200px;">
+							<p style="text-align: center; width: 200px;"><small>杰拉德·杰伊·萨斯曼
+									<br>麻省理工学院</small></p>
+						</div>
+						<div>
+							<img src="./imgs/lec1/盖伊.png" alt="盖伊" style="width: 200px;">
+							<p style="text-align: center; width: 200px;"><small>盖伊·史提尔二世
+									<br>麻省理工学院</small></p>
+						</div>
+						<div style="width: 600px;">
+							<pre><code>
+(define my-counter
+	(let ((count 0))
+		(lambda ()
+			(set! count (+ count 1))
+			count)))
+						</code></pre>
+							<p style="text-align: center; width: 600px;"><small>Scheme 语言 闭包</small></p>
+						</div>
+					</div>
+				</section>
+
+				<section style="text-align: center;" data-auto-animate>
+					<h3>1.4 编程语言派系与历史</h3>
+					<h4>1983年</h4>
+					<img src="./imgs/lec1/比雅尼.png" />
+					<p><small>比雅尼·斯特劳斯特鲁普 <br> 贝尔实验室 </small></p>
+					<p><small>C++语言</small></p>
+
+				</section>
+
+				<section data-markdown data-auto-animate>
+					<textarea data-template data-auto-animate>
+						### 1.4 编程语言派系与历史
+
+						- 1992年
+						- 俄勒冈波特兰的函数式编程语言与计算机结构大会成立专门委员会，形成第一个Haskell版本
+						- 惰性函数式编程语言
+
+						```haskell [1-4|6-9]
+						primes = filterPrime [2..] -- 筛法求素数
+						  where
+						    filterPrime (p : xs) =
+						      p : filterPrime [x | x <- xs, x `mod` p /= 0]
+						
+						-- 快速排序
+						qsort [] = []
+						qsort (x : xs) = qsort (filter (<= x) xs) ++ [x] ++
+						               qsort (filter (> x) xs)
+						```
+
+						---
+
+						### 1.4 编程语言派系与历史
+
+						#### 1995年
+						
+						<p>詹姆斯·高斯林</p>
+						<p>Sun微系统公司</p>
+
+					</textarea>
+				</section>
+			</section>
+
+			<section>
+				<section data-auto-animate>
+					<h3>1.5 最简单的程序</h3>
+					<pre data-id="code-animation"><code data-trim data-line-numbers>
+#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+	cout << "Hello, world!" << endl;
+	return 0;
+}</code></pre>
+					<p>C++ Hello World 程序</p>
+				</section>
+				<section data-auto-animate>
+					<h3>1.5 最简单的程序</h3>
+					<pre data-id="code-animation"><code data-trim data-line-numbers="1">
+#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+	cout << "Hello, world!" << endl;
+	return 0;
+}</code></pre>
+					<p>头文件从 <code>stdio.h</code> 变为了 <code>iostream</code></p>
+				</section>
+				<section data-auto-animate>
+					<h3>1.5 最简单的程序</h3>
+					<pre data-id="code-animation"><code data-trim data-line-numbers="2">
+#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+	cout << "Hello, world!" << endl;
+	return 0;
+}</code></pre>
+					<p>使用命名空间避免命名冲突。</p>
+				</section>
+				<section data-auto-animate>
+					<h3>1.5 最简单的程序</h3>
+					<pre data-id="code-animation"><code data-trim data-line-numbers="4,6-7">
+#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+	cout << "Hello, world!" << endl;
+	return 0;
+}</code></pre>
+					<p><code>main</code> 函数为返回整型的函数，返回0表示运行成功。</p>
+				</section>
+				<section data-auto-animate>
+					<h3>1.5 最简单的程序</h3>
+					<pre data-id="code-animation"><code data-trim data-line-numbers="5">
+#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+	cout << "Hello, world!" << endl;
+	return 0;
+}</code></pre>
+					<p>新的输入/输出方法。</p>
+				</section>
+			</section>
+
+			<section style="text-align: left;">
+				<h2>课后作业</h2>
+				<p style="color: red;">简单，但是重要！</p>
+				<p>在任意平台上搭建好C++开发环境，编译并运行Hello World程序。</p>
 			</section>
 		</div>
 	</div>

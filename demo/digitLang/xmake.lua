@@ -6,6 +6,7 @@ target("digitLang")
     set_kind("binary")
     set_rundir(os.curdir())
     add_files("src/*.cpp")
+    
 
 --
 -- If you want to known more usage about xmake, please see https://xmake.io
