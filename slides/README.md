@@ -6,9 +6,15 @@
 
 注意，此方法需要安装 [nodejs](https://nodejs.org/zh-cn) 。
 
-在当前目录下执行
+在当前目录下，首次执行需要运行以下命令：
 
+```bash
+npm install
 ```
+
+之后运行（下次运行只运行此命令即可）：
+
+```bash
 npm start
 ```
 
