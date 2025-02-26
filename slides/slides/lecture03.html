@@ -361,7 +361,7 @@ Node *insert(Node *list, int element, size_t index) {
 
 delete, length, find ...
 
-- &shy;<!-- .element: class="fragment" data-fragment-index="1" -->如果需要链表结，推荐使用`std::list` （双向链表）
+- &shy;<!-- .element: class="fragment" data-fragment-index="1" -->如果需要链表，推荐使用`std::list` (双向链表)
 - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->如果需要手工实现，推荐使用 `std::shared_ptr` (智能指针)
 - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->扩展阅读：[Cons List](https://en.wikipedia.org/wiki/Cons)
 
@@ -514,7 +514,7 @@ public:
 	}
 	
 	double angle() {
-		return std::atan(y, x);
+		return std::atan2(y, x);
 	}
 };
 ```
@@ -539,7 +539,7 @@ public:
 	}
 	
 	double angle() {
-		return std::atan(y, x);
+		return std::atan2(y, x);
 	}
 };
 ```
@@ -556,7 +556,7 @@ private:
 public:
 	void set(double x, double y) {
 		r = std::sqrt(x * x + y * y);
-		a = std::atan(y, x);
+		a = std::atan2(y, x);
 	}
 	
 	double length() {
@@ -564,7 +564,7 @@ public:
 	}
 	
 	double angle() {
-		return std::atan(y, x);
+		return std::atan2(y, x);
 	}
 };
 ```
@@ -581,7 +581,7 @@ private:
 public:
 	void set(double x, double y) {
 		r = std::sqrt(x * x + y * y);
-		a = std::atan(y, x);
+		a = std::atan2(y, x);
 	}
 	
 	double length() {
@@ -589,7 +589,7 @@ public:
 	}
 	
 	double angle() {
-		return std::atan(y, x);
+		return std::atan2(y, x);
 	}
 };
 ```
@@ -606,7 +606,7 @@ private:
 public:
 	void set(double x, double y) {
 		r = std::sqrt(x * x + y * y);
-		a = std::atan(y, x);
+		a = std::atan2(y, x);
 	}
 	
 	double length() {
