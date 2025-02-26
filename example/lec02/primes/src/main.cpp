@@ -16,6 +16,8 @@ int main(int argc, char** argv) {
     vector<bool> primes(maxNum + 1, true);
     for (int i = 2; i < primes.size() - 1; i++)
     {
+        if (!primes[i])
+            continue;
         for (int j = i + 1; j < primes.size(); j++) {
             if (!primes[j])
                 continue;
@@ -24,7 +26,7 @@ int main(int argc, char** argv) {
         }
     }
 
-    for (int i = 2; i < maxNum; i++)
+    for (int i = 2; i <= maxNum; i++)
         if (primes[i])
             cout << i << " ";
     cout << endl;

@@ -2,7 +2,7 @@
 
 using namespace std;
 
-void printArray(const int *arr, size_t n)
+void printArray(const int *arr, const size_t n)
 {
     for (int i = 0; i < n; i++)
     {

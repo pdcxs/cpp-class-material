@@ -9,6 +9,8 @@ int main() {
   std::cout << "a = " << a << ", b = " << b << std::endl;
   std::cout << "*pointer_1 = " << *pointer_1 << ", *pointer_2 = " << *pointer_2
             << std::endl;
+  std::cout << "pointer_1 = " << pointer_1 << ", pointer_2 = " << pointer_2
+            << std::endl;
 
   return 0;
 }

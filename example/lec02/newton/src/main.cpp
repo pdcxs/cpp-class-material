@@ -28,5 +28,6 @@ int main(int argc, char** argv) {
     std::cout << std::setprecision(10);
     std::cout << newton(equation1) << std::endl;
     std::cout << 4 * newton(equation2) << std::endl;
+    std::cout << newton([](double x) {return x * x - 2;}) << std::endl;
     return 0;
 }
