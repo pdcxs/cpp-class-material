@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+	<meta charset="utf-8">
+
+    <title>面向对象程序设计技术X 第三课</title>
+
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" href="../dist/reset.css">
+	<link rel="stylesheet" href="../dist/reveal.css">
+	<link rel="stylesheet" href="../dist/theme/white-contrast.css" id="theme">
+	<link rel="stylesheet" href="../css/layout.css" id="theme">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="../plugin/highlight/monokai.css">
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+<section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 从结构体到类
+
+### 理解 C++ 封装
+
+主讲：陈笑沙
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 复习
+
+以下程序，哪行代码有错误？
+
+```cpp [1-4|5-7|8-10]
+int a = 100, b = 10;
+const int *p1 = &a;
+p1 = &b;
+*p1 = 0;
+int * const p2 = &a;
+*p2 = 0;
+p2 = &b;
+const int * const p3 = &a;
+*p3 = 0;
+p3 = &b
+```
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 目录
+
+- 3.1 结构的概念与操作
+- 3.2 结构与指针
+- 3.3 结构与数组
+- 3.4 链表
+- 3.5 从结构到类
+- 3.7 成员函数
+- 3.8 屏蔽类的内部实现
+</div></script></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 3.1 结构的概念与操作
+
+- &shy;<!-- .element: class="fragment" data-fragment-index="1" -->单一数值类型的缺陷
+	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->客体属性描述往往非单值，批量处理更显复杂。
+	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->如：日期、排序等等。
+- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->解决方法：结构体
+
+```cpp [|1|3-5|6]
+struct Date
+{
+	int month;
+	int day;
+	int year;
+}; // 注意尾部分号
+```
+<!-- .element: class="fragment" -->
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 3.1 结构的概念与操作
+
+先声明结构体类型，再定义该类型的变量。
+
+```cpp [|1|2-7|8|9]
+struct Student {
+	std::string id;
+	std::string name;
+	char gender; // 'M' or 'F'
+	unsigned int age;
+	double score;
+	std::string address;
+};
+Student student1, student2;
+```
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 3.1 结构的概念与操作
+
+- &shy;<!-- .element: class="fragment" data-fragment-index="1" -->结构体类型与结构体变量是不同的概念
+	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->什么是类型？什么是变量？
+	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->可以简单地理解为：类型是集合，变量是集合中的元素
+- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->结构体类型中的成员名可以和变量名相同，但是意义不同
+- &shy;<!-- .element: class="fragment" data-fragment-index="5" -->成员变量可以单独使用，其作用和地位与普通变量相当
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 3.1 结构的概念与操作
+
+```cpp [|1-6|8|9-12]
+struct Student {
+	std::string id;
+	std::string name;
+	char gender;
+	std::string address;
+};
+
+Student a = {"10101", "Alice", 'F', "Taiyuan"};
+std::cout << a.id << ", "
+          << a.name << ", "
+          << a.gender << ", "
+          << a.address << std::endl;
+```
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 3.1 结构的概念与操作
+
+另一种方法（不推荐）
+
+```cpp [|]
+struct Student {
+  std::string name;
+  char gender;
+} stu = {"Bob", 'M'};
+```
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 3.2 结构与指针
+
+结构体只是一种组织数据的方式：实际数据保存在成员变量中。但是可以有指向结构体的指针
+
+```cpp [|1-3|5-9|12-13|14-16|17|18-20]
+#include <iostream>
+
+using namespace std;
+
+struct Person {
+	string name;
+	string id;
+	double salary;
+};
+
+int main() {
+	Person person1, person2;
+	Person *ptr1 = &person1;
+	ptr1->name = "Eric";
+	ptr1->id = "1234004321";
+	ptr1->salary = 500.0;
+	person2 = *ptr1;
+	cout << ptr1->name << ", "
+	     << ptr1->id << ", "
+	     << ptr1->salary << endl;
+	return 0;
+}
+```
+<!-- .element: class="fragment" -->
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 3.2 结构与指针
+
+如果需要结构体当作函数参数传递，一般采用指针或者引用。否则容易出现性能问题。
+</div></script></section></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 3.3 结构与数组
+
+与基本数据类型相同的用法。
+
+```cpp [|1-4|7-10|11]
+struct Person {
+	string name;
+	unsigned int age;
+};
+
+int main() {
+	Person group[3] = {
+	    {"Bob", 20},
+	    {"Alice", 30},
+	    {"Eric", 40}};
+	Person *p = group;
+	return 0;
+}
+```
+</div></script></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 3.4 链表
+
+### 什么是链表？
+
+
+<div class="mermaid">
+classDiagram
+ Head --|> P1
+ P1 --|> P2
+ class Head {
+ 	type data;
+ 	Node* next;
+ }
+ class P1 {
+ 	type data;
+ 	Node* next;
+ }
+ class P2 {
+ 	type data;
+ 	Node* next;
+ }
+
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 3.4 链表
+
+### 什么是链表？
+
+- &shy;<!-- .element: class="fragment" data-fragment-index="1" -->链表由若干个结点组成
+- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->每个节点包含两个成员：
+	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->数据（可以是其他结构）
+	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->指向下一个节点的指针
+- &shy;<!-- .element: class="fragment" data-fragment-index="5" -->空指针代表空链表
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 3.4 链表
+
+```cpp [|3]
+struct Node {
+	int data;
+	Node* next;
+};
+```
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 3.4 链表
+
+创建链表：
+
+```cpp
+Node* makeList() {
+	return nullptr; // 不要用 NULL
+}
+```
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 3.4 链表
+
+prepend：
+
+```cpp [|1|2|3-4|5]
+Node *prepend(Node *list, const int element) {
+  Node *head = new Node();
+  head->data = element;
+  head->next = list;
+  return head;
+}
+```
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 3.4 链表
+
+print:
+
+```cpp [|1|2|3|4,9|5|6-8|11]
+void printList(const Node *list) {
+  std::cout << "[";
+  const Node *head = list;
+  while (head != nullptr) {
+    std::cout << head->data;
+    if (head->next != nullptr) {
+      std::cout << ", ";
+    }
+    head = head->next;
+  }
+  std::cout << "]";
+}
+```
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 3.4 链表
+
+free:
+
+```cpp [|1|2|3-5]
+void freeList(Node *list) {
+  while (list != nullptr) {
+    Node *next = list->next;
+    delete list;
+    list = next;
+  }
+}
+```
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 3.4 链表
+
+insert:
+
+```cpp [|1|2-11|4-9|10|13-14|15-21|22-24|25-27|28-29]
+Node *insert(Node *list, int element, size_t index) {
+  if (list == nullptr) {
+    // empty list
+    if (index == 0) {
+      Node *newNode = new Node();
+      newNode->data = element;
+      newNode->next = nullptr;
+      return newNode;
+    }
+    return list; // Fail, should thrown exception
+  }
+
+  Node *prev = nullptr;
+  Node *next = list;
+  while (index > 0) {
+    if (next == nullptr)
+      return list; // Fail
+    prev = next;
+    next = next->next;
+    --index;
+  }
+  Node *newNode = new Node();
+  newNode->data = element;
+  newNode->next = next;
+  if (prev == nullptr) {
+    return newNode;
+  }
+  prev->next = newNode;
+  return list;
+}
+
+```
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 3.4 链表
+
+delete, length, find ...
+
+- &shy;<!-- .element: class="fragment" data-fragment-index="1" -->如果需要链表结，推荐使用`std::list` （双向链表）
+- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->如果需要手工实现，推荐使用 `std::shared_ptr` (智能指针)
+- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->扩展阅读：[Cons List](https://en.wikipedia.org/wiki/Cons)
+
+`example/lec03/list` <!-- .element: class="fragment" -->
+
+`example/lec03/smartList` <!-- .element: class="fragment" -->
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 3.5 从结构到类
+
+- &shy;<!-- .element: class="fragment" data-fragment-index="1" -->某些函数需要操控特定数据，每次需要将数据传入：
+	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->`Node *prepend(Node *list, ...)`
+	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->`Node *insert(Node *list, ...)`
+	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->`void freeList(Node *list)`
+- &shy;<!-- .element: class="fragment" data-fragment-index="5" -->语言层次，数据与其操作没有关联
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 3.5 从结构到类
+
+- &shy;<!-- .element: class="fragment" data-fragment-index="1" -->某些数据不想暴露给调用者（内部实现）
+	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->内部更改不影响外部调用
+	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->外部出错更加容易排查错误
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 3.5 从结构到类
+
+引入类的概念：
+
+- &shy;<!-- .element: class="fragment" data-fragment-index="1" -->数据与操作绑定
+- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->数据的访问权限控制
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 3.5 从结构到类
+
+```cpp
+class Point {
+    // 数据，默认为 private
+	int x;
+	int y;
+public:
+    // 在类内部定义函数(方法)
+	void print() {
+		cout << '(' << x << ", " << ')';
+	}
+};
+```
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 3.5 从结构到类
+
+- &shy;<!-- .element: class="fragment" data-fragment-index="1" -->类是一种数据类型，对象是对应类的实例
+	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->对象是对应数据类型的变量
+- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->类是一张蓝图
+	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->对象是根据蓝图制作出来的具体实体
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 3.5 从结构到类
+
+- &shy;<!-- .element: class="fragment" data-fragment-index="1" -->出于兼容性考虑，`c++` 中，`struct` 也可以加入方法。
+- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->`struct` 中的成员变量，默认是`public` 权限
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 3.6 成员函数
+
+- &shy;<!-- .element: class="fragment" data-fragment-index="1" -->一个类中，包含有成员变量与成员函数
+- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->成员变量与成员函数，统称为类的成员
+- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->成员变量有时被称为属性，成员函数有时被称为方法
+- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->它们都不是必需的
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 3.6 成员函数
+
+- &shy;<!-- .element: class="fragment" data-fragment-index="1" -->在类的定义中，用下列访问范围关键字来说明类成员可被访问的范围：
+	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->`private`: 私有成员，只能在成员函数内访问
+	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->`public` : 公有成员，可以在任何地方访问
+	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->`protected`: 保护成员，以后再说
+- &shy;<!-- .element: class="fragment" data-fragment-index="5" -->以上三种关键字出现的次数和先后次序都没有限制。
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 3.6 成员函数
+
+如何定义一个类？
+
+```cpp
+class className {
+private:
+	//私有属性和函数
+public:
+	//公有属性和函数
+protected:
+	//保护属性和函数
+}; // 不要忘了分号
+```
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 3.6 成员函数
+
+```cpp [|1|2-3|4|5-7|8-10|11-14|18|19|20]
+class Rectangle {
+private:
+	int w, h;
+public:
+	int area() {
+		return w * h;
+	}
+	int perimeter() {
+		return 2 * (w + h);
+	}
+	void set(int width, int height) {
+		w = width;
+		h = height;
+	}
+};
+
+int main() {
+	Rectangle rect;
+	rect.set(3, 4);
+	cout << rect.area() << ", " << rect.perimeter();
+	cout << endl;
+	return 0;
+}
+```
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 3.8 屏蔽类的内部实现
+
+```cpp [|1|2-3|5-8|10-12|14-16|3]
+class Point {
+private:
+	double x, y;
+public:
+	void set(double xCoord, double yCoord) {
+		x = xCoord;
+		y = yCoord;
+	}
+	
+	double length() {
+		return std::sqrt(x * x + y * y);
+	}
+	
+	double angle() {
+		return std::atan(y, x);
+	}
+};
+```
+<!-- .element: data-id="point" -->
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 3.8 屏蔽类的内部实现
+
+```cpp [3|5-8]
+class Point {
+private:
+	double r, a;
+public:
+	void set(double xCoord, double yCoord) {
+		x = xCoord;
+		y = yCoord;
+	}
+	
+	double length() {
+		return std::sqrt(x * x + y * y);
+	}
+	
+	double angle() {
+		return std::atan(y, x);
+	}
+};
+```
+<!-- .element: data-id="point" -->
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 3.8 屏蔽类的内部实现
+
+```cpp [5-8|10-12]
+class Point {
+private:
+	double r, a;
+public:
+	void set(double x, double y) {
+		r = std::sqrt(x * x + y * y);
+		a = std::atan(y, x);
+	}
+	
+	double length() {
+		return std::sqrt(x * x + y * y);
+	}
+	
+	double angle() {
+		return std::atan(y, x);
+	}
+};
+```
+<!-- .element: data-id="point" -->
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 3.8 屏蔽类的内部实现
+
+```cpp [10-12|14-16]
+class Point {
+private:
+	double r, a;
+public:
+	void set(double x, double y) {
+		r = std::sqrt(x * x + y * y);
+		a = std::atan(y, x);
+	}
+	
+	double length() {
+		return r;
+	}
+	
+	double angle() {
+		return std::atan(y, x);
+	}
+};
+```
+<!-- .element: data-id="point" -->
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 3.8 屏蔽类的内部实现
+
+```cpp [14-16]
+class Point {
+private:
+	double r, a;
+public:
+	void set(double x, double y) {
+		r = std::sqrt(x * x + y * y);
+		a = std::atan(y, x);
+	}
+	
+	double length() {
+		return r;
+	}
+	
+	double angle() {
+		return a;
+	}
+};
+```
+<!-- .element: data-id="point" -->
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 3.8 屏蔽类的内部实现
+
+- &shy;<!-- .element: class="fragment" data-fragment-index="1" -->内部更改，接口不变，不会影响外部程序
+	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->解耦合
+- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->更加方便定位错误
+	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->不用考虑外部在不未知情况下改动了私有属性
+</div></script></section></section>
+		</div>
+	</div>
+
+	<script src="../dist/reveal.js"></script>
+	<script src="../plugin/zoom/zoom.js"></script>
+	<script src="../plugin/notes/notes.js"></script>
+	<script src="../plugin/search/search.js"></script>
+	<script src="../plugin/markdown/markdown.js"></script>
+	<script src="../plugin/mermaid/mermaid.js"></script>
+	<script src="../plugin/highlight/highlight.js"></script>
+	<script>
+		Reveal.initialize({
+			controls: true,
+			progress: true,
+			center: true,
+			hash: true,
+			slideNumber: true,
+			plugins: [RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMermaid]
+		});
+
+	</script>
+</body>
+
+</html>
