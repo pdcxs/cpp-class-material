@@ -13,7 +13,7 @@
 
 	<link rel="stylesheet" href="../dist/reset.css">
 	<link rel="stylesheet" href="../dist/reveal.css">
-	<link rel="stylesheet" href="../dist/theme/dracula.css" id="theme">
+	<link rel="stylesheet" href="../dist/theme/white-contrast.css" id="theme">
 	<link rel="stylesheet" href="../css/layout.css" id="theme">
 
 	<!-- Theme used for syntax highlighting of code -->
@@ -32,6 +32,8 @@
 	<script src="../plugin/notes/notes.js"></script>
 	<script src="../plugin/search/search.js"></script>
 	<script src="../plugin/markdown/markdown.js"></script>
+	<script src="../plugin/mermaid/mermaid.js"></script>
+	<script src="../plugin/math/math.js"></script>
 	<script src="../plugin/highlight/highlight.js"></script>
 	<script>
 		Reveal.initialize({
@@ -40,7 +42,7 @@
 			center: true,
 			hash: true,
 			slideNumber: true,
-			plugins: [RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight]
+			plugins: [RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMermaid, RevealMath.KaTex]
 		});
 
 	</script>

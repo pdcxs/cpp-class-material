@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+	<meta charset="utf-8">
+
+    <title>面向对象程序设计技术X 第四课</title>
+
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" href="../dist/reset.css">
+	<link rel="stylesheet" href="../dist/reveal.css">
+	<link rel="stylesheet" href="../dist/theme/white-contrast.css" id="theme">
+	<link rel="stylesheet" href="../css/layout.css" id="theme">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="../plugin/highlight/monokai.css">
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+<section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 构造函数
+
+主讲：陈笑沙
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 目录
+
+- 4.1 类与对象
+- 4.2 构造函数的必要性
+- 4.3 构造函数的使用
+- 4.4 析构函数
+- 4.5 带参数的构造函数
+- 4.6 重载构造函数
+- 4.7 默认构造函数
+- 4.8 类成员初始化
+- 4.9 构造对象的顺序
+</div></script></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 4.1 类与对象
+
+
+类是 `C++` 自定义数据类型——描述数据组织与操作
+
+```cpp
+class Point {
+	int x, y; // 数据组织
+public:
+	void set(int ix, int iy) { // 操作
+		x = ix;
+		y = iy;
+	}
+};
+```
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 4.1 类与对象
+
+对象是类的实体
+ 
+变量是基本类型的实体
+
+```cpp
+int a = 3; // 基本类型变量
+struct Date { // 结构变量
+	int year, month, day;
+};
+Point w;
+w.set(3, 5);
+```
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 4.1 类与对象
+
+### C ++是一种混合型程序设计语言
+
+- &shy;<!-- .element: class="fragment" data-fragment-index="1" -->简单数据结构,单纯复合控制语句,函数(模块)设计,构成过程化程序设计
+- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->以类及对象为数据基础，以过程化程序设计为框架,构成对象化程序设计
+- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->以类系多态为数据处理主要对象,以对象化设计为框架,构成面向对象程序设计
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 4.2 构造函数的必要性
+
+数据实体都有初始化的诉求
+
+```cpp
+int a = 3;     // 整型变量初始化
+int a; a = 3;  // 整型变量赋初值
+double t[] = {1.3, 2.5}; // 数组初始化
+struct Date {int year, month, day; };
+Date d = {1998, 5, 23}; // 结构体变量初始化
+```
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 4.2 构造函数的必要性
+
+对于对象来说，初始化是一个复杂的问题
+
+```cpp
+class Point {
+	int x, y;
+public:
+	void set(int ix, int iy) {
+		x = ix;
+		y = iy;
+	}
+};
+int main() {
+	Point t = {3, 4}; // 错误，直接给私有变量赋值
+	Point d; // 产生未初始化对象
+	d.set(3, 4); //赋初值，非初始化
+}
+```
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 4.2 构造函数的必要性
+
+如果全部是公有变量，则可以这样操作：
+
+```cpp [|2-3|7]
+class Point {
+public:
+	int x, y;
+};
+
+int main() {
+	Point t = {3, 4}; // W
+    return 0;
+}
+```
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 4.3 构造函数的使用
+
+对象初始化的设计
+
+应在构造对象时完成初始化，无关访问权限
+
+```cpp
+class A {
+	int a, b;
+};
+A x = {2, 3}; // OK
+A y{2, 3}; // OK
+A z(2, 3); // OK
+```
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 4 .3 构造函数的使用
+
+构造函数的语法：
+
+- &shy;<!-- .element: class="fragment" data-fragment-index="1" -->没有返回类型（甚至没有 `void`）
+- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->名称与类的名称相同（大小写也需一致）
+- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->可以是任意访问权限，不一定非得是 `public`
+- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->一个类可以有多个构造函数
+
+```cpp [|4|5|6|]
+class A {
+	int a, b;
+public:
+	void A(int ia, int ib); // Wrong
+	construct(int ia, int ib); // Wrong
+	A(int ia, int ib); // Right
+};
+```
+<!-- .element: class="fragment" -->
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 4 .3 构造函数的使用
+
+例：为 `Clock` 类添加构造函数
+
+```cpp
+class Clock {
+	int hour, minute, second;
+public:
+	Clock(int h, int m, int s) {
+		...
+	}
+};
+```
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 4 .3 构造函数的使用
+
+### 实现构造函数：初始化成员变量
+
+```cpp
+Clock(int h, int m, int s) {
+	hour = h;
+	minute = m;
+	second = s;
+}
+```
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 4 .3 构造函数的使用
+
+### 实现构造函数：初始化成员变量
+
+```cpp
+Clock(int h, int m, int s) : hour(h), minute(m), second(s) {}
+```
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 4 .3 构造函数的使用
+
+构造函数的调用：
+
+```cpp [|2-3|8|8-12|14]
+class Desk {
+public:
+	Desk();
+private:
+	int height, width;
+};
+
+Desk::Desk() {
+	cout << "Constructor of Desk." << endl;
+	height = 3;
+	width = 2;
+}
+
+Desk desk; // call the constructor
+```
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 4.4 析构函数
+
+类设计中若存在指针成员,则构造函数会申请堆内存赋给该指针,成员函数就可共享该资源
+
+```cpp
+class A {
+	int* aa;
+	int num;
+public:
+    A(int n) {
+    	num = n;
+    	aa = new int[n];
+    	// delete[] aa; ???
+    }
+};
+```
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 4.4 析构函数
+
+- &shy;<!-- .element: class="fragment" data-fragment-index="1" -->有时我们在释放类对象的时候，可能需要做一些收尾工作，但也可能会因为忘记调用这些做收尾工作的函数而出现问题，这个怎么解决？
+- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->C++也为我们考虑了，与构造函数相对的，提供了析构函数专门用于处理对象销毁时候的清理工作。
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 4.4 析构函数
+
+析构函数没有返回类型，没有参数，函数名是在类名前加“~”。析构函数将会在对象的生存期结束后被自动调用。
+
+析构函数也可以是私有的，但是不常见。
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 4.4 析构函数
+
+```cpp [|7|9-11]
+class A {
+	int* aa;
+	int num;
+public:
+    A(int n) {
+    	num = n;
+    	aa = new int[n];
+    }
+    ~A() { // 不能有参数
+    	delete[] aa;
+    }
+};
+```
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 4.5 带参数的构造函数
+
+通过向构造函数传入参数，可以指定成员变量的值。
+
+```cpp
+class Student {
+	std::string name;
+	char gender;
+	double gpa;
+public:
+	Student(const std::string& name, char gender, double gpa):
+	name(name), gender(gender), gpa(gpa) {}
+};
+
+Student stu("Eric", 'M', 4.5);
+```
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 4.5 带参数的构造函数
+
+```cpp [|2-3|5-7|12-15|17-20]
+class Teacher {
+    std::string name;
+    uint8_t age;
+public:
+    Teacher(const std::string& name, uint8_t age) {
+        this->name = name;
+        this->age = age;
+    }
+};
+
+class Student {
+    std::string name;
+    char gender;
+    double gpa;
+    Teacher t;
+public:
+    Student(const std::string& name, char gender, double gpa):
+    name(name), gender(gender), gpa(gpa) {
+        t(name, 30); // Wrong
+    }
+};
+```
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 4.5 带参数的构造函数
+
+如果构造函数仅有一个参数，也可以这样初始化：<!-- .element: class="fragment" -->
+
+```cpp
+className obj = parameter;
+```
+<!-- .element: class="fragment" -->
+
+为了防止这种情况，可以进行如下设置：<!-- .element: class="fragment" -->
+
+```cpp [|4|8|]
+class A{
+    int a;
+public:
+    explicit A(int n):a(n){} // 注意新的关键字
+};
+
+int main() {
+    A a = 1; // Wrong
+    return 0;
+}
+```
+<!-- .element: class="fragment" -->
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 4.5 带参数的构造函数
+
+- &shy;<!-- .element: class="fragment" data-fragment-index="1" -->题外话：函数的字符串参数应该是什么类型？
+	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->`const char*`
+	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->`const std::string&`
+- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->一般而言，`const char*` 性能更好，但是不安全。
+- &shy;<!-- .element: class="fragment" data-fragment-index="5" -->大部分情况，不必要如此极致地考虑性能。
+- &shy;<!-- .element: class="fragment" data-fragment-index="6" -->一般情况选 `const std::string&`。
+- &shy;<!-- .element: class="fragment" data-fragment-index="7" -->`c++17` 之后，可以使用 `std::string_view`。
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 4.5 带参数的构造函数
+
+- &shy;<!-- .element: class="fragment" data-fragment-index="1" -->有时构造函数参数与成员变量名称相同，则可以：
+	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->使用 `this` 指针
+	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->使用初始化成员列表
+- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->`this` 指针是类成员函数中指向当前对象实例的隐含指针，用于访问对象的成员。​
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 4.5 带参数的构造函数
+
+```cpp
+class Point {
+	int x, y;
+public:
+	Point(int x, int y) : x(x), y(y) {}
+};
+```
+<!-- .element: data-id="this-pointer" -->
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 4.5 带参数的构造函数
+
+```cpp
+class Point {
+	int x, y;
+public:
+	Point(int x, int y){
+		this->x = x;
+		this->y = y;
+	}
+};
+```
+<!-- .element: data-id="this-pointer" -->
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 4.5 带参数的构造函数
+
+以下两种方式调用构造函数是等价的：
+
+```cpp
+Point p(3, 4); // 传统方式
+Point p = {3, 4}; // 如果构造函数为explicit，则编译失败
+Point p{3, 4}; // 推荐的方式，c++11以后的方式，与函数区分
+```
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 4.6 重载构造函数
+
+- &shy;<!-- .element: class="fragment" data-fragment-index="1" -->`C++` 成员函数可重载,构造函数同样也可重载
+- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->一个类可以提供多个构造函数，即构造函数的重载。
+- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->重载的目的是为了满足不同的初始化需要。
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 4.6 重载构造函数
+
+```cpp [|4-8|13-15]
+class Clock
+{
+private:
+	int hour, minute, second;
+public:
+	Clock(int h, int m, int s);
+	Clock();
+	Clock(const std::string& timestr);
+};
+
+int main( )
+{
+	Clock clock1{23, 12, 0};
+	Clock clock2{};
+	Clock clock3{“14:45:32”};
+}
+
+```
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 4.6 重载构造函数
+
+该如何实现以下拥有多种构造方式的类？
+
+```cpp
+int main()
+{
+    Date date1{2000, 3, 4};
+    Date date2{2000, 3};
+    Date date3{2000};
+    Date date4{};
+    return 0;
+}
+```
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 4.6 重载构造函数
+
+### 方案一（重载）
+
+```cpp
+class Date{
+  int year, month, day;   // 默认private
+public:    // 以下四个重载函数,每个对应一种构建对象方式
+  Date();
+  Date(int d);
+  Date(int m, int d);
+  Date(int y, int m, int d);
+};
+Date::Date(){ year=1900; month=1; day=1; }
+Date::Date(int y){ month=4; day=d; year=1996; }
+Date::Date(int y, int m){ month=m; day=1; year=1900; }
+Date::Date(int y, int m, int d){ month=m; day=d; year=y; }
+```
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 4.6 重载构造函数
+
+### 方案二（C++11）
+
+```cpp
+class Date {
+    int year, month, day;
+public:
+    Date(int year, int month, int day) : year(year), month(month), day(day) {}
+    Date(int year, int month) : Date(year, month, 1) {}
+    Date(int year) : Date(year, 1, 1) {}
+    Date() : Date(1900, 1, 1) {}
+};
+```
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 4.6 重载构造函数
+
+### 方案三 （默认参数，推荐）
+
+```cpp
+class Date
+{
+    int year, month, day;
+public:
+    Date(int year = 1900, int month = 1, int day = 1)
+        : year(year), month(month), day(day)
+    {
+    }
+};
+```
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 4.7 默认构造函数
+
+- &shy;<!-- .element: class="fragment" data-fragment-index="1" -->默认构造函数不是默认参数构造函数
+- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->创建对象一定需要构造函数
+- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->默认构造函数：类中若无构造函数定义，系统会默认一个无参构造函数，以完成创建对象的使命
+- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->程序员只要定义构造函数(不管几个)，则系统不再默认构造函数
+- &shy;<!-- .element: class="fragment" data-fragment-index="5" -->默认构造函数一定是无参构造函数,无参构造函数可自定义
+- &shy;<!-- .element: class="fragment" data-fragment-index="6" -->实际上，也存在与之对应的默认析构函数
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 4 .7 默认构造函数
+
+```cpp [|1-3|7|8|9]
+class Date
+{
+};
+
+int main()
+{
+    Date date{}; // ok
+    Date date2; // ok
+    Date date3(); // ok
+    return 0;
+}
+```
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 4.7 类成员初始化
+
+- &shy;<!-- .element: class="fragment" data-fragment-index="1" -->构造函数总是先创建对象空间，然后执行构造函数体语句
+- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->类中若含对象成员，则构造函数创建对象空间完成时，调用对象成员的无参构造函数，然后执行构造函数体语句
+- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->对象成员若没有无参构造函数，则应采用成员初始化列表方式
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 4.7 类成员初始化
+
+```cpp [|5-8|15|17-19]
+class Teacher {
+    std::string name;
+    uint8_t age;
+public:
+    Teacher(const std::string& name, uint8_t age) {
+        this->name = name;
+        this->age = age;
+    }
+};
+
+class Student {
+    std::string name;
+    char gender;
+    double gpa;
+    Teacher t;
+public:
+    Student(const std::string& name, char gender, double gpa):
+    name(name), gender(gender), gpa(gpa), t("no name", 100) { // ok
+    }
+};
+```
+</div></script></section></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 4.9 构造对象的顺序
+
+成员以其在类中声明的顺序构造
+
+```cpp
+class A {
+	int num, age; // 先构造num，后构造age
+public:
+	A(int n) : age(n), num(age + 1) {} // 与此处顺序无关
+};
+```
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 例子：约瑟夫环问题
+
+<iframe src="https://www.geogebra.org/classic/a9nqmhpt?embed" width="800" height="600" allowfullscreen style="border: 1px solid #e4e4e4;border-radius: 4px;" frameborder="0"></iframe>
+</div></script></section>
+		</div>
+	</div>
+
+	<script src="../dist/reveal.js"></script>
+	<script src="../plugin/zoom/zoom.js"></script>
+	<script src="../plugin/notes/notes.js"></script>
+	<script src="../plugin/search/search.js"></script>
+	<script src="../plugin/markdown/markdown.js"></script>
+	<script src="../plugin/mermaid/mermaid.js"></script>
+	<script src="../plugin/math/math.js"></script>
+	<script src="../plugin/highlight/highlight.js"></script>
+	<script>
+		Reveal.initialize({
+			controls: true,
+			progress: true,
+			center: true,
+			hash: true,
+			slideNumber: true,
+			plugins: [RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMermaid, RevealMath.KaTeX]
+		});
+
+	</script>
+</body>
+
+</html>
