@@ -1,6 +1,0 @@
-[
-{
-  "directory": "c:\\Users\\chenx\\OneDrive - huizh\\文档\\Work\\课程\\面向对象程序设计\\2025\\cpp-class-material\\example\\lec01\\project",
-  "arguments": ["x86_64-w64-mingw32-g++.exe", "-c", "-o", "build\\.objs\\project\\mingw\\x64\\src\\main.cpp.obj", "src\\main.cpp"],
-  "file": "src\\main.cpp"
-}]

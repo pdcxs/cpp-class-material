@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+	<meta charset="utf-8">
+
+    <title>面向对象程序设计技术X 第五课</title>
+
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" href="../dist/reset.css">
+	<link rel="stylesheet" href="../dist/reveal.css">
+	<link rel="stylesheet" href="../dist/theme/white-contrast.css" id="theme">
+	<link rel="stylesheet" href="../css/layout.css" id="theme">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="../plugin/highlight/monokai.css">
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+<section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 面向对象程序设计
+
+主讲：陈笑沙
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 目录
+
+- 5.1 抽象
+- 5.2 分类
+- 5.3 设计和效率
+- 5.4 再次讨论 Josephus 问题
+	- 5.4.1 过程化方法
+	- 5.4.2 函数式方法
+	- 5.4.3 面向对象方法
+- 5.5 其他案例
+</div></script></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 5.1 抽象
+
+代码的抽象能力是编程中至关重要的核心能力，它决定了代码的可维护性、扩展性和复用性。
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 5.1 抽象
+
+每一种强有力的语言……提供了三种机制：
+
+- **基本表达形式**：用于表示语言所关心的最简单的个体。
+- **组合的方法**：通过它们可以从较简单的东西出发构造出复合的元素。
+- **抽象的方法**：通过它们可以为复合对象命名，并将它们当作单元去操作。
+
+<p style="text-align:right;">——《计算机程序的构造和解释》</p>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 5.1 抽象
+
+哲学本质：抽象是对现实的逻辑建模
+
+- 抽象是计算机科学的第一性原理，通过选择性忽略细节，构建事物的本质模型
+- 类似于地图绘制：保留主干道路，省略树木和路灯等细节
+- 示例：用坐标系表示城市交通，用节点和边表示社交网络关系
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 5.1 抽象
+
+技术实现的三重境界
+
+- &shy;<!-- .element: class="fragment" data-fragment-index="1" -->初级抽象：代码封装
+	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->例如：函数的抽象
+- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->中级抽象：结构建模
+	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->例如：类的抽象
+- &shy;<!-- .element: class="fragment" data-fragment-index="5" -->高级抽象：模式与范式
+	- &shy;<!-- .element: class="fragment" data-fragment-index="6" -->设计模式
+	- &shy;<!-- .element: class="fragment" data-fragment-index="7" -->MVC 分层抽象
+	- &shy;<!-- .element: class="fragment" data-fragment-index="8" -->函数式编程中的 Monad 抽象
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 5.1 抽象
+
+抽象能力的演进路径
+
+- &shy;<!-- .element: class="fragment" data-fragment-index="1" -->初学者：识别重复代码
+- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->进阶者：设计领域模型
+- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->专家：创建DSL（特定领域语言）
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 5.2 分类
+
+- &shy;<!-- .element: class="fragment" data-fragment-index="1" -->面向对象程序设计自定义数据类型，该数据类型自成一体，隐藏了数据组成及操作，体现了程序设计中的抽象性
+- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->自定义数据类型，非孤立(后面会看到继承)，而是系统化分层结构
+- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->分类是设计和划分类对象的边界的一种手段，它分别作为各个类别的实体，区分其不同类、不同数据属性、不同范围以及不同操作
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 5.2 分类
+
+例子
+
+- &shy;<!-- .element: class="fragment" data-fragment-index="1" -->`Student` 类
+	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->小学生
+	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->中学生
+	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->大学生
+		- &shy;<!-- .element: class="fragment" data-fragment-index="5" -->不同专业
+		- &shy;<!-- .element: class="fragment" data-fragment-index="6" -->不同学院
+		- &shy;<!-- .element: class="fragment" data-fragment-index="7" -->不同年级
+</div></script></section></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 5.3 设计和效率
+
+- &shy;<!-- .element: class="fragment" data-fragment-index="1" -->软件效率分运行效率和生产(开发)效率
+- &shy;<!-- .element: class="fragment" data-fragment-index="2" --><span style="color: red;">运行效率</span>包括运行时间耗用和空间耗用，关乎程序设计策略，数据结构，存储管理和算法(代码优化)
+- &shy;<!-- .element: class="fragment" data-fragment-index="3" --><span style="color: red;">设计效率</span>关乎设计方法和管理机制
+- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->设计方法即程序设计方法，分层与抽象的角度看问题有利于理清数据处理的思路
+- &shy;<!-- .element: class="fragment" data-fragment-index="5" -->面向对象程序设计方法能简捷地利用语言来表达分层与抽象(开发效率)，C++语言本身的类机制能很好地发挥程序的运行效率
+</div></script></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 5.4 再次讨论 Josephus 问题
+
+### 5.4.1 过程化方法
+
+一种偏向于函数式的思路：
+
+将问题抽象为一般的数据结构，再进行处理
+
+`example/lec05/josephus1`
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 5.4 再次讨论 Josephus 问题
+
+### 5.4.2 函数式方法
+
+如果只考虑最后一个：
+
+```cpp
+int josephus(int n, int k) {
+	if (n == 1)
+		return 0;
+	int r = josephus(n - 1, k);
+	return (k + r) % n;
+}
+```
+<!-- .element: data-id="recursion" -->
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 5.4 再次讨论 Josephus 问题
+
+### 5.4.2 函数式方法
+
+如果只考虑最后一个：
+
+```cpp
+int josephus(int n, int k) {
+	return n == 1 ? 0 : (k + josephus(n - 1, k)) % n;
+}
+```
+<!-- .element: data-id="recursion" -->
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 5.4 再次讨论 Josephus 问题
+
+### 5.4.2 函数式方法
+
+<div style="font-size:25px">
+$f(n,k)=(k + f(n-1,k)) \bmod n$
+</div>
+<!-- .element: class="fragment" -->
+
+<div style="font-size:25px">
+$f(1,k)=0$
+</div>
+<!-- .element: class="fragment" -->
+
+<div style="font-size:25px">
+$f(2,k)=(k+f(1,k)) \bmod 2 = (k+0) \bmod 2 $
+</div>
+<!-- .element: class="fragment" -->
+
+<div style="font-size:25px">
+$f (3, k)=(k+f (2, k)) \bmod 3 = ((k+0) \bmod 2 + k) \bmod 3 $
+</div>
+<!-- .element: class="fragment" -->
+
+<div style="font-size:25px" data-id="equation">
+$f (n, k)= (((k+0) \bmod 2 + k) \bmod 3 + k \cdots ) \bmod n $
+</div>
+<!-- .element: class="fragment" -->
+
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 5.4 再次讨论 Josephus 问题
+
+### 5.4.2 函数式方法
+
+<div style="font-size:25px" data-id="equation">
+$f (n, k)= (((k+0) \bmod 2 + k) \bmod 3 + k \cdots ) \bmod n $
+</div>
+
+```cpp
+int josephus(int n, int k) {
+    int r = 0;
+    for (int i = 2; i <= n; i++) {
+    	r = (r + k) % i;
+    }
+    return r + 1;
+}
+```
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 5.4 再次讨论 Josephus 问题
+
+### 5.4.2 函数式方法
+
+扩展阅读:纯函数式的几种方案（Haskell 版本）
+
+```Haskell
+josephus n k =
+  let loop xs = let d:r = drop (k-1) xs
+                in d : loop (filter (/= d) r)
+  in take n (loop (cycle [1..n]))
+```
+
+```Haskell
+josephus 1 k = 0
+josephus n k = (k + josephus (n - 1) k) `mod` n
+```
+
+```Haskell
+josephus n k = 1 + foldl go 0 [2..n]
+ where
+  go r i = (r + k) `mod` i
+```
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 5.4 再次讨论 Josephus 问题
+
+### 5.4.3 面向对象方法
+
+`example/lec04/joseph`
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 5.4 再次讨论 Josephus 问题
+
+### 扩展阅读： APL 语言
+
+Uiua 语言<sup id="fnref:uiua" role="doc-noteref">1</sup>版本：分别输出列表与最后结果
+
+```uiua
+Joseph ← ◌:◌:⍥(⊙:⊂⊙(⊃(⊢|↘1)⤚↻)):[]⊙::⟜⧻+1⇡⊙(-1)
+Joseph 41 2
+```
+
+
+
+
+
+
+<div class="footnotes" role="doc-endnotes">
+<ol>
+<li id="fn:uiua" role="doc-endnote" class="footnote"><p>
+
+<https://www.uiua.org></https>
+
+</p></li></ol>
+</div>
+</div></script></section></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate="true" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 5.5 其他案例
+
+`raylib` 相关案例
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 作业
+
+用 `raylib`，借助弹簧函数：$x''(t)=-k x(t)$，实现多个小球连成链状的动画效果（每个小球都以前一个小球为弹簧中心，第一个小球以鼠标为弹簧中心，每个小球考虑重力，效果参考：<https://www.bilibili.com/video/BV1zz411e7YN></https>）
+</div></script></section>
+		</div>
+	</div>
+
+	<script src="../dist/reveal.js"></script>
+	<script src="../plugin/zoom/zoom.js"></script>
+	<script src="../plugin/notes/notes.js"></script>
+	<script src="../plugin/search/search.js"></script>
+	<script src="../plugin/markdown/markdown.js"></script>
+	<script src="../plugin/mermaid/mermaid.js"></script>
+	<script src="../plugin/math/math.js"></script>
+	<script src="../plugin/highlight/highlight.js"></script>
+	<script>
+		Reveal.initialize({
+			controls: true,
+			progress: true,
+			center: true,
+			hash: true,
+			slideNumber: true,
+			plugins: [RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMermaid, RevealMath.KaTeX]
+		});
+
+	</script>
+</body>
+
+</html>

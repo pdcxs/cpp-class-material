@@ -1,6 +1,0 @@
-[
-{
-  "directory": "d:\\onedrive - huizh\\文档\\Work\\课程\\面向对象程序设计\\2025\\cpp-class-material\\example\\lec04\\joseph",
-  "arguments": ["x86_64-w64-mingw32-g++.exe", "-c", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-DNDEBUG", "-o", "build\\.objs\\joseph\\mingw\\x64\\release\\src\\main.cpp.obj", "src\\main.cpp"],
-  "file": "src\\main.cpp"
-}]
