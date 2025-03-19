@@ -2,17 +2,14 @@
 #include "ball.h"
 #include <raylib.h>
 
-int main()
-{
+int main() {
   App app{400, 400, "Bouncing Ball"};
   Ball ball(&app, 50, 70, 20, RED);
   app.setActions(
-      []()
-      {
+      []() {
         // do nothing
       },
-      [&](float delta)
-      {
+      [&](float delta) {
         ClearBackground(WHITE);
         float lineThickness = 2.0f;
         DrawLineEx({10.0f, 10.0f}, {10.0f, 390.0f}, lineThickness, BLACK);
@@ -23,17 +20,12 @@ int main()
         std::string text = "BOUNCING BALL!";
         int fontSize = 40;
 
-        DrawText(
-            text.c_str(),
-            40, 40,
-            fontSize, BLUE);
+        DrawText(text.c_str(), 40, 40, fontSize, BLUE);
 
-        for (int i = -50; i <= app.getHeight() + 50; i += 50)
-        {
+        for (int i = -50; i <= app.getHeight() + 50; i += 50) {
           DrawLine(-50, i, app.getWidth() + 50, i, GRAY);
         }
-        for (int i = -50; i <= app.getWidth() + 50; i += 50)
-        {
+        for (int i = -50; i <= app.getWidth() + 50; i += 50) {
           DrawLine(i, -50, i, app.getHeight() + 50, GRAY);
         }
 

@@ -5,8 +5,7 @@
 using std::string;
 
 App::App(int width, int height, const string &title)
-    : width(width), height(height), camera{0}
-{
+    : width(width), height(height), camera{0} {
   InitWindow(width, height, title.c_str());
   InitAudioDevice();
   camera.target = {0, 0};
@@ -19,12 +18,10 @@ App::App(int width, int height, const string &title)
   collisionSound = LoadSound("assets/collision.mp3");
 }
 
-void App::run()
-{
+void App::run() {
   setup();
 
-  while (!WindowShouldClose())
-  {
+  while (!WindowShouldClose()) {
     float time = GetFrameTime();
     camSx += time * (-camera.target.x) * camSpring;
     camSy += time * (-camera.target.y) * camSpring;
@@ -32,10 +29,10 @@ void App::run()
     camSy *= 0.999;
     camera.target.x += time * camSx;
     camera.target.y += time * camSy;
-    if (abs(camSx) < 0.1) {
+    if (std::abs(camSx) < 0.1) {
       camSx = 0;
     }
-    if (abs(camSy) < 0.1) {
+    if (std::abs(camSy) < 0.1) {
       camSy = 0;
     }
     BeginDrawing();
@@ -49,8 +46,7 @@ void App::run()
 }
 
 void App::setActions(std::function<void()> setup,
-                     std::function<void(float)> draw)
-{
+                     std::function<void(float)> draw) {
   this->setup = setup;
   this->draw = draw;
 }
