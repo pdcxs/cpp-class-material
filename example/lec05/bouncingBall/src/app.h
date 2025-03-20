@@ -16,7 +16,7 @@ public:
 
 public:
   Camera2D camera;
-  Sound collisionSound;
+  std::string collisionSound;
 
 private:
   const int width;

@@ -1,6 +1,14 @@
 #include "ball.h"
 #include <cmath>
 
+void playAudio(float volume, const std::string &filename) {
+  if (volume > 0.1) {
+    Sound s = LoadSound(filename.c_str());
+    SetSoundVolume(s, std::min(1.0f, volume));
+    PlaySound(s);
+  }
+}
+
 Ball::Ball(App *app, float x, float y, int r, Color color) : color(color) {
   this->x = x;
   this->y = y;
@@ -18,36 +26,28 @@ void Ball::update(float delta) {
     x = 10 + r;
     app->applyCamSpeed(-xSpeed, 0);
     float v = std::abs(xSpeed / 200);
-    v = v < 1.0 ? v : 1.0;
-    SetSoundVolume(app->collisionSound, v);
-    PlaySound(app->collisionSound);
+    playAudio(v, app->collisionSound);
     xSpeed *= -0.9;
   }
   if (x + r > app->getWidth() - 10) {
     x = app->getWidth() - r - 10;
     app->applyCamSpeed(-xSpeed, 0);
     float v = std::abs(xSpeed / 200);
-    v = v < 1.0 ? v : 1.0;
-    SetSoundVolume(app->collisionSound, v);
-    PlaySound(app->collisionSound);
+    playAudio(v, app->collisionSound);
     xSpeed *= -0.9;
   }
   if (y - r < 10) {
     y = 10 + r;
     app->applyCamSpeed(0, -ySpeed);
     float v = std::abs(ySpeed / 200);
-    v = v < 1.0 ? v : 1.0;
-    SetSoundVolume(app->collisionSound, v);
-    PlaySound(app->collisionSound);
+    playAudio(v, app->collisionSound);
     ySpeed *= -1;
   }
   if (y + r > app->getHeight() - 10) {
     y = app->getHeight() - r - 10;
     app->applyCamSpeed(0, -ySpeed);
     float v = std::abs(ySpeed / 200);
-    v = v < 1.0 ? v : 1.0;
-    SetSoundVolume(app->collisionSound, v);
-    PlaySound(app->collisionSound);
+    playAudio(v, app->collisionSound);
     ySpeed *= -0.95;
   }
 

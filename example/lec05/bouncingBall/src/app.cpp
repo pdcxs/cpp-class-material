@@ -14,8 +14,8 @@ App::App(int width, int height, const string &title)
   camera.rotation = 0.0f;
   camSx = 0;
   camSy = 0;
-  camSpring = 150;
-  collisionSound = LoadSound("assets/collision.mp3");
+  camSpring = 200;
+  collisionSound = "assets/collision.mp3";
 }
 
 void App::run() {
@@ -27,14 +27,13 @@ void App::run() {
     camSy += time * (-camera.target.y) * camSpring;
     camSx *= 0.999;
     camSy *= 0.999;
+    if (std::abs(camSx) < 0.01)
+      camSx = 0;
+    if (std::abs(camSy) < 0.01)
+      camSy = 0;
     camera.target.x += time * camSx;
     camera.target.y += time * camSy;
-    if (std::abs(camSx) < 0.1) {
-      camSx = 0;
-    }
-    if (std::abs(camSy) < 0.1) {
-      camSy = 0;
-    }
+
     BeginDrawing();
     BeginMode2D(camera);
     draw(time);

@@ -20,7 +20,7 @@ int main() {
         std::string text = "BOUNCING BALL!";
         int fontSize = 40;
 
-        DrawText(text.c_str(), 40, 40, fontSize, BLUE);
+        DrawText(text.c_str(), 30, 40, fontSize, BLUE);
 
         for (int i = -50; i <= app.getHeight() + 50; i += 50) {
           DrawLine(-50, i, app.getWidth() + 50, i, GRAY);
