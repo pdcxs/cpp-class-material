@@ -42,6 +42,7 @@ void App::run() {
   }
 
   CloseWindow();
+  CloseAudioDevice();
 }
 
 void App::setActions(std::function<void()> setup,
