@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+	<meta charset="utf-8">
+
+    <title>面向对象程序设计技术X 第六课</title>
+
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" href="../dist/reset.css">
+	<link rel="stylesheet" href="../dist/reveal.css">
+	<link rel="stylesheet" href="../dist/theme/white-contrast.css" id="theme">
+	<link rel="stylesheet" href="../css/layout.css" id="theme">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="../plugin/highlight/monokai.css">
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+<section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 堆与拷贝构造函数
+
+主讲：陈笑沙
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 目录
+
+- 6.1 关于堆
+- 6.2 需要 `new` 和 `delete` 的原因
+- 6.3 分配堆对象
+- 6.4 拷贝构造函数
+- 6.5 浅拷贝与深拷贝
+- 6.6 临时对象
+- 6.7 构造函数用于类型转换
+- 6.8 扩展阅读
+</div></script></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec1" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 6.1 关于堆
+
+程序驻留内存得以运行，其内存布局有四个区域：
+
+- &shy;<!-- .element: class="fragment" data-fragment-index="1" -->`Code` 区（代码区）
+- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->`Data` 区（全局数据区）
+- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->`Heap` 区（堆区）
+- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->`Stack` 区（栈区）
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec1" -->
+<div class="" style="font-size:35px; position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 6.1 关于堆
+
+- &shy;<!-- .element: class="fragment" data-fragment-index="1" -->**代码区**存放可执行指令
+	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->只读、可能被多个进程共享（如动态库）、大小固定、程序运行时加载
+- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->**全局数据区**保存全局变量和静态变量、常量字符串
+	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->可读写、生命周期与程序一致
+- &shy;<!-- .element: class="fragment" data-fragment-index="5" -->**堆区**动态内存分配和存储区
+	- &shy;<!-- .element: class="fragment" data-fragment-index="6" -->手动管理、地址由低到高、大小不固定、运行时动态分配、碎片化问题可能比较严重
+- &shy;<!-- .element: class="fragment" data-fragment-index="7" -->**栈区**存放局部变量、函数参数、返回地址，保存函数调用的上下文（如寄存器状态）
+	- &shy;<!-- .element: class="fragment" data-fragment-index="8" -->自动管理、地址由高到低、大小有限、快速访问
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec1" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 6.1 关于堆
+
+C 语言中的堆申请与释放
+
+```c [|4|8|8-12|14]
+#include <stdlib.h>
+#include <stdio.h>
+
+int num = 10; // 数据区
+
+int main()
+{
+    int* arr = (int*)malloc(sizeof(int) * num); // 堆区申请
+    for (int i = 0; i < num; i++) {
+        arr[i] = i; // arr 和 i 为栈区变量
+        printf("%d\n", arr[i]);
+    }
+    
+    free(arr); // 释放
+    return 0;
+}
+```
+
+<small>可以在<https://godbolt.org></https>上查看汇编代码，直观感受底层原理（最好把 `Compiler options` 选项清空）</small>
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec2" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 6.2 需要 `new` 和 `delete` 的原因
+
+`C++` 中有大量的对象数据，在申请堆的同时，还需要对内存进行初始化（构造函数）；释放内存时，需要调用析构函数。
+
+```cpp [|]
+class Point {
+public:
+	Point() { x = 1; y = 1; } // 无参构造函数
+	void print() { cout << x << ", " << y; }
+	void set(int x, int y) {
+		this->x = x;
+		this->y = y;
+	}
+	~Point() { // do something ... }
+private:
+	int x, y;
+};
+```
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec2" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 6.2 需要 `new` 和 `delete` 的原因
+
+`malloc` 与 `free` 的不足。
+
+```cpp [|2-3|4-5|6]
+int main() {
+	// 没有调用构造函数
+	Point* pd = (Point*)malloc(10 * sizeof(Point));
+	for (int i = 0; i < 10; i++)
+		pd[i].set(1, 1); // 需要这样初始化
+	free(pd); // 没有调用析构函数
+	return 0;
+}
+```
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec3" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 6.3 分配堆对象
+
+```cpp [|2|3|4|5|7|8|]
+int main() {
+	Point* pd = new Point; // 申请一个对象
+	Point* pds = new Point[10]; // 申请一个数组
+	pd->print(); // 已经初始化，不用再设置
+	pds[2].print();
+	
+	delete pd; // 释放一个对象
+	delete[] pds; // 释放多个对象
+	
+	return 0;
+}
+```
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec3" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 6.3 分配堆对象
+
+- &shy;<!-- .element: class="fragment" data-fragment-index="1" --> `new` 与 `delete` 为 `C++` 操作符，不用引入新的头文件
+- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->其功能覆盖 C 语言，可以申请基本数据类型
+- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->性能与 C 语言相同，自动类型匹配，无需转换
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec3" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 6.3 分配堆对象
+
+用 `new` 时，可以传入构造函数参数：
+
+```cpp [|3|12|13|14|]
+class Point {
+public:
+	Point(int x, int y): x(x), y(y){}
+	void print() { cout << x << ", " << y; }
+	void set(int x, int y) {
+		this->x = x;
+		this->y = y;
+	}
+};
+
+int main() {
+	Point* p = new Point(3, 4);
+	p->print();
+	delete p; // 此处不能有参数
+	return 0;
+}
+```
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec4" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 6.4 拷贝构造函数
+
+对象常见的操作：
+
+- &shy;<!-- .element: class="fragment" data-fragment-index="1" -->创建（构造函数）
+- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->比较
+- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->赋值
+- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->拷贝构造
+- &shy;<!-- .element: class="fragment" data-fragment-index="5" -->析构（析构函数）
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec4" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 6.4 拷贝构造函数
+
+### 题外话
+
+实质上，并不是所有对象都支持这些操作，`C++` 中并没有对哪些对象需要支持哪些操作进行严格的限制，在 `C++ 20` 之后，引入了 `concept` 的概念，以解决这一问题。
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec4" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 6.4 拷贝构造函数
+
+当一个类没有自定义这些操作时，编译器会自动添加一个默认的操作。
+
+```cpp
+class Student {
+public:
+	Student(); // 默认构造函数
+	Student(const Student& other); // 默认拷贝构造函数
+	~Student(); // 默认析构函数
+	Student& operator=(const Student& other); // 默认赋值函数
+	bool operator==(const Student& other) const; // 默认比较函数
+};
+```
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec4" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 6.4 拷贝构造函数
+
+我们可以自定义拷贝构造函数：
+
+```cpp [|7-10|11-16|17-19|28-30|31]
+#include <iostream>
+
+using namespace std;
+
+class Student {
+public:
+  Student(const string &name, int age)
+    : name(name), age(age) {
+    cout << "Constructing Student " << name << endl;
+  }
+  Student(const Student &other) {
+    cout << "Constructing copy of Student "
+         << other.name << endl;
+    name = other.name;
+    age = other.age;
+  }
+  ~Student() {
+    cout << "Destructing Student " << name << endl;
+  }
+  void setName(const string &name) { this->name = name; }
+
+private:
+  int age;
+  string name;
+};
+
+int main() {
+  Student s{"Eric", 12};
+  Student s2 = s;
+  Student s3{"Alice", 20};
+  s3 = s; // this will not call copy constructor
+  s2.setName("Bob");
+  return 0;
+}
+
+```
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec4" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 6.4 拷贝构造函数
+
+- &shy;<!-- .element: class="fragment" data-fragment-index="1" -->如果将与自己同类的对象的引用作为参数时，该构造函数就称为拷贝构造函数。
+- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->拷贝构造函数的特点
+	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->它是一个构造函数，当创建对象时系统会自动调用它。
+	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->它将一个已经创建好的对象作为参数，根据需要将该对象中的数据成员逐一对应地赋值给新对象。
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec4" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 6.4 拷贝构造函数
+
+- &shy;<!-- .element: class="fragment" data-fragment-index="1" -->如果没有定义拷贝构造函数，那么编译器会为该类产生一个缺省的拷贝构造函数。
+- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->缺省的拷贝构造函数使用位拷贝的方法来完成对象到对象的复制。
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec5" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 6.5 浅拷贝与深拷贝
+
+考虑以下情形，有什么问题？
+
+```cpp [|25-27|7-10|11-14|15-16|17-22|30-37]
+#include <iostream>
+
+using namespace std;
+
+class Array {
+public:
+  explicit Array(int size) {
+    this->size = size;
+    arr = new int[size];
+  }
+  Array(const Array &other) {
+    this->size = other.size;
+    this->arr = other.arr;
+  }
+  void set(int i, int value) { arr[i] = value; }
+  int get(int i) const { return arr[i]; }
+  void print() {
+    cout << "[";
+    for (int i = 0; i < size - 1; i++)
+      cout << arr[i] << ", ";
+    (size>0 ? cout<<arr[size - 1] : cout) << "]" << endl;
+  }
+  ~Array() { delete[] arr; }
+
+private:
+  int *arr;
+  int size;
+};
+
+int main() {
+  Array a{10};
+  Array b = a;
+  a.set(2, 100);
+  a.print();
+  b.print();
+  return 0;
+}
+
+```
+<!-- .element: data-id="shallow" -->
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec5" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 6.5 浅拷贝与深拷贝
+
+一个对象改变，另一个对象也发生改变，因为共用一片内存空间。
+
+```cpp [30-37|11-14]
+#include <iostream>
+
+using namespace std;
+
+class Array {
+public:
+  explicit Array(int size) {
+    this->size = size;
+    arr = new int[size];
+  }
+  Array(const Array &other) {
+    this->size = other.size;
+    this->arr = other.arr;
+  }
+  void set(int i, int value) { arr[i] = value; }
+  int get(int i) const { return arr[i]; }
+  void print() {
+    cout << "[";
+    for (int i = 0; i < size - 1; i++)
+      cout << arr[i] << ", ";
+    (size>0 ? cout<<arr[size - 1] : cout) << "]" << endl;
+  }
+  ~Array() { delete[] arr; }
+
+private:
+  int *arr;
+  int size;
+};
+
+int main() {
+  Array a{10};
+  Array b = a;
+  a.set(2, 100);
+  a.print();
+  b.print();
+  return 0;
+}
+
+```
+<!-- .element: data-id="shallow" -->
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec5" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 6.5 浅拷贝与深拷贝
+
+如何修改？
+
+```cpp [11-14]
+#include <iostream>
+
+using namespace std;
+
+class Array {
+public:
+  explicit Array(int size) {
+    this->size = size;
+    arr = new int[size];
+  }
+  Array(const Array &other) {
+    this->size = other.size;
+    this->arr = other.arr;
+  }
+  void set(int i, int value) { arr[i] = value; }
+  int get(int i) const { return arr[i]; }
+  void print() {
+    cout << "[";
+    for (int i = 0; i < size - 1; i++)
+      cout << arr[i] << ", ";
+    (size>0 ? cout<<arr[size - 1] : cout) << "]" << endl;
+  }
+  ~Array() { delete[] arr; }
+
+private:
+  int *arr;
+  int size;
+};
+
+int main() {
+  Array a{10};
+  Array b = a;
+  a.set(2, 100);
+  a.print();
+  b.print();
+  return 0;
+}
+
+```
+<!-- .element: data-id="shallow" -->
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec5" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 6.5 浅拷贝与深拷贝
+
+如何修改？
+
+```cpp [11-16]
+#include <iostream>
+
+using namespace std;
+
+class Array {
+public:
+  explicit Array(int size) {
+    this->size = size;
+    arr = new int[size];
+  }
+  Array(const Array &other) {
+    this->size = other.size;
+    this->arr = new int[this->size];
+    for (int i = 0; i < this->size; i++)
+    	this->arr[i] = other.arr[i];
+  }
+  void set(int i, int value) { arr[i] = value; }
+  int get(int i) const { return arr[i]; }
+  void print() {
+    cout << "[";
+    for (int i = 0; i < size - 1; i++)
+      cout << arr[i] << ", ";
+    (size>0 ? cout<<arr[size - 1] : cout) << "]" << endl;
+  }
+  ~Array() { delete[] arr; }
+
+private:
+  int *arr;
+  int size;
+};
+
+int main() {
+  Array a{10};
+  Array b = a;
+  a.set(2, 100);
+  a.print();
+  b.print();
+  return 0;
+}
+
+```
+<!-- .element: data-id="shallow" -->
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec6" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 6.6 临时对象
+
+考虑以下情况(`example/lec06/tempObject`)：
+
+```cpp[|5-16|18-21|24|25|26]
+#include <iostream>
+
+using namespace std;
+
+class A {
+public:
+  A(string id) : id(id) {
+    cout << "Constructing A with id " << id << endl;
+  }
+  A(const A &other) : id(other.id) {
+    cout << "Copy " << other.id << endl;
+  }
+
+private:
+  string id;
+};
+
+A returnValueFunc(A a) {
+  A b = a;
+  return b; // 如果没有返回值优化，此处会发生拷贝
+}
+
+int main() {
+  A a("a1");
+  A b = a;
+  A c = returnValueFunc(b);
+  return 0;
+}
+```
+<!-- .element: data-id="tempobj" -->
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec6" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 6.6 临时对象
+
+共发生了几次拷贝？
+<!-- .element: class="fragment" -->
+
+```cpp[26|18-21]
+#include <iostream>
+
+using namespace std;
+
+class A {
+public:
+  A(string id) : id(id) {
+    cout << "Constructing A with id " << id << endl;
+  }
+  A(const A &other) : id(other.id) {
+    cout << "Copy " << other.id << endl;
+  }
+
+private:
+  string id;
+};
+
+A returnValueFunc(A a) {
+  A b = a;
+  return b; // 如果没有返回值优化，此处会发生拷贝
+}
+
+int main() {
+  A a("a1");
+  A b = a;
+  A c = returnValueFunc(b);
+  return 0;
+}
+```
+<!-- .element: data-id="tempobj" -->
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec6" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 6.6 临时对象
+
+- &shy;<!-- .element: class="fragment" data-fragment-index="1" -->`C++` 中，函数参数如果按值传入，会发生拷贝
+- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->函数参数按值返回，则会认为这是一个临时对象，进行优化
+- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->可以加上 `-fno-elide-constructors` 参数以关闭返回值优化
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec6" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 6.6 临时对象
+
+再考虑以下情况：
+
+```cpp
+A a = A("a");
+```
+
+此时，表面上是用 `A("a")` 创建了一个 **无名对象** ，然后调用拷贝构造函数初始化 ` a `，但是实际上仍然会调用构造函数。
+<!-- .element: class="fragment" -->
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec7" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 6.7 构造函数用于类型转换
+
+只有一个参数的构造函数可以进行类型转换
+
+```cpp [|1-5|7|9-10|7]
+class Student {
+	Student(const string& name) : name(name) {}
+private:
+	string name;
+};
+
+void f(Student stu) {...}
+
+// 可以直接这样调用
+f("Trump");
+```
+<!-- .element: data-id="implicit" -->
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec7" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 6.7 构造函数用于类型转换
+
+只有一个参数的构造函数可以进行类型转换
+
+```cpp [7]
+class Student {
+	Student(const string& name) : name(name) {}
+private:
+	string name;
+};
+
+void f(Student& stu) {...} // cannot do this
+
+// 可以直接这样调用
+f("Trump");
+```
+<!-- .element: data-id="implicit" -->
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec7" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 6.7 构造函数用于类型转换
+
+只有一个参数的构造函数可以进行类型转换
+
+```cpp [7]
+class Student {
+	Student(const string& name) : name(name) {}
+private:
+	string name;
+};
+
+void f(const Student& stu) {...} // this is ok
+
+// 可以直接这样调用
+f("Trump");
+```
+<!-- .element: data-id="implicit" -->
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec7" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 6.7 构造函数用于类型转换
+
+只有一个参数的构造函数可以进行类型转换
+
+```cpp [7]
+class Student {
+	Student(const string& name) : name(name) {}
+private:
+	string name;
+};
+
+void f(Student&& stu) {...} // this is also ok
+
+// 可以直接这样调用
+f("Trump");
+```
+<!-- .element: data-id="implicit" -->
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec7" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 6.7 构造函数用于类型转换
+
+再考虑如下情况：
+<!-- .element: class="fragment" -->
+
+```cpp [|1-5|7-11|13-14|17]
+class A {
+public:
+  int i;
+  A(int n) : i(n) {}
+};
+
+class B {
+public:
+  int i;
+  B(int n) : i(n) {}
+};
+
+void f(A a) {}
+void f(B b) {} // overload
+
+int main() {
+  f(10); // compile error!
+  return 0;
+}
+```
+<!-- .element: class="fragment" -->
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec7" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 6.7 构造函数用于类型转换
+
+- &shy;<!-- .element: class="fragment" data-fragment-index="1" -->这种情况一般是不需要的
+- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->而且是有害的（隐形类型转换应当尽量避免，容易引起歧义）
+- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->好的编程风格：
+	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->如果构造函数只有一个参数
+	- &shy;<!-- .element: class="fragment" data-fragment-index="5" -->那么在构造函数前加 `explicit` 关键字
+</div></script></section></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec8" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+
+## 6.8 扩展阅读
+
+- &shy;<!-- .element: class="fragment" data-fragment-index="1" -->实际上，函数传递值发生拷贝是一个影响性能的问题，现代 `C++` 引入了 `std::move` 来解决这一问题。
+- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->同样是为了解决这一问题，`Rust` 语言引入了 `Onwership` 概念。
+- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->参考资料：
+	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->[一文读懂C++右值引用和std::move - 知乎](https://zhuanlan.zhihu.com/p/335994370)
+	- &shy;<!-- .element: class="fragment" data-fragment-index="5" -->[Rust：所有权（ownership） - 知乎](https://zhuanlan.zhihu.com/p/132869544)
+</div></script></section><section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate data-auto-animate-id="challenge"-->
+<div class="" style="font-size: 35px; position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 挑战
+
+实现自己的 `vector`
+
+- 不用使用泛型，只针对 `int` 类型
+- 初始内存大小为 8
+- 如果内存不够，自动扩展内存（当前内存数量乘以 2）
+- `capacity` 返回内存大小
+- `size` 返回元素数量
+- `int get(int index) const` 与 `std::optional<int> safe_get(int index) const`
+- `bool set(int index, int value)`
+- `std::string to_string() const`
+</div></script></section>
+<section  data-markdown><script type="text/template"><!-- .slide: class="drop" data-auto-animate data-auto-animate-id="challenge" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 挑战
+
+实现自己的 `vector`
+
+### 进阶
+
+- &shy;<!-- .element: class="fragment" data-fragment-index="1" -->拷贝构造函数
+- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->针对右值引用的拷贝构造函数
+- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->使用 `std::move` 对这两个构造函数进行测试
+- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->实现 `push_back`：`capacity` 不足时自动扩充内存
+
+</div></script></section></section>
+	</div>
+	</div>
+
+	<script src="../dist/reveal.js"></script>
+	<script src="../plugin/zoom/zoom.js"></script>
+	<script src="../plugin/notes/notes.js"></script>
+	<script src="../plugin/search/search.js"></script>
+	<script src="../plugin/markdown/markdown.js"></script>
+	<script src="../plugin/mermaid/mermaid.js"></script>
+	<script src="../plugin/math/math.js"></script>
+	<script src="../plugin/highlight/highlight.js"></script>
+	<script>
+		Reveal.initialize({
+			controls: true,
+			progress: true,
+			center: true,
+			hash: true,
+			slideNumber: true,
+			plugins: [RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMermaid, RevealMath.KaTeX]
+		});
+
+	</script>
+</body>
+
+</html>

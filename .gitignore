@@ -1,3 +1,4 @@
 **/.xmake/
 **/.vscode/
+**/*.exe
 **/.cache/
