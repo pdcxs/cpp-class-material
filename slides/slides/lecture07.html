@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+
+    <title>面向对象程序设计技术X 第七课</title>
+
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="../dist/reset.css" />
+    <link rel="stylesheet" href="../dist/reveal.css" />
+    <link rel="stylesheet" href="../dist/theme/white-contrast.css" id="theme" />
+    <link rel="stylesheet" href="../css/layout.css" id="theme" />
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="../plugin/highlight/monokai.css" />
+  </head>
+
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ## 静态成员与友元
+
+            主讲：陈笑沙
+            </div>
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ## 目录
+
+
+            - 7.1 为什么需要静态成员
+            - 7.2 如何使用静态成员
+            - 7.3 静态成员变量
+            - 7.4 静态成员函数
+            - 7.5 为什么需要友元
+            - 7.6 如何使用友元
+            </div>
+          </script>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 7.1 为什么需要静态成员
+
+              ### 什么是静态成员？
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->当用关键字 `static` 说明一个类成员时，该成员为静态成员。
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->静态成员分为：
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->静态成员变量
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->静态成员函数
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 7.1 为什么需要静态成员
+
+              静态成员变量的定义和初始化
+
+              ```cpp [|3|6|]
+              class A {
+              public:
+              	static int property;
+              };
+
+              int A::property = 1;
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 7.1 为什么需要静态成员
+
+              静态成员变量的特性
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->类的所有对象共享静态成员变量，因此无论建立多少个该类的对象，静态成员变量只有一份拷贝。
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->静态成员变量属于类，而不属于具体对象。
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->静态成员变量的生命周期与全局变量相同。
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 7.1 为什么需要静态成员
+
+              个别属性描述所有对象的共性
+
+              ```cpp []
+              class EnemySlime {
+              	int maxHealth;
+              	float maxSpeed;
+              };
+              ```
+
+              但是到目前为止的语法中，所有类只能描述对象的属性，而无法描述共有属性。
+              <!-- .element: class="fragment" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 7.1 为什么需要静态成员
+
+              是否可以使用全局变量？
+              <!-- .element: class="fragment" -->
+
+              ```cpp []
+              int slimeMaxHealth;
+              float slimeMaxSpeed;
+              class Slime {...};
+              ```
+              <!-- .element: class="fragment" -->
+
+              - 容易命名冲突<!-- .element: class="fragment" -->
+              - 无法控制可访问性（代码任意位置均可见）<!-- .element: class="fragment" -->
+              - 尽量不要使用全局变量（不好的代码风格）<!-- .element: class="fragment" -->
+              </div>
+            </script>
+          </section>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-2" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ## 7.2 如何使用静态成员
+
+            - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->静态数据成员也有 `public` 和 `private` 之分
+            	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->类外只能访问 `public` 属性的静态数据成员
+            	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->类内可以访问所有属性的静态数据成员
+            - &shy;<!-- .element: class="fragment" data-fragment-index="4" -->静态数据成员是属于类的
+            	- &shy;<!-- .element: class="fragment" data-fragment-index="5" -->访问方法：`ClassName::StaticMember`
+            - &shy;<!-- .element: class="fragment" data-fragment-index="6" -->当对象不存在时，也可以访问类的静态数据成员
+            </div>
+          </script>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 7.3 静态成员变量
+
+              ```cpp [|2-3|4-5|]
+              class Slime {
+              	static int maxHealth;
+              	static int maxSpeed;
+              	int health;
+              	int speed;
+              };
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 7.3 静态成员变量
+
+              ```cpp [|3-5|7-13|9,11|]
+              class Slime {
+              public:
+              	void heal(int amount) {
+              		health = std::min(health + amount, maxHealth);
+              	}
+
+              	void acc(int amount) {
+              		speed += amount;
+              		if (speed > maxSpeed)
+              			speed = maxSpeed;
+              		else if (speed < -maxSpeed)
+              			speed = -maxSpeed;
+              	}
+              };
+              ```
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 7.4 静态成员函数
+
+              静态成员函数的定义：
+
+              ```cpp []
+              class A {
+                static void func() { ...}
+              };
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 7.4 静态成员函数
+
+              看以下例子：
+
+              ```cpp [|3|5|6-10|9|12-16]
+              class Vector2D {
+              private:
+              	double x, y;
+              public:
+              	Vector2D(x = 0.0, y = 0.0) : x(x), y(y) {}
+              	Vector2D& add(const Vector2D& other) {
+              		x += other.x;
+              		y += other.y;
+              		return *this; // why this?
+              	}
+
+              	std::string to_string() const {
+                      std::ostringstream oss;
+                      oss << "{" << x << ", " << y << "}";
+                      return oss.str();
+                  }
+              };
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 7.4 静态成员函数
+
+              返回自身可以做到链式调用：
+
+              ```cpp [|1|4-5|8|9|10|]
+              #include "vector2d.hpp"
+              #include <iostream>
+
+              using std::cout;
+              using std::endl;
+
+              int main(int argc, char **argv) {
+                Vector2D v;
+                v.add({1, 2}).add({3, 4});
+                cout << v.to_string() << endl;
+                return 0;
+              }
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 7.4 静态成员函数
+
+              但是加法非得是一个向量加到另一个向量上么？
+
+              ```cpp [|2|3-4]
+              class Vector2D {
+                static Vector2D add(const Vector2D& v1, const Vector2D& v2) {
+                  Vector2D v(v1.x + v2.x, v1.y + v2.y);
+                  return v;
+                }
+              };
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 7.4 静态成员函数
+
+              但是加法非得是一个向量加到另一个向量上么？
+
+              ```cpp [8-10|12-14]
+              #include "vector2d.hpp"
+              #include <iostream>
+
+              using std::cout;
+              using std::endl;
+
+              int main(int argc, char **argv) {
+                Vector2D v;
+                v.add({1, 2}).add({3, 4});
+                cout << v.to_string() << endl;
+
+                Vector2D v2{100, 200};
+                Vector2D v3 = Vector2D::add(v, v2);
+                cout << v3.to_string() << endl;
+                return 0;
+              }
+
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 7.4 静态成员函数
+
+              另外一个例子：`/example/lec07/itemManage`
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-5" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 7.5 为什么需要友元
+
+              思考一个问题：
+
+              如果有一个 `List` 类，一个 `Node` 类，我们该如何实现 `list.append(Node&)`
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-5" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 7.5 为什么需要友元
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->`Node` 类中的`next`是 `private` 的。
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->`List` 类中的 `head` 的是`private`的。
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->但是需要在 `list` 中对 `node` 的 `next` 进行修改。
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-5" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 7.5 为什么需要友元
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->封装的目的就是为了实现信息隐蔽。
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->一个对象的私有成员只能被自己的成员访问到。当类外的对象或函数要访问这个类的私有成员时，只能通过该类提供的公有成员间接地进行。
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->C++提供了友元机制来打破私有化的界限，即一个类的友元可以访问到该类的私有成员。
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-6" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 7.6 如何使用友元
+
+              例子：`/example/lec07/list`
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-6" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 7.6 如何使用友元
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->友元具有如下的性质：
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->类的友元可以直接访问它的所有成员。
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->友元的声明必须放在类的内部，但放在哪个段没有区别。
+              - &shy;<!-- .element: class="fragment" data-fragment-index="4" -->友元关系不具备对称性，即X是Y的友元，但Y不一定是X的友元。
+              - &shy;<!-- .element: class="fragment" data-fragment-index="5" -->友元关系不具备传递性，即X是Y的友元，Y是Z的友元，但X不一定是Z的友元。
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-6" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 7.6 如何使用友元
+
+              好的代码风格：尽量避免使用友元！
+              </div>
+            </script>
+          </section>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" -->
+            <div class="" style="font-size: 30px; position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ## 练习
+
+            - 实现 `Vector2D` 的**静态**与**非静态**版本的以下方法
+            	- `sub`
+            	- `dot`
+            	- `cross`
+            - 利用 `vector` 实现`Matrix2D`，实现以下方法：
+            	- `add`
+            	- `scale` （矩阵和标量的乘法）
+            	- `mult` （矩阵和矩阵的乘法）
+            - 实现 `vector` 以下方法
+            	- 非静态成员函数：`applyTransform(const Matrix2D&)`
+            	- 静态成员函数：`mult(const Matrix2D&, const Vector2D&)`
+            </div>
+          </script>
+        </section>
+      </div>
+    </div>
+
+    <script src="../dist/reveal.js"></script>
+    <script src="../plugin/zoom/zoom.js"></script>
+    <script src="../plugin/notes/notes.js"></script>
+    <script src="../plugin/search/search.js"></script>
+    <script src="../plugin/markdown/markdown.js"></script>
+    <script src="../plugin/mermaid/mermaid.js"></script>
+    <script src="../plugin/math/math.js"></script>
+    <script src="../plugin/highlight/highlight.js"></script>
+    <script>
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        center: true,
+        hash: true,
+        slideNumber: true,
+        plugins: [
+          RevealZoom,
+          RevealNotes,
+          RevealSearch,
+          RevealMarkdown,
+          RevealHighlight,
+          RevealMermaid,
+          RevealMath.KaTeX,
+        ],
+      });
+    </script>
+  </body>
+</html>
