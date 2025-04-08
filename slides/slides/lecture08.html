@@ -1,0 +1,1074 @@
+<!doctype html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+
+    <title>面向对象程序设计技术X 第八课</title>
+
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="../dist/reset.css" />
+    <link rel="stylesheet" href="../dist/reveal.css" />
+    <link rel="stylesheet" href="../dist/theme/white-contrast.css" id="theme" />
+    <link rel="stylesheet" href="../css/layout.css" id="theme" />
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="../plugin/highlight/monokai.css" />
+  </head>
+
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ## 继承
+
+            主讲：陈笑沙
+            </div>
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ## 复习
+
+            以下哪个描述是错误的？
+
+            - A. 非静态方法可以调用静态方法和属性
+            - B. 静态方法可以调用其他静态方法和属性
+            - C. 静态方法可以调用非静态方法和属性
+            - D. 非静态方法可以调用其他非静态方法和属性
+            </div>
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ## 目录
+
+            - 8.1 继承的概念
+            - 8.2 继承的工作方式
+            - 8.3 继承与组合
+            - 8.4 多继承如何工作
+            - 8.5 多继承的模糊性
+            - 8.6 虚拟继承
+            - 8.7 多继承的构造顺序
+            </div>
+          </script>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.1 继承的概念
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->类描述了群体的共性，通过创建类的不同对象，我们实现了代码重用。但这种重用是不充分的。
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->例如，汽车类 `Car` 有启动，刹车，换挡，改变方向功能。当 `Car` 类的功能需要进行扩展为变形金刚类 `Transformer`，增加“变身”的功能，怎么做？
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.1 继承的概念
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->方法一：
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->创建一个新类 `Transformer` ，在其中粘贴 `Car` 类的代码。
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->再添加新的方法 `void transform(){...}`，这时如果 `Car` 类增加一个功能：自动停车 `void stop()`，那么我们要同时更改 `Car` 类和 `Transformer` 类的代码。
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.1 继承的概念
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->方法二：
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->`Transofomer` 类“使用”了 `Car` 类的特性，那么不需要复制粘贴，`Transformer` 类就自动具有 `Car` 类所有的特性。
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->更好的一点是，任何时候 `Car` 类进行修改，`Transformer` 类都能应用这种修改。这就是<span style="color: red;">**继承与派生**</span>。
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.1 继承的概念
+
+              #### 现实中的继承与派生
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->猫、狗都属于哺乳动物，具备胎生、哺乳、恒温等特征，但又具有各自的特性。
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->这就是“继承”关系的重要性质。
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->形成继承关系的2个类之间，具有 `IS_A` 的关系。
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.1 继承的概念
+
+              #### 现实中的继承与派生
+
+
+              <div class="mermaid">
+              classDiagram
+                哺乳动物 <|-- 猫
+                哺乳动物 <|-- 狗
+                哺乳动物: 胎生
+                哺乳动物: void 哺乳()
+                哺乳动物: 恒温
+
+                class 猫 {
+                  吃鱼
+                  void 喵喵叫()
+                }
+
+                class 狗 {
+                  啃骨头
+                  void 汪汪叫()
+                }
+
+              </div>
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.1 继承的概念
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->事物通过分类与分层相关在一起
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->上层事物具有下层事物的共性
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->例如
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->四川人与浙江人都归类为中国人
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="5" -->具有黄皮肤，黑头发，会说中国话的共性
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.1 继承的概念
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->编程需要处理分层的事物(数据)
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->拥有上层数据或对象，用继承描述下层数据与对象
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->既共享了上层数据与代码获得代码重用的好处，又保持了类结构特有的封装性
+              - &shy;<!-- .element: class="fragment" data-fragment-index="4" -->使得继承后的实体又可以作为上层数据和代码继承下去
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.1 继承的概念
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" --><span style="color: red">**继承**</span>
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->一旦指定了某种事物父代的本质特征，那么它的子代将会自动具有那些性质。
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->这是一种朴素的可重用的概念。
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->继承就是在一个已经存在的类的基础上建立另一个新的类。
+              - &shy;<!-- .element: class="fragment" data-fragment-index="5" --><span style="color: red">**派生**</span>
+                  - &shy;<!-- .element: class="fragment" data-fragment-index="6" -->子代可以拥有父代没有的特性，这是可扩充的概念。
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.1 继承的概念
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->派生类的功能主要通过以下方式来体现
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->吸收基类成员
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->添加新成员
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->改造基类成员
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.1 继承的概念
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->从编码的角度来看，派生类从基类中以较低的代价换来了较大的灵活性
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->派生类可以对继承的属性进行扩展、限制或改变
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->一旦产生了可靠的基类，只需要调试派生类中所作的修改即可
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.2 继承的工作方式
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->单继承：派生类只有一个直接基类
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->多继承：派生类有多个直接基类
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.2 继承的工作方式
+
+              #### 单继承
+
+              <div class="mermaid">
+              classDiagram
+                A <|-- B
+                B <|-- C
+                A <|-- D
+                D <|-- E
+
+              </div>
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.2 继承的工作方式
+
+              #### 多继承
+
+              <div class="mermaid">
+              classDiagram
+                B <|-- C
+                A <|-- C
+                A <|-- D
+                B <|-- E
+                D <|-- E
+
+              </div>
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.2 继承的工作方式
+
+              定义单继承派生类的语法格式
+
+              ```cpp []
+              class 派生类名 : <继承方式> 基类名{
+                  ...//派生类修改基类的成员
+              };
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.2 继承的工作方式
+
+              - 虽然继承了基类的所有成员，但是派生类并非都能访问基类的所有成员，继承方式会影响派生类对基类中各种成员的使用。
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.2 继承的工作方式
+
+              | 派生方式 | 公有成员 | 保护成员 |  私有成员  |
+              | :--: | :--: | :--: | :----: |
+              | 公有派生 | 公有成员 | 保护成员 | 不可访问成员 |
+              | 私有派生 | 私有成员 | 私有成员 | 不可访问成员 |
+              | 保护派生 | 保护成员 | 保护成员 | 不可访问成员 |
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.2 继承的工作方式
+
+              ```cpp [|2-6|8-12|14-18|]
+              class Base {
+              public:
+                  int publicVar = 1;
+                  void publicFunc() {
+                      cout << "Base::publicFunc()" << endl;
+                  }
+
+              protected:
+                  int protectedVar = 2;
+                  void protectedFunc() {
+                      cout << "Base::protectedFunc()" << endl;
+                  }
+
+              private:
+                  int privateVar = 3;
+                  void privateFunc() {
+                      cout << "Base::privateFunc()" << endl;
+                  }
+              };
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.2 继承的工作方式
+
+              ```cpp [|1|3-8|5|6|7|]
+              class PublicDerived : public Base {
+              public:
+                  void accessBaseMembers() {
+                      cout << "PublicDerived访问基类成员：" << endl;
+                      publicFunc();          // ✔️ 可访问（公有→公有）
+                      protectedFunc();       // ✔️ 可访问（保护→保护）
+                      // privateFunc();     // ❌ 编译错误：基类私有成员不可访问
+                  }
+              };
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.2 继承的工作方式
+
+              ```cpp [|1|3-8|5|6|7|]
+              class ProtectedDerived : protected Base {
+              public:
+                  void accessBaseMembers() {
+                      cout << "ProtectedDerived访问基类成员：" << endl;
+                      publicFunc();          // ✔️ 可访问（公有→保护）
+                      protectedFunc();       // ✔️ 可访问（保护→保护）
+                      // privateFunc();     // ❌ 编译错误：基类私有成员不可访问
+                  }
+              };
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.2 继承的工作方式
+
+              ```cpp [|1|3-8|5|6|7|]
+              class PrivateDerived : private Base {
+              public:
+                  void accessBaseMembers() {
+                      cout << "PrivateDerived访问基类成员：" << endl;
+                      publicFunc();          // ✔️ 可访问（公有→私有）
+                      protectedFunc();       // ✔️ 可访问（保护→私有）
+                      // privateFunc();     // ❌ 编译错误：基类私有成员不可访问
+                  }
+              };
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.2 继承的工作方式
+
+              ```cpp [|2-7|9-12|14-17]
+              int main() {
+                  // 公有继承对象
+                  PublicDerived pubObj;
+                  // ✔️ 外部可访问基类公有成员
+                  pubObj.publicFunc();
+                  // ❌ 外部不可访问基类保护成员
+                  // pubObj.protectedFunc();
+
+                  // 保护继承对象
+                  // ❌ 外部不可访问（基类公有成员在派生类中变为保护）
+                  ProtectedDerived proObj;
+                  // proObj.publicFunc();
+
+                  // 私有继承对象
+                  PrivateDerived priObj;
+                  // ❌ 外部不可访问（基类公有成员在派生类中变为私有）
+                  // priObj.publicFunc();
+
+                  return 0;
+              }
+              ```
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.3 继承与组合
+
+              ```cpp [|1-5|7-13|15-19|21-31]
+              // 继承示例（is-a关系）
+              class Vehicle {  // 基类
+              public:
+                  virtual void start() { cout << "Vehicle启动" << endl; }
+              };
+
+              class Car : public Vehicle {  // 公有继承
+              public:
+                  void start() override {  // 重写基类方法
+                      cout << "Car启动：踩下离合器" << endl;
+                  }
+                  void drive() { cout << "Car行驶中" << endl; }
+              };
+
+              // 组合示例（has-a关系）
+              class Engine {  // 独立部件类
+              public:
+                  void startEngine() { cout << "Engine点火" << endl; }
+              };
+
+              class ElectricCar {  // 组合类
+              private:
+                  Engine engine;    // 内嵌Engine对象
+                  Vehicle vehicle;  // 组合其他类的对象
+              public:
+                  void start() {
+                      engine.startEngine();  // 调用部件功能
+                      vehicle.start();       // 复用基类逻辑
+                      cout << "ElectricCar启动完成" << endl;
+                  }
+              };
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.3 继承与组合
+
+              #### 继承与组合的相同点
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->两种方式都能复用已有类的功能：
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->继承通过派生类直接调用基类方法（如`Car`调用`Vehicle::start()`）
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->组合通过持有对象调用其接口（如`ElectricCar`调用`Engine::startEngine()`）
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.3 继承与组合
+
+              #### 继承与组合的不同点
+
+              | 特性           | 继承                         | 组合                            |
+              | ------------ | -------------------------- | ----------------------------- |
+              | ​**​关系类型​**​ | `is-a`                     | `has-a`                       |
+              | ​**​耦合度​**​  | 高耦合（子类依赖父类实现细节，父类修改可能影响子类） | 低耦合（仅通过接口交互，部件类内部修改不影响组合类）    |
+              | ​**​复用方式​**​ | 白盒复用（可覆盖父类方法）              | 黑盒复用（仅使用部件类的公开接口）             |
+              | ​**​动态性​**​  | 编译时确定，无法运行时切换父类            | 运行时可通过指针/引用动态更换部件（如更换不同类型的引擎） |
+              | ​**​设计原则​**​ | 违反单一职责原则（子类可能继承不相关功能）      | 符合单一职责原则（各部件独立封装）             |
+              <!-- .element: style="font-size: 25px" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.3 继承与组合
+
+              好的代码风格
+
+              **组合优于继承！**
+              <!-- .element: style="color: red; font-size: 70px" class="fragment" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.3 继承与组合
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->以下场景优先选择继承：
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->需要扩展基类功能（如`Car`重写`start()`方法）
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->需要多态特性（如通过基类指针操作不同派生类对象）
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.3 继承与组合
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->以下场景优先选择组合：
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->需要动态更换组件（如支持燃油引擎和电动机自由切换）
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->避免过度层级嵌套（组合可替代多重继承的复杂场景）
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.4 多继承如何工作
+
+              - 多个不同父类派生同一个子类
+              - 或者说一个子类继承多个不同父类
+              - 根据组合与继承的关系同，既然类可以有多个成员对象，那么类也可以继承多个父类使其拥有多个父类的特质
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.4 多继承如何工作
+
+              语法：
+
+              ```cpp
+              class Derived : public Base1, protected Base2, private Base3, ... {
+               ...
+              };
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.4 多继承如何工作
+
+              ```cpp [|4-10|12-18|20-28|30-31|33-35|37-38]
+              #include <iostream>
+              using namespace std;
+
+              // 基类1：飞行能力
+              class Flyable {
+              public:
+                  void fly() {
+                      cout << "使用喷气引擎飞行" << endl;
+                  }
+              };
+
+              // 基类2：游泳能力
+              class Swimmable {
+              public:
+                  void swim() {
+                      cout << "使用螺旋桨航行" << endl;
+                  }
+              };
+
+              // 派生类：多继承两个基类
+              class AmphibiousAircraft : public Flyable, public Swimmable {
+              public:
+                  void showMode() {
+                      cout << "=== 切换模式 ===" << endl;
+                      fly();  // 调用第一个基类方法
+                      swim(); // 调用第二个基类方法
+                  }
+              };
+
+              int main() {
+                  AmphibiousAircraft aa;
+
+                  // 直接访问不同基类的成员函数
+                  aa.fly();    // 输出：使用喷气引擎飞行
+                  aa.swim();   // 输出：使用螺旋桨航行
+
+                  // 调用派生类自有方法
+                  aa.showMode();
+
+                  return 0;
+              }
+              ```
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-5" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.5 多继承的模糊性
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->多继承必须直面父类名字冲突问题
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->子类来自父类A的成员函数与父类B的成员函数调用形式可能完全相同
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->应用编程不得不了解多重继承细节,与面向对象编程的宗旨背道而驰
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-5" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.5 多继承的模糊性
+
+              ```cpp [|4-10|12-18|20-33|35-40|43-46|48-50]
+              #include <iostream>
+              using namespace std;
+
+              // 基类1：电子设备
+              class ElectronicDevice {
+              public:
+                  void powerOn() { // 同名成员函数
+                      cout << "电子设备电源启动" << endl;
+                  }
+              };
+
+              // 基类2：机械装置
+              class MechanicalDevice {
+              public:
+                  void powerOn() { // 同名成员函数
+                      cout << "机械装置动力激活" << endl;
+                  }
+              };
+
+              // 派生类：智能机器人（多继承）
+              class Robot : public ElectronicDevice, public MechanicalDevice {
+              public:
+                  void startup() {
+                      // 直接调用会产生二义性
+                      // powerOn();  // ❌ 编译错误：'powerOn' is ambiguous
+
+                      // 解决方案1：使用作用域限定符
+                      ElectronicDevice::powerOn();  // 明确调用指定基类版本
+                      MechanicalDevice::powerOn();
+
+                      // 解决方案2：在派生类中重定义统一接口
+                      combinedPowerOn();
+                  }
+
+                  // 解决方案2：创建统一接口
+                  void combinedPowerOn() {
+                      cout << "==== 系统启动 ====" << endl;
+                      ElectronicDevice::powerOn();
+                      MechanicalDevice::powerOn();
+                  }
+              };
+
+              int main() {
+                  // 基础多继承冲突解决
+                  Robot bot;
+                  bot.startup();
+
+                  // 外部调用时也需要明确作用域
+                  bot.ElectronicDevice::powerOn();
+                  bot.MechanicalDevice::powerOn();
+
+                  return 0;
+              }
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-5" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.5 多继承的模糊性
+
+              #### 菱形继承问题
+
+
+              <div class="mermaid">
+              classDiagram
+                A <|-- B
+                A <|-- C
+                B <|-- D
+                C <|-- D
+
+              </div>
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-5" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.5 多继承的模糊性
+
+              ```cpp [|4-9|11-15|17-21|23-27|30|32-34|36-38|40-44]
+              #include <iostream>
+              using namespace std;
+
+              // 公共基类
+              class Animal {
+              public:
+                  int age;
+                  void eat() { cout << "Animal eating" << endl; }
+              };
+
+              // 第一继承路径
+              class Mammal : public Animal {
+              public:
+                  void breathe() { cout << "Mammal breathing" << endl; }
+              };
+
+              // 第二继承路径
+              class Bird : public Animal {
+              public:
+                  void fly() { cout << "Bird flying" << endl; }
+              };
+
+              // 菱形继承的派生类
+              class Platypus : public Mammal, public Bird {
+              public:
+                  void layEggs() { cout << "Platypus laying eggs" << endl; }
+              };
+
+              int main() {
+                  Platypus perry;
+
+                  // 产生二义性的访问
+                  // perry.age = 2; // ❌ 编译错误：ambiguous access of 'age'
+                  // perry.eat(); // ❌ 编译错误：ambiguous access of 'eat'
+
+                  // 显式指定路径可以解决
+                  perry.Mammal::age = 2;  // ✅ 明确使用Mammal路径的age
+                  perry.Bird::eat();      // ✅ 明确使用Bird路径的eat
+
+                  // 验证两个基类副本的存在
+                  cout << "Mammal's age: " << perry.Mammal::age << endl;
+                  perry.Mammal::age = 3;
+                  // 输出不同值
+                  cout << "Bird's age: " << perry.Bird::age << endl;
+
+                  return 0;
+              }
+              ```
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-6" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.6 虚继承
+
+              **菱形继承的核心问题​**​：
+
+              - 派生类包含两份`Animal`成员副本
+              - 直接访问公共基类成员时编译器无法确定使用哪个副本
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-6" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.6 虚继承
+
+              ```cpp [|1-3|5-11|13-18]
+              // 修改继承方式为虚继承
+              class Mammal : virtual public Animal {};  // 虚继承
+              class Bird : virtual public Animal {};     // 虚继承
+
+              class Platypus : public Mammal, public Bird {
+              public:
+                  void layEggs() {
+                      age = 2;         // ✅ 可以直接访问（唯一副本）
+                      eat();           // ✅ 无二义性
+                  }
+              };
+
+              int main() {
+                  Platypus perry;
+                  perry.age = 5;       // ✅ 正常访问
+                  cout << perry.age;   // 输出5（唯一值）
+                  return 0;
+              }
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-6" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.6 虚继承
+
+              ```cpp [|1-3|5-7|9-11]
+              class A {};
+              class B1 : public A {};
+              class B2 : public A {};
+
+              class C1 : public B1, public B2 {
+                // B1 is real base, B2 is fake base.
+              }
+
+              class C2 : public B2, public B1 {
+                // B2 is real base, B1 is fake base.
+              }
+              ```
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-7" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.7 多继承的构造顺序
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->首先完成虚继承的构造
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->其他则按继承规则
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->首先构造非虚基类
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->再构造成员对象
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="5" -->最后构造派生类自己的数据
+              - &shy;<!-- .element: class="fragment" data-fragment-index="6" -->若在同一层中包含多个虚基类，那么虚基类的构造按它们说明的次序调用
+              - &shy;<!-- .element: class="fragment" data-fragment-index="7" -->析构的顺序与之相反
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-7" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.7 多继承的构造顺序
+
+              ```cpp [|4-9|11-16|18-23|25-32|34-41|43-48|50-59|61-71]
+              #include <iostream>
+              using namespace std;
+
+              // 基类
+              class Base {
+              public:
+                  Base() { cout << "Base 构造函数" << endl; }
+                  ~Base() { cout << "Base 析构函数" << endl; }
+              };
+
+              // 普通继承的中间类1
+              class Derived1 : public Base {
+              public:
+                  Derived1() { cout << "Derived1 构造函数" << endl; }
+                  ~Derived1() { cout << "Derived1 析构函数" << endl; }
+              };
+
+              // 普通继承的中间类2
+              class Derived2 : public Base {
+              public:
+                  Derived2() { cout << "Derived2 构造函数" << endl; }
+                  ~Derived2() { cout << "Derived2 析构函数" << endl; }
+              };
+
+              // 虚继承的中间类1
+              class VirtualDerived1 : virtual public Base {
+              public:
+                  VirtualDerived1() { cout << "VirtualDerived1 构造函数" << endl; }
+                  ~VirtualDerived1() {
+                  	cout << "VirtualDerived1 析构函数" << endl;
+                  }
+              };
+
+              // 虚继承的中间类2
+              class VirtualDerived2 : virtual public Base {
+              public:
+                  VirtualDerived2() { cout << "VirtualDerived2 构造函数" << endl; }
+                  ~VirtualDerived2() {
+                  	cout << "VirtualDerived2 析构函数" << endl;
+                  }
+              };
+
+              // 普通菱形继承的最终派生类
+              class Diamond : public Derived1, public Derived2 {
+              public:
+                  Diamond() { cout << "Diamond 构造函数" << endl; }
+                  ~Diamond() { cout << "Diamond 析构函数" << endl; }
+              };
+
+              // 使用虚继承的最终派生类
+              class VirtualDiamond : public VirtualDerived1, public VirtualDerived2 {
+              public:
+                  VirtualDiamond() : Base() {  // 显式调用虚基类构造函数
+                      cout << "VirtualDiamond 构造函数" << endl;
+                  }
+                  ~VirtualDiamond() {
+                  	cout << "VirtualDiamond 析构函数" << endl;
+                  }
+              };
+
+              int main() {
+                  cout << "========== 普通菱形继承 ==========\n";
+                  Diamond d;
+
+                  cout << "\n========== 虚继承菱形继承 ==========\n";
+                  VirtualDiamond vd;
+
+                  cout << "\n========== 析构函数调用 ==========\n";
+
+                  return 0;
+              }
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-7" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.7 多继承的构造顺序
+
+              输出内容
+
+              ```txt [|1-6|8-12|14-23]
+              ========== 普通菱形继承 ==========
+              Base 构造函数
+              Derived1 构造函数
+              Base 构造函数
+              Derived2 构造函数
+              Diamond 构造函数
+
+              ========== 虚继承菱形继承 ==========
+              Base 构造函数
+              VirtualDerived1 构造函数
+              VirtualDerived2 构造函数
+              VirtualDiamond 构造函数
+
+              ========== 析构函数调用 ==========
+              VirtualDiamond 析构函数
+              VirtualDerived2 析构函数
+              VirtualDerived1 析构函数
+              Base 析构函数
+              Diamond 析构函数
+              Derived2 析构函数
+              Base 析构函数
+              Derived1 析构函数
+              Base 析构函数
+              ```
+              </div>
+            </script>
+          </section>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ## 课外阅读
+
+            现代的GUI编程框架，有很多已经摆脱了继承，而采用组合、函数式等方式来实现。
+
+            参考资料：
+
+            - Reactive (`JavaScript` 前端框架)
+            - ftxui (`C++` 的现代化 TUI 框架)
+            </div>
+          </script>
+        </section>
+      </div>
+    </div>
+
+    <script src="../dist/reveal.js"></script>
+    <script src="../plugin/zoom/zoom.js"></script>
+    <script src="../plugin/notes/notes.js"></script>
+    <script src="../plugin/search/search.js"></script>
+    <script src="../plugin/markdown/markdown.js"></script>
+    <script src="../plugin/mermaid/mermaid.js"></script>
+    <script src="../plugin/math/math.js"></script>
+    <script src="../plugin/highlight/highlight.js"></script>
+    <script>
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        center: true,
+        hash: true,
+        slideNumber: true,
+        plugins: [
+          RevealZoom,
+          RevealNotes,
+          RevealSearch,
+          RevealMarkdown,
+          RevealHighlight,
+          RevealMermaid,
+          RevealMath.KaTeX,
+        ],
+      });
+    </script>
+  </body>
+</html>
