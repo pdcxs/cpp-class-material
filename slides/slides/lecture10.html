@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+
+    <title>面向对象程序设计技术X 第十课</title>
+
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="../dist/reset.css" />
+    <link rel="stylesheet" href="../dist/reveal.css" />
+    <link rel="stylesheet" href="../dist/theme/white-contrast.css" id="theme" />
+    <link rel="stylesheet" href="../css/layout.css" id="theme" />
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="../plugin/highlight/monokai.css" />
+  </head>
+
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ## 运算符重载
+
+            主讲：陈笑沙
+            </div>
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ## 目录
+
+            - 10.1 运算符的需要性
+            - 10.2 如何重载运算符
+            - 10.3 返回值与返回引用
+            - 10.4 重载增量运算符
+            - 10.5 转换运算符
+            - 10.6 赋值运算符
+            </div>
+          </script>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 10.1 运算符的需要性
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->`C++` 中，我们不仅要使用基本数据类型，还要设计新的数据类型—类类型。
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->一般情况下，基本数据类型的运算都是用运算符来表达，这很直观，语义也简单。
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->`a = b + c`
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->内部数据类型都预定义了运算符(操作符)
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 10.1 运算符的需要性
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->`C++` 擅长自定义数据类型,以成员函数的方式定义其操作
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->矩阵 `a + b` 实现调用为 `a.add(b)`
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->或者 `Matrix::add(a, b)`
+              - &shy;<!-- .element: class="fragment" data-fragment-index="4" -->`C++` 能在自定义类中定义操作符
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="5" -->为矩阵定义 `+` 运算符
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 10.1 运算符的需要性
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->如果直接将运算符作用在类类型之上，情况又如何呢？
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->`Complex ret, c1,c2; ret=c1+c2;`
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->编译器将不能识别运算符的语义。
+              - &shy;<!-- .element: class="fragment" data-fragment-index="4" -->需要一种机制来重新定义运算符作用在类类型上的含义。
+              - &shy;<!-- .element: class="fragment" data-fragment-index="5" -->这种机制就是运算符重载。
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 10.2 如何重载运算符
+
+              ```cpp [|26-28|4-12|14-24|30-36]
+              #include <sstream>
+              #include <iostream>
+
+              class Complex {
+              public:
+                Complex(double r = 0.0, double i = 0.0) : re(r), im(i) {}
+                static Complex add(const Complex &c1, const Complex &c2) {
+                  Complex r;
+                  r.re = c1.re + c2.re;
+                  r.im = c1.im + c2.im;
+                  return r;
+                }
+
+                std::string to_string() const {
+                  std::ostringstream oss;
+                  oss << re << " + ";
+                  if (im != 0) {
+                    if (im != 1) {
+                      oss << im;
+                    }
+                    oss << "i";
+                  }
+                  return oss.str();
+                }
+
+              private:
+                double re, im;
+              };
+
+              int main() {
+                Complex c1{1, 2};
+                Complex c2{3, 4};
+                auto c3 = Complex::add(c1, c2);
+                std::cout << c3.to_string() << std::endl;
+                return 0;
+              }
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 10.2 如何重载运算符
+
+              示例解读：`example/lec10/complex`
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 10.2 如何重载运算符
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->实际上还可以：
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->将 `Complex operator+(Complex& c1, Complex &c2)` 声明为类成员函数。
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->`c2 = c1 + 27` 相当于 `c2 = c1.operator+(Complex{27})`
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->此时，`c2 = 27 + c1` 会报错
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 10.2 如何重载运算符
+
+              也可以采用友元：
+
+              ```cpp []
+              class  Complex{
+                double re, im;
+                friend Complex operator+(const Complex& c1, const Complex& c2);
+              };
+              ```
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 10.3 返回值与返回引用
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->如果想输出复数对象，该怎么办？
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->`cout << c.to_string() << endl`
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->如果想要直接 `cout << c << endl` 呢？
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 10.3 返回值与返回引用
+
+              ```cpp [|6-16|10,12|18-20|22-34|36-43]
+              #include <iostream>
+              #include <ostream>
+
+              using namespace std;
+
+              class Complex {
+              public:
+                Complex(double r = 0.0, double i = 0.0) : re(r), im(i) {}
+
+                friend Complex operator+(const Complex &c1, const Complex &c2);
+
+                friend ostream &operator<<(ostream &out, const Complex &c);
+
+              private:
+                double re, im;
+              };
+
+              Complex operator+(const Complex &c1, const Complex &c2) {
+                return {c1.re + c2.re, c1.im + c2.im};
+              }
+
+              ostream &operator<<(ostream &out, const Complex &c) {
+                if (c.re != 0)
+                  out << c.re;
+                if (c.im != 0) {
+                  if (c.re != 0)
+                    out << " + ";
+                  if (c.im != 1) {
+                    out << c.im;
+                  }
+                  out << "i";
+                }
+                return out;
+              }
+
+              int main(int argc, char **argv) {
+                cout << Complex{1, 2} + Complex{-1, 2} << endl;
+                cout << Complex{1, 0} << endl;
+                cout << Complex{1, 1} << endl;
+                cout << Complex{0, 1} << endl;
+                cout << Complex{0, 4} << endl;
+                return 0;
+              }
+
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 10.3 返回值与返回引用
+
+              思考：为何 `std::ostream` 需要返回引用？为何函数参数不能加 `const`？
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 10.4 重载增量运算符
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->类对象要实现自增，自减操作，也要进行运算符重载。
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->那么，如何区别前置和后置呢？
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->自增自减的函数原型是什么？
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 10.4 重载增量运算符
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->增量运算符分前增量与后增量,前减量与后减量
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->`int a=3;`
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->`a++;  //后增量`
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->`++a;  //前增量`
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="5" -->`--a;  //前减量`
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="6" -->`a--;  //后减量`
+              - &shy;<!-- .element: class="fragment" data-fragment-index="7" -->施行前增量运算成为左值表达式
+              - &shy;<!-- .element: class="fragment" data-fragment-index="8" -->施行后增量运算成为右值表达式
+              - &shy;<!-- .element: class="fragment" data-fragment-index="9" -->重载前++与后++,都只有一个操作数,故对应一个参数。
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 10.4 重载增量运算符
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->运算符都是 `operator++`
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->重载前++时返回引用,重载后++时返回值
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->C++对前++和后++的重载,区分为：后++增设一整型参数
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->`T &operator++(T& a); // 前++`
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="5" -->`T &operator++(T& a, int); // 后++`
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 10.4 重载增量运算符
+
+
+              ```cpp [|4-8|9-12|14-20|22|25-35]
+              #include <iostream>
+              using namespace std;
+
+              class Increase {
+                int value;
+
+              public:
+                Increase(int x) : value(x) {}
+                Increase &operator++() { // 前增量(无参数)
+                  value++;               // 先增量
+                  return *this;          // 返回原对象
+                }
+
+                Increase operator++(int) {
+                  // 后增量(仅一标记参数int)
+                  Increase temp(value);
+                  // 构造临时对象存放原对象值
+                  value++;     // 原有对象值改变
+                  return temp; // 返回原对象值
+                }
+
+                void display() { cout << "the value is " << value << endl; }
+              };
+
+              int main() {
+                Increase n(20);
+                n.display();
+
+                (n++++).display();
+                n.display();
+
+                ++(++n);
+                n.display();
+                return 0;
+              }
+
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 10.4 重载增量运算符
+
+              ### `this` 指针的用处
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->一个对象的 `this` 指针并不是对象本身的一部分，不会影响 `sizeof(对象)` 的结果。
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->`this` 作用域是在类内部，当在类的非静态成员函数中访问类的非静态成员的时候，编译器会自动将对象本身的地址作为一个隐含参数传递给函数。
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->也就是说，即使你没有写上 `this` 指针，编译器在编译的时候也是加上 `this` 的，它作为非静态成员函数的隐含形参，对各成员的访问均通过 `this` 进行。
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 10.4 重载增量运算符
+
+              ### `this` 指针的使用
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->一种情况就是，在类的非静态成员函数中返回类对象本身的时候，直接使用 `return *this;`
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->另外一种情况是当参数与成员变量名相同时，如 `this->n = n`
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 10.4 重载增量运算符
+
+              ### 普通函数形式
+
+              ```cpp [|3-10|12-15|17-21]
+              #include<iostream>
+              using namespace std;
+              class Increase{
+                int value;
+              public:
+                Increase(int x) : value(x) {}
+                friend Increase &operator++(Increase& a);
+                friend Increase operator++(Increase &a, int);
+                void display() { cout<< "the value is " << value << endl; }
+              };
+
+              Increase& operator++(Increase& a){ 
+                a.value++;
+                return a;
+              }
+
+              Increase operator++(Increase& a, int){
+                Increase temp(a);
+                a.value++;
+                return temp;
+              }
+              ```
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec5" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 10.5 转换运算符
+
+              ```cpp [|4-13|15-19|21-25|27-31]
+              #include<iostream>
+              using namespace std;
+
+              class RMB {
+                unsigned int yuan, jf;  //元角分
+              public:
+                RMB(double d=0) : yuan(d) , jf(int(d*100+0.5)%100){}
+
+                RMB(int y, int f):yuan(y), jf(f) {}
+                friend RMB operator+(const RMB&, const RMB&); 
+                friend RMB& operator++(RMB&);
+                void display(){ cout<<(yuan + jf / 100.0)<<endl; }
+              };
+
+              RMB operator+(const RMB& s1, const RMB& s2){
+                unsigned int x = s1.jf + s2.jf;
+                unsigned int yuan = s1.yuan + s2.yuan + x/100;
+                return RMB(yuan, x % 100);
+              }
+
+              RMB& operator++(RMB& s){
+                yuan += ++s.jf/100;
+                s.jf %= 100;
+                return s;
+              }
+
+              int main(){
+                RMB w(12.567);  //将浮点数转为RMB对象(浮点类转为RMB类)
+                ++w;
+                w.display();
+              }
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec5" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 10.5 转换运算符
+
+              ```cpp [|1-12|7-9|14-21]
+              class RMB{
+                unsigned int yuan, jf;  //元角分
+              public:
+                RMB(double value = 0.0) : yuan(value) {
+                  jf = (value - yuan) * 100 + 0.5;
+                }
+                operator double(){  //转换运算符行使转出去
+                  return yuan + jf/100.0;
+                }
+
+                void display(){ cout<<(yuan + jf/100.0)<<endl; }
+              };
+
+              int main(){
+                RMB d1(2.0), d2(1.5), d3; //构造函数转成RMB
+                //(显式)转成浮点数做+运算
+                d3 = RMB((double)d1 + (double)d2);
+                //(隐式)d1和d2没有重载+,却有转换运算符而转成浮点数
+                d3 = d1 + d2;
+                d3.display();
+              }
+              ```
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec6" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 10.6 赋值运算符
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->类中总是有默认赋值运算符，一般情况下无须重载赋值运算符
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->当类对象拷贝为深拷贝性质时，需要自定义：
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->`ClassName(const ClassName &other)`
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->`ClassName& operator=(const ClassName &other)`
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="5" -->构造函数
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="6" -->析构函数
+              - &shy;<!-- .element: class="fragment" data-fragment-index="7" -->赋值运算符第一参数一般为对象,所以其总是设计为成员函数
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec6" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 10.6 赋值运算符
+
+              问题：`class A{};` 有几个默认函数？
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->`A()` 默认构造函数
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->`A(const A&)` 拷贝构造函数
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->`~A()` 析构函数
+              - &shy;<!-- .element: class="fragment" data-fragment-index="4" -->`A& operator=(const A&)` 拷贝赋值运算符
+              - &shy;<!-- .element: class="fragment" data-fragment-index="5" -->`A* operator&()` 取址运算符
+              - &shy;<!-- .element: class="fragment" data-fragment-index="6" -->`const A* operator&()` const取址运算符
+              - &shy;<!-- .element: class="fragment" data-fragment-index="7" -->`A(A&&)` 移动构造函数
+              - &shy;<!-- .element: class="fragment" data-fragment-index="8" -->`A& operator=(A&&)` 移动赋值运算符
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec6" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 10.6 赋值运算符
+
+              示例：`example/lec10/myvector`
+              </div>
+            </script>
+          </section>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ## 总结
+
+            - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->运算符可以重载为成员函数，也可以重载为普通函数
+            - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->运算符重载后，结合性、优先级等不变
+            - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->大部分运算可以重载，但是少量运算符无法重载
+            - &shy;<!-- .element: class="fragment" data-fragment-index="4" -->不存在的运算符无法重载
+            - &shy;<!-- .element: class="fragment" data-fragment-index="5" -->好的编程风格：尽量不要重载运算符，除非是约定俗成的。
+            </div>
+          </script>
+        </section>
+      </div>
+    </div>
+
+    <script src="../dist/reveal.js"></script>
+    <script src="../plugin/zoom/zoom.js"></script>
+    <script src="../plugin/notes/notes.js"></script>
+    <script src="../plugin/search/search.js"></script>
+    <script src="../plugin/markdown/markdown.js"></script>
+    <script src="../plugin/mermaid/mermaid.js"></script>
+    <script src="../plugin/math/math.js"></script>
+    <script src="../plugin/highlight/highlight.js"></script>
+    <script>
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        center: true,
+        hash: true,
+        slideNumber: true,
+        plugins: [
+          RevealZoom,
+          RevealNotes,
+          RevealSearch,
+          RevealMarkdown,
+          RevealHighlight,
+          RevealMermaid,
+          RevealMath.KaTeX,
+        ],
+      });
+    </script>
+  </body>
+</html>
