@@ -18,6 +18,10 @@ Complex operator+(const Complex &c1, const Complex &c2) {
 }
 
 std::ostream &operator<<(std::ostream &out, const Complex &c) {
+  if (c.re == 0 && c.im == 0) {
+    out << 0;
+    return out;
+  }
   if (c.re != 0)
     out << c.re;
   if (c.im != 0) {
@@ -37,5 +41,6 @@ int main(int argc, char **argv) {
   std::cout << Complex{1, 1} << std::endl;
   std::cout << Complex{0, 1} << std::endl;
   std::cout << Complex{0, 4} << std::endl;
+  std::cout << Complex{0, 0} << std::endl;
   return 0;
 }

@@ -8,6 +8,18 @@ public:
   Complex(double r = 0.0, double i = 0.0) : re(r), im(i) {}
   static Complex add(const Complex &c1, const Complex &c2);
 
+  Complex &add(const Complex &other) {
+    re += other.re;
+    im += other.im;
+    return *this;
+  }
+
+  Complex &operator+=(const Complex &other) {
+    this->re += other.re;
+    this->im += other.im;
+    return *this;
+  }
+
   std::string to_string() const;
 
 private:

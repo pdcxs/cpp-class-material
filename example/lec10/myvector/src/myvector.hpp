@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <sstream>
 #include <string>
+
 class Vector {
   using Elem = int;
   unsigned int capacity;
@@ -42,9 +43,6 @@ public:
     if (index < 0 || index >= size) {
       return;
     }
-
-    if (size == 0)
-      return;
 
     for (int i = index; i < size - 1; i++) {
       content[i] = content[i + 1];

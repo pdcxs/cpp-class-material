@@ -317,7 +317,7 @@
               - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->重载前++时返回引用,重载后++时返回值
               - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->C++对前++和后++的重载,区分为：后++增设一整型参数
               	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->`T &operator++(T& a); // 前++`
-              	- &shy;<!-- .element: class="fragment" data-fragment-index="5" -->`T &operator++(T& a, int); // 后++`
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="5" -->`T operator++(T& a, int); // 后++`
               </div>
             </script>
           </section>
@@ -465,7 +465,7 @@
               }
 
               RMB& operator++(RMB& s){
-                yuan += ++s.jf/100;
+                s.yuan += ++s.jf/100;
                 s.jf %= 100;
                 return s;
               }
