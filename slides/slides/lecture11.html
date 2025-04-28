@@ -1,0 +1,681 @@
+<!doctype html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+
+    <title>面向对象程序设计技术X 第十一课</title>
+
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="../dist/reset.css" />
+    <link rel="stylesheet" href="../dist/reveal.css" />
+    <link rel="stylesheet" href="../dist/theme/white-contrast.css" id="theme" />
+    <link rel="stylesheet" href="../css/layout.css" id="theme" />
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="../plugin/highlight/monokai.css" />
+  </head>
+
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ## const关键字与模板
+
+            主讲：陈笑沙
+            </div>
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ## 目录
+
+            - 11.1 const 关键字
+            - 11.2 const 与类
+            - 11.3 为什么需要模板？
+            - 11.4 如何定义模板？
+            - 11.5 迭代器
+            </div>
+          </script>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.1 const 关键字
+
+              `const` 关键字表示变量、函数或者参数是不可更改的。
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.1 const 关键字
+
+              ```cpp [|1-4|6-9]
+              std::vector<int> vec{1, 2, 3};
+              const std::vector<int> c_vec{7, 8};
+              std::vector<int>& ref = vec;
+              const std::vector<int>& c_ref = vec;
+
+              vec.push_back(3);
+              c_vec.push_back(3);
+              ref.push_back(3);
+              c_ref.push_back(3);
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.1 const 关键字
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->如果一个类中，某个方法被标明为 `const`
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->则该方法可以在 `const` 变量、引用、指针中使用。
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->比如：
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->对于方法 `void f() const`，只能是常量对象调用
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="5" -->对于方法 `void f()`，常量对象无法调用
+              - &shy;<!-- .element: class="fragment" data-fragment-index="6" -->成员函数（方法）可以通过常量与非常量进行区分
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.1 const 关键字
+
+              ```cpp [|3-8|9-14|15-20]
+              class vector {
+              ...
+                iterator begin() {
+                  return iterator(data);
+                }
+                iterator end() {
+                  return iterator(data + m_size);
+                }
+                const_iterator begin() const {
+                  return const_iterator(data);
+                }
+                const_iterator end() const {
+                  return const_iterator(data + m_size);
+                }
+                const_iterator cbegin() const {
+                  return const_iterator(data);
+                }
+                const_iterator cend() const {
+                  return const_iterator(data + m_size);
+                }
+              ...
+              };
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.1 const 关键字
+
+              ### 使用 `const` 的好处
+
+              ```cpp []
+              void f(int x, int y) {
+                if ((x == 2 && y == 3) || (x == 1))
+                  cout << 'a' << endl;
+                if (y = -1) // in most time, this is not we want
+                  cout << 'b' << endl;
+                if ((x == 3) && (y == 2 * x))
+                  cout << 'c' << endl;
+              }
+              ```
+              <!-- .element: data-id="const" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.1 const 关键字
+
+              ### 使用 `const` 的好处
+
+              ```cpp []
+              void f(const int x, const int y) {
+                if ((x == 2 && y == 3) || (x == 1))
+                  cout << 'a' << endl;
+                if (y = -1) // compile error!
+                  cout << 'b' << endl;
+                if ((x == 3) && (y == 2 * x))
+                  cout << 'c' << endl;
+              }
+              ```
+              <!-- .element: data-id="const" -->
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.2 const 与类
+
+              ```cpp []
+              class Student {
+              public:
+                std::string getName();
+                void setName(const std::string& name);
+                int getAge();
+                void setAge(int age);
+              private:
+                std::string name;
+                int age;
+              };
+              ```
+              <!-- .element: class="fragment" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.2 const 与类
+
+              ```cpp []
+              std::ostream& operator<<(std::ostream& out, const Student& stu) {
+                out << stu.getName << ": " << stu.getAge() << endl;
+              }
+              ```
+
+              <span class="fragment" style="color: red; font-weight: bold;">编译错误！</span>
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.2 const 与类
+
+
+              ```cpp []
+              std::ostream& operator<<(std::ostream& out, const Student& stu) {
+                out << stu.getName << ": " << stu.getAge() << endl;
+              }
+              ```
+
+              编译器不知道 `getName()` 与 `getAge()` 方法不会改变 `Student`
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.2 const 与类
+
+              ```cpp []
+              class Student {
+              public:
+                std::string getName() const;
+                void setName(const std::string& name);
+                int getAge() const;
+                void setAge(int age);
+              private:
+                std::string name;
+                int age;
+              };
+              ```
+              <!-- .element: class="fragment" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.2 const 与类
+
+              相关成员函数实现时，也需要加 `const`
+
+              ```cpp []
+              std::string Student::getName() const {
+                return name;
+              }
+              void Student::setName(const std::string& name) {
+                this->name = name;
+              }
+              ```
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.3 为什么需要模板？
+
+              ```cpp []
+              class IntVector {
+              private:
+                int* ptr;
+                unsigned int size;
+              public:
+                ...
+              };
+              ```
+              <!-- .element: class="fragment" -->
+
+              需要为不同的元素类型创建不同的容器类。
+              <!-- .element: class="fragment" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.3 为什么需要模板？
+
+              ```cpp []
+              class Vector {
+              using T = int;
+              private:
+                T* ptr;
+                unsigned int size;
+              public:
+                ...
+              };
+              ```
+
+              每次更改内容，需要改  `Vector` 里面的代码。
+              <!-- .element: class="fragment" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.3 为什么需要模板？
+
+              ```cpp []
+              #define VECTOR_DEFINE(T) \
+              typedef T##Vector { \
+              private:\
+                  T* data; \
+                  size_t size; \
+                  size_t capacity; \
+                  ...\
+              }; \
+              ```
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->容易出错
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->编程工具不会提供语法检查
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.3 为什么需要模板？
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->对于基础数据类型，有可能通过创建 `IntVector` `DoubleVector` 等遍历。
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->但是如果想要存储用户自定义的类，则不可能穷举所有情况。
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->需要有一种工具，可以由用户自定义容器类的元素类型。
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.4 如何定义模板？
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" --><span style="color: red; font-weight: bold">模板类</span>是一个以**类型参数化**为核心的类定义模式。
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->通过将类中的**某些**具体类型（如 `int`、`string` 等）替换为占位符类型参数（如 `T`），可以在不修改类逻辑的前提下，用同一套代码支持多种数据类型。
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->编译器会在编译时根据实际类型实例化出具体的类。
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.4 如何定义模板？
+
+              ```cpp []
+              class MyPair {
+              public:
+                int getFirst();
+                int getSecond();
+
+                void setFirst(int f);
+                void setSecond(int s);
+
+              private:
+                int first;
+                int second;
+              };
+              ```
+              <!-- .element: data-id="mypair" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.4 如何定义模板？
+
+              ```cpp []
+              template<typename First, typename Second>
+              class MyPair {
+              public:
+                First getFirst();
+                Second getSecond();
+
+                void setFirst(First f);
+                void setSecond(Second s);
+
+              private:
+                First first;
+                Second second;
+              };
+              ```
+              <!-- .element: data-id="mypair" -->
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->`First` 和 `Second` 是泛型类型，可以是任意类型！
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.4 如何定义模板？
+
+              - `typename` 也可以被写作 `class`
+              - 大部分情况两者等价
+              - 更推荐使用 `typename`，语义更加明确
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.4 如何定义模板？
+
+              - 也了类以外，还有模板函数
+
+              ```cpp [|4-9|11-14|17-21|23-27|30-32]
+              #include <iostream>
+              using namespace std;
+
+              template <typename T>
+              void swapValues(T &a, T &b) {
+                T temp = a;
+                a = b;
+                b = temp;
+              }
+
+              template <typename T>
+              void print(const string &prompt, const T &a, const T &b) {
+                cout << prompt << ": " << a << ", " << b << endl;
+              }
+
+              int main() {
+                int x = 10, y = 20;
+                print("before swap", x, y);
+                swapValues(x, y);
+                print("after swap", x, y);
+                cout << endl;
+
+                double a = 3.14, b = 2.718;
+                print("before swap", a, b);
+                swapValues(a, b);
+                print("after swap", a, b);
+                cout << endl;
+
+                string s1 = "Hello", s2 = "World";
+                print("before swap", s1, s2);
+                swapValues(s1, s2);
+                print("after swap", s1, s2);
+
+                return 0;
+              }
+
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.4 如何定义模板？
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->编译器需要根据模板的定义，生成对应不同类型的类并编译。
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->因此，不要将模板类的定义放在源文件中。
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->而是需要与模板类的声明一起放在头文件中。
+              - &shy;<!-- .element: class="fragment" data-fragment-index="4" -->模板函数也一样。
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.4 如何定义模板？
+
+              - 模板是一个非常复杂的 `C++` 编程分支，在确认熟悉之前，尽量不要亲自实现复杂的模板库。
+              - 尝试编译以下代码：
+
+              ```cpp []
+              #include <algorithm>
+              #include <vector>
+
+              int main() {
+                int a;
+                std::vector<std::vector<int>> v;
+                std::vector<std::vector<int>>::const_iterator it =
+                    std::find(v.begin(), v.end(), a);
+                return 0;
+              }
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.4 如何定义模板？
+
+              - 模板还有非常多的内容：
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->甚至是一门图灵完备的语言
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->内容过于繁杂，本课程不深入讨论
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->深入学习可以参考：[Cpp Templates 2nd](https://github.com/Walton1128/CPP-Templates-2nd--)
+              - &shy;<!-- .element: class="fragment" data-fragment-index="4" -->推荐阅读：《C++20高级编程》（罗能，机械工业出版社）
+              - &shy;<!-- .element: class="fragment" data-fragment-index="5" -->在完全掌握模板之前，不建议**过度**使用
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-5" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.5 迭代器
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->如果想要给我们自定义的容器添加 `foreach` 语法支持：
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->即：`for(auto& elem : myContainer)`
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->则需要实现**迭代器**
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-5" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.5 迭代器
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->迭代器的作用：
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->统一遍历方法，更改容器类型不用更改遍历代码。
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->免去下标检查，避免越界错误。
+              - &shy;<!-- .element: class="fragment" data-fragment-index="4" -->迭代器的统一接口：
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="5" -->容器：`begin()`， `end()`
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="6" -->迭代器：`++`，`*`，`!=`
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="7" -->迭代器类型：`value_type`、`difference_type`、`pointer`、`reference`
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="8" -->迭代器范畴：`iterator_category`
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-5" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.5 迭代器
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->`iterator_category` 包含：
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->`std::input_iterator`： `istream` 独有
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->`std::output_iterator`: `ostream` 独有
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->`std::forward_iterator`
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="5" -->`std::bidirectional_iterator`
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="6" -->`std::random_access_iterator`
+              - &shy;<!-- .element: class="fragment" data-fragment-index="7" -->所有相关定义，在 `<iterator>` 头文件中
+              - &shy;<!-- .element: class="fragment" data-fragment-index="8" -->由于 `C++` 不支持接口，因此编译器不提供编译期语法检查。正确性由程序员保证。
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-5" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.5 迭代器
+
+              `/example/lec11/vector`
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-5" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.5 迭代器
+
+              | Iterator 类型          | 是否可以自增自减？ | 是否可以改变指向的内容？ |
+              | -------------------- | --------- | ------------ |
+              | iterator             | 是         | 是            |
+              | const_iterator       | 是         | 否            |
+              | const iterator       | 否         | 是            |
+              | const const_iterator | 否         | 否            |
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-5" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.5 迭代器
+
+              | Iterator 类型          | 与指针类型对比          |
+              | -------------------- | ---------------- |
+              | iterator             | int*             |
+              | const_iterator       | const int*       |
+              | const iterator       | int const*       |
+              | const const_iterator | const int const* |
+              </div>
+            </script>
+          </section>
+        </section>
+      </div>
+    </div>
+
+    <script src="../dist/reveal.js"></script>
+    <script src="../plugin/zoom/zoom.js"></script>
+    <script src="../plugin/notes/notes.js"></script>
+    <script src="../plugin/search/search.js"></script>
+    <script src="../plugin/markdown/markdown.js"></script>
+    <script src="../plugin/mermaid/mermaid.js"></script>
+    <script src="../plugin/math/math.js"></script>
+    <script src="../plugin/highlight/highlight.js"></script>
+    <script>
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        center: true,
+        hash: true,
+        slideNumber: true,
+        plugins: [
+          RevealZoom,
+          RevealNotes,
+          RevealSearch,
+          RevealMarkdown,
+          RevealHighlight,
+          RevealMermaid,
+          RevealMath.KaTeX,
+        ],
+      });
+    </script>
+  </body>
+</html>
