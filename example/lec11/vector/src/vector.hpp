@@ -19,7 +19,7 @@ template <typename T> class vector {
     using pointer = T *;
     using reference = T &;
 
-    explicit iterator(T *p) : ptr(p) {}
+    explicit iterator(pointer p) : ptr(p) {}
 
     reference operator*() { return *ptr; }
 
@@ -169,8 +169,12 @@ private:
   size_t m_capacity;
 
   void grow() {
-    m_capacity *= 2;
-    T *newData = new T[m_capacity * 2];
+    if (m_capacity > 0)
+      m_capacity *= 2;
+    else
+      m_capacity = 8;
+
+    T *newData = new T[m_capacity];
     for (int i = 0; i < m_size; i++) {
       newData[i] = data[i];
     }
@@ -188,7 +192,7 @@ public:
 
   vector(size_t count, const T &value) {
     m_size = count;
-    m_capacity = count;
+    m_capacity = count == 0 ? 8 : count;
     data = new T[m_capacity];
     for (int i = 0; i < count; i++) {
       data[i] = value;
@@ -197,7 +201,7 @@ public:
 
   vector(std::initializer_list<T> init) {
     m_size = init.size();
-    m_capacity = m_size < 8 ? 8 : m_size;
+    m_capacity = m_size == 0 ? 8 : m_size;
     data = new T[m_capacity];
     int i = 0;
     for (auto const &e : init) {

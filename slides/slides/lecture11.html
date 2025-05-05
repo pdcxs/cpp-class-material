@@ -392,8 +392,8 @@
               ```cpp []
               class MyPair {
               public:
-                int getFirst();
-                int getSecond();
+                int getFirst() const;
+                int getSecond() const;
 
                 void setFirst(int f);
                 void setSecond(int s);
@@ -418,8 +418,8 @@
               template<typename First, typename Second>
               class MyPair {
               public:
-                First getFirst();
-                Second getSecond();
+                First getFirst() const;
+                Second getSecond() const;
 
                 void setFirst(First f);
                 void setSecond(Second s);
