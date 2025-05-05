@@ -1,0 +1,975 @@
+<!doctype html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+
+    <title>面向对象程序设计技术X 第十二课</title>
+
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="../dist/reset.css" />
+    <link rel="stylesheet" href="../dist/reveal.css" />
+    <link rel="stylesheet" href="../dist/theme/white-contrast.css" id="theme" />
+    <link rel="stylesheet" href="../css/layout.css" id="theme" />
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="../plugin/highlight/monokai.css" />
+  </head>
+
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ## STL 中的容器类
+
+            主讲：陈笑沙
+            </div>
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ## 目录
+
+            - 12.1 容器类
+            - 12.2 线性结构容器
+            	- 12.2.1 vector
+            	- 12.2.2 deque
+            - 12.3 关联结构容器
+            	- 12.3.1 map
+            	- 12.3.2 set
+            	- 12.3.3 无序关联结构容器
+            - 12.4 总结
+            </div>
+          </script>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.1 容器类
+
+              C++ 中有很多容器类
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->std::vector
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->std::set
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->std::stack
+              - &shy;<!-- .element: class="fragment" data-fragment-index="4" -->std::queue
+              - &shy;<!-- .element: class="fragment" data-fragment-index="5" -->...
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.1 容器类
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->什么时候该用什么容器呢？
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->本质上是空间与时间的权衡
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.1 容器类
+
+              STL: Standard **Template** Library
+
+              全是模板类
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.1 容器类
+
+              主要包含：
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Containers
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Iterators
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Functors
+              - &shy;<!-- .element: class="fragment" data-fragment-index="4" -->Algorithms
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.1 容器类
+
+              容器类可以分为：
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->线性结构容器
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->关联结构容器
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.2 线性结构容器
+
+              ### 12.2.1 vector
+
+              `std::vector`
+
+              `#include <vector>`
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.2 线性结构容器
+
+              ### 12.2.1 vector
+
+              vector 是一个动态数组
+
+              ```cpp []
+              std::vector<int> vec { 1, 2, 3, 4 };
+              vec.push_back(5);
+              vec.push_back(6);
+              vec[1] = 20;
+
+              for (size_t i = 0; i < vec.size(); i++) {
+                std::cout << vec[i] << " ";
+              }
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.2 线性结构容器
+
+              ### 12.2.1 vector
+
+              | 操作              | 代码                          |
+              | --------------- | --------------------------- |
+              | 创造一个空的vector    | `std::vector<int> v;`       |
+              | 创造一个有n个0的vector | `std::vector<int> v(n);`    |
+              | 创造一个有n个k的vector | `std::vector<int> v(n, k);` |
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.2 线性结构容器
+
+              ### 12.2.1 vector
+
+
+              | 操作     | 代码                |
+              | ------ | ----------------- |
+              | 向后边添加k | `v.push_back(k);` |
+              | 清空     | `v.clear()`       |
+              | 判断是否为空 | `v.empty()`       |
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.2 线性结构容器
+
+              ### 12.2.1 vector
+
+
+              | 操作             | 代码                 |
+              | -------------- | ------------------ |
+              | 获取第i个元素（无越界检查） | `int k = v[i];`    |
+              | 获取第i个元素（有越界检查） | `int k = v.at(i);` |
+              | 替换第i个元素（无越界检查） | `v.at(i) = k`      |
+              | 替换第i个元素（有越界检查） | `v[i] = k`         |
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.2 线性结构容器
+
+              ### 12.2.1 vector
+
+              使用标准迭代方案：
+
+              ```cpp []
+              for (size_t i = 0; i < vec.size(); i++) {
+                std::cout << vec[i] << " ";
+              }
+
+              for (const auto &elem : vec) {
+                std::cout << elem << " ";
+              }
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.2 线性结构容器
+
+              ### 12.2.1 vector
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->尽量使用 `const auto& elem`，而非`auto elem`
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->尽量使用 `at` 而非 `[]`
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.2 线性结构容器
+
+              ### 12.2.1 vector
+
+              零成本抽象：
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->不必为没有使用的工具付出代价
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->使用工具后与纯手写的效率应当一致
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.2 线性结构容器
+
+              ### 12.2.1 vector
+
+              某些场景下，`vector`并不适用，例如：
+
+              ```cpp []
+              void receivePrice(vector<double>& prices, double price)
+              {
+                prices.push_front(price); // 没有这个方法
+                if (prices.size() > 10000)
+                  prices.pop_back();
+              }
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.2 线性结构容器
+
+              ### 12.2.1 vector
+
+              如何手动实现 `push_front`？
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.2 线性结构容器
+
+              ### 12.2.2 deque
+
+              `std::deque`
+
+              `#include <deque>`
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.2 线性结构容器
+
+              ### 12.2.2 deque
+
+              - `std::deque`
+              	- 是一个双端队列
+              	- 允许高效地在双端进行插入/删除操作
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.2 线性结构容器
+
+              ### 12.2.2 deque
+
+              ```cpp []
+              void receivePrice(deque<double>& prices, double price)
+              {
+                prices.push_front(price);  // Super fast
+                if (prices.size() > 10000)
+                  prices.pop_back();
+              }
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.2 线性结构容器
+
+              ### 12.2.2 deque
+
+              `deque`与`vector`的接口完全相同，只是多了`push_front`和`pop_front`。
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.2 线性结构容器
+
+              ### 12.2.2 deque
+
+              `deque` 是如何实现的？
+
+              基本思路是多个小数组线性排列
+              <!-- .element: class="fragment" -->
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.3 关联结构容器
+
+              关联结构容器通过键值管理元素
+              <!-- .element: class="fragment" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.3 关联结构容器
+
+              ### 12.3.1 map
+
+              `std::map`
+
+              `#include <map>`
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.3 关联结构容器
+
+              ### 12.3.1 map
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->`std::map` 将键(Key)映射到值 (Value)
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->"ABC" $\rightarrow$ `std::map<std::string, int>` $\rightarrow$ 42
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->可以认为是 `python` 的字典
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.3 关联结构容器
+
+              ### 12.3.1 map
+
+              ```cpp []
+              std::map<std::string, int> map {
+                { "Chris", 2},
+                { "CN", 42},
+                { "Keith", 14 },
+                { "Nick", 51 },
+                { "Sean", 35 },
+              };
+
+              int sean = map["Sean"]; // 35
+              map["Chris"] = 31;
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.3 关联结构容器
+
+              ### 12.3.1 map
+
+              | 操作       | 代码                               |
+              | -------- | -------------------------------- |
+              | 创建一个空map | `std::map<char, int> m`          |
+              | 把键k映射为v  | `m.insert(k, v);` <br>`m[k] = v` |
+              | 删除键k     | `m.erase(k);`                    |
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.3 关联结构容器
+
+              ### 12.3.1 map
+
+
+              | 操作              | 代码                             |
+              | --------------- | ------------------------------ |
+              | 检测是否包含键k        | `if (m.count(k))`              |
+              | 检测是否包含键k(C++20) | `if (m.contains(k))`           |
+              | 检测m是否为空         | `if (m.empty())`               |
+              | 获取与更新           | `int i = m[k];`<br>`m[k] = i;` |
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.3 关联结构容器
+
+              ### 12.3.1 map
+
+              可以认为，`std::map<K, V>` 保存了一堆 `std::pair<const K, V>`
+
+              为什么`K` 是`const`？
+              <!-- .element: class="fragment" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.3 关联结构容器
+
+              ### 12.3.1 map
+
+              ```cpp []
+              std::map<std::string, int> map;
+
+              for (auto kv : map) {
+                // kv: std::pair<const std::string, int>
+                std::string key = kv.first;
+                int value = kv.second;
+              }
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.3 关联结构容器
+
+              ### 12.3.1 map
+
+              ```cpp []
+              std::map<std::string, int> map;
+
+              for (const auto& [key, value] : map) {
+                // key is const std::string&
+                // value is const int&
+              }
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.3 关联结构容器
+
+              ### 12.3.1 map
+
+              `map` 是如何实现的？
+
+              底层是用一棵**红黑树**实现的。
+              <!-- .element: class="fragment" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.3 关联结构容器
+
+              ### 12.3.1 map
+
+
+              <div class="mermaid">
+              erDiagram
+                CN ||--o{ Chris : child
+                CN ||--o{ Nick : child
+                Nick ||--o{ Keith : child
+                Nick ||--o{ Sean : child
+                CN {
+                  value i42
+                }
+                Chris {
+                  value i31
+                }
+                Nick {
+                  value i51
+                }
+                Keith {
+                  value i14
+                }
+                Sean {
+                  value i35
+                }
+
+              </div>
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.3 关联结构容器
+
+              ### 12.3.1 map
+
+              那么 `map["Alex"]`呢？
+
+
+              <div class="mermaid">
+              erDiagram
+                CN ||--o{ Chris : child
+                Chris ||--o{ Alex : child
+                CN ||--o{ Nick : child
+                Nick ||--o{ Keith : child
+                Nick ||--o{ Sean : child
+                CN {
+                  value i42
+                }
+                Chris {
+                  value i31
+                }
+                Nick {
+                  value i51
+                }
+                Keith {
+                  value i14
+                }
+                Sean {
+                  value i35
+                }
+                Alex {
+                  value i0
+                }
+
+              </div>
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.3 关联结构容器
+
+              ### 12.3.1 map
+
+              `std::map<K, V>` 需要 `K` 支持 `operator<`
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->`std::map<int, int> map1;`
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->✅ OKAY - `int` has `operator<`
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->`std::map<std::ifstream, int> map2;`
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->❌ ERROR - `std::ifstream` has no `operator<`
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.3 关联结构容器
+
+              ### 12.3.2 set
+
+              `std::set`
+
+              `#include <set>`
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.3 关联结构容器
+
+              ### 12.3.2 set
+
+              `set` 包含了一系列不同的元素（参考数学上的集合）
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.3 关联结构容器
+
+              ### 12.3.2 set
+
+
+              | 操作                  | 代码                   |
+              | ------------------- | -------------------- |
+              | 创建一个空的 `set`        | `std::set<char> s;`  |
+              | 添加一个元素 k            | `s.insert(k);`       |
+              | 删除元素 k              | `s.erase(k);`        |
+              | 检查 k 是否在集合中         | `if (s.count(k))`    |
+              | 检查 k 是否在集合中 (c++20) | `if (s.contains(k))` |
+              | 检查 s 是否为空           | `if(s.empty())`      |
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.3 关联结构容器
+
+              ### 12.3.2 set
+
+              `std::set` 实际上是没有值，只有键的 `std::map`
+
+
+              <div class="mermaid">
+              erDiagram
+                CN ||--o{ Chris : child
+                CN ||--o{ Nick : child
+                Nick ||--o{ Keith : child
+                Nick ||--o{ Sean : child
+
+              </div>
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.3 关联结构容器
+
+              ### 12.3.3 无序关联结构容器
+
+              有时候不需要排序，`map` 和 `set` 有更高效的选择。
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.3 关联结构容器
+
+              ### 12.3.3 无序关联结构容器
+
+
+              `std::unordered_map` and `std:: unordered_set`
+
+              `#include <unordered_map>`
+
+              `#include <unordered_set>`
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.3 关联结构容器
+
+              ### 12.3.3 无序关联结构容器
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->`std::unordered_map` 是 `map` 的优化版本
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->接口基本相同
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.3 关联结构容器
+
+              ### 12.3.3 无序关联结构容器
+
+              ```cpp []
+              std::unordered_map<std::string, int> map {
+              	{ "Chris", 2 },
+              	{ "Nick", 51 },
+              	{ "Sean", 35 },
+              };
+              int sean = map["Sean"]; // 35
+              map["Chris"] = 31;
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.3 关联结构容器
+
+              ### 12.3.3 无序关联结构容器
+
+              `unordered_map` 以哈希值对 `std::pair` 进行保存
+
+              `std::unordered_map<K, V>` 需要 `K` 有一个哈希函数
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.3 关联结构容器
+
+              ### 12.3.3 无序关联结构容器
+
+              ```cpp [|5-6]
+              // unordered_map
+              template<
+                class Key,
+                class T,
+                class Hash = std::hash<Key>,
+                class KeyEqual = std::equal_to<Key>,
+                class Allocator = std::allocator<std::pair<const Key, T>>
+              > class unordered_map;
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.3 关联结构容器
+
+              ### 12.3.3 无序关联结构容器
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->`std::map<int, int> map1;`
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->✅ OKAY - `int` is hashable
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->`std::map<std::ifstream, int> map2;`
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->❌ ERROR - `std::ifstream` is not hashable
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.3 关联结构容器
+
+              ### 12.3.3 无序关联结构容器
+
+              `unordered_set` 就是一个没有值、只有键的 `unordered_map`
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.3 关联结构容器
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->`unordered_map` 通常比 `map` 快
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->但是 `unordered_map` 需要更多内存
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->如果键的类型不支持比较，只能选择 `unordered_map`
+              - &shy;<!-- .element: class="fragment" data-fragment-index="4" -->如果不清楚用哪个，则可以先试试 `unordered_map`
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: style="font-size: 25px" class="drop" data-auto-animate data-auto-animate-id="sec4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.4 总结
+
+              |                    | 第 i 个元素 | 查找  | 插入         | 删除                   |
+              | ------------------ | ------- | --- | ---------- | -------------------- |
+              | std::vector        | 非常快     | 慢   | 最后快<br>其他慢 | 最后快(pop_back)<br>其他慢 |
+              | std::deque         | 快       | 慢   | 两端快<br>其他慢 | 两端快<br>其他慢           |
+              | std::set           | 慢       | 快   | 快          | 快                    |
+              | std::map           | 慢       | 快   | 快          | 快                    |
+              | std::unordered_set | 不支持     | 非常快 | 非常快        | 非常快                  |
+              | std::unordered_map | 不支持     | 非常快 | 非常快        | 非常快                  |
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec4" "="true" -->
+              <div class="" style="font-size: 25px; position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.4 总结
+
+              一个例子：
+
+              [Day 11 - Advent of Code 2024](https://adventofcode.com/2024/day/11)
+
+              有一串神奇的石头，每个石头上面有一个数字。盯着它们时，石头不会发生变化，但是每次眨眼睛，这些石头就会发生一些神奇的变化：
+
+              - 标着 0 的石头会变成数字 1
+              - 如果数字个数为偶数，则分成两个石头，每个石头分别是一半的数字（前面的0消失）：1234变成12和34，1104变成11和4（而不是04）
+              - 如果以上两条都不符合，则数字变为原来的2024倍。
+
+              开始时石头为：`[3028, 78, 973951, 5146801, 5, 0, 23533, 857]`
+
+              眨25次眼后，有多少个石头？
+
+              眨75次眼后，有多少个石头？
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec4" "="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 12.4 总结
+
+              一个例子：
+
+              [Day 11 - Advent of Code 2024](https://adventofcode.com/2024/day/11)
+
+              `example/lec12/magicstone`
+              </div>
+            </script>
+          </section>
+        </section>
+      </div>
+    </div>
+
+    <script src="../dist/reveal.js"></script>
+    <script src="../plugin/zoom/zoom.js"></script>
+    <script src="../plugin/notes/notes.js"></script>
+    <script src="../plugin/search/search.js"></script>
+    <script src="../plugin/markdown/markdown.js"></script>
+    <script src="../plugin/mermaid/mermaid.js"></script>
+    <script src="../plugin/math/math.js"></script>
+    <script src="../plugin/highlight/highlight.js"></script>
+    <script>
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        center: true,
+        hash: true,
+        slideNumber: true,
+        plugins: [
+          RevealZoom,
+          RevealNotes,
+          RevealSearch,
+          RevealMarkdown,
+          RevealHighlight,
+          RevealMermaid,
+          RevealMath.KaTeX,
+        ],
+      });
+    </script>
+  </body>
+</html>
