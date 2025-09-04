@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+	<meta charset="utf-8">
+
+	<title>Object-Oriented Programming Technology Lesson 1</title>
+
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" href="../dist/reset.css">
+	<link rel="stylesheet" href="../dist/reveal.css">
+	<link rel="stylesheet" href="../dist/theme/white-contrast.css" id="theme">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="../plugin/highlight/monokai.css">
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section>
+				<h3>Object-Oriented Programming Technology</h3>
+				<p><small>Lecturer：陈笑沙</small></p>
+				<p><small>Material：<a href="https://github.com/pdcxs/cpp-class-material">GitHub</a></small></p>
+			</section>
+			<section style="text-align:left">
+				<h3>Course Arrangement</h3>
+				<p style="color:red"> Class Schedule </p>
+				<p><small>24 periods of teaching contents</small></p>
+				<p><small>8 periods of experiment contents</small></p>
+				<p style="color:red">Grade Composition</p>
+				<p><small>72% Exam Score, 28% Regular Performance</small></br>
+					<small>Regular Performance: Participation and Homework</small>
+				</p>
+			</section>
+
+			<section style="text-align:left">
+				<h3>Class Material</h3>
+				<p><a href="https://github.com/pdcxs/cpp-class-material">https://github.com/pdcxs/cpp-class-material</a>
+			</section>
+
+			<!-- <section style="text-align:left">
+				<h3>Table of Contents</h3>
+
+			</section> -->
+			<section data-markdown style="text-align: left;">
+				<textarea data-template>
+					### Lesson 1
+
+					   1.1 Software and Hardware
+
+					   1.2 Introduction of Programming Tools
+
+					   1.3 Setup Development Environment
+
+					   1.4 Programming Languages and Their History
+
+					   1.5 The Simplest C++ Program
+
+				</textarea>
+			</section>
+
+			<section style="text-align: left">
+				<section data-auto-animate>
+					<h3>1.1 Software and Hardware</h3>
+					<h4>Hardware</h4>
+					<ul>
+						<li>Input Hardware：<br>
+							<ol>
+								<li>Keyboard</li>
+								<li>Mouse</li>
+								<li>Camera</li>
+								<li>……</li>
+							</ol>
+						</li>
+						<li>Output Hardware:<br>
+							<ol>
+								<li>Display</li>
+								<li>Printer</li>
+								<li>……</li>
+							</ol>
+						</li>
+					</ul>
+				</section>
+				<section data-auto-animate>
+					<h3>1.1 Software and Hardware</h3>
+					<h4>Hardware</h4>
+					<ul>
+						<li>Computer Architecture:<br>
+							<ol>
+								<li>RAM (Random Access Memory)</li>
+								<li>Hard Disk</li>
+								<li>CPU (Central Processing Unit)</li>
+								<li>GPU (Graphics Processing Unit)</li>
+								<li>……</li>
+							</ol>
+						</li>
+					</ul>
+				</section>
+				<section data-auto-animate>
+					<h3>1.1 Software and Hardware</h3>
+					<h4>Software</h4>
+					<ul>
+						<li>
+							Operating Systems：<br>
+							<ol>
+								<li>Windows</li>
+								<li>Linux</li>
+								<li>Mac</li>
+							</ol>
+						</li>
+						<li>
+							Programming：<br>
+							<ol>
+								<li>Compiler</li>
+								<li>Interpreter</li>
+								<li>Editor</li>
+								<li>IDE (Integrated Development Environment)</li>
+							</ol>
+						</li>
+					</ul>
+				</section>
+			</section>
+
+      <section data-auto-animate>
+        <h3>1.1 Software and Hardware</h3>
+        <h4>Software</h4>
+        <ul>
+          <ul>Others 
+            <li>Real-time communication</li>
+            <li>Official</li>
+            <li>Entertainment</li>
+            <li>...</li>
+          </ul>
+        </ul>
+      </section>
+        </section>
+
+			<section style="text-align: left;">
+				<section data-auto-animate>
+					<h3>1.2 Introduction of Programming Tools</h3>
+					<h4>Classification of Programming Languages</h4>
+					<ul>
+						<li class="fragment">Compiled Language</li>
+						<li class="fragment">Interpreted Language</li>
+						<li class="fragment">Static Typed Language</li>
+						<li class="fragment">Dynamic Typed Language</li>
+						<li class="fragment">Strong Typed Language</li>
+						<li class="fragment">Weak Typed Language</li>
+					</ul>
+				</section>
+
+				<section data-auto-animate>
+					<h3>1.2 Introduction of Programming Tools</h3>
+					<h4>Classification of Programming Languages</h4>
+					<ul>
+						<li class="fragment highlight-red">Procedural Programming Languages</li>
+						<li class="fragment highlight-red">Object-Oriented Programming Languages</li>
+						<li class="fragment highlight-red">Functional Programming Languages</li>
+						<li class="fragment highlight-red">Declarative Programming Languages</li>
+						<li class="fragment highlight-red">Markup Programming Languages</li>
+					</ul>
+				</section>
+
+				<section data-auto-animate>
+					<h3>1.2 Introduction of Programming Tools</h3>
+					<h4>C++</h4>
+					<p>C++ is a static typed language</p>
+					<p>C++ is a weak typed language</p>
+					<p>C++ is a compiled language</p>
+					<p>C++ is a multi-paradigm language</p>
+				</section>
+			</section>
+
+			<section style="text-align: left;">
+				<section data-auto-animate>
+					<h3>1.3 Setup Development Environment</h3>
+
+					<p>Video Tutorial (Chinese):</p>
+					<p><a href="https://www.bilibili.com/video/BV1beNfepExE">
+							Setup Development Environment：<br/>
+              https://www.bilibili.com/video/BV1beNfepExE
+						</a></p>
+				</section>
+
+				<section data-auto-animate>
+					<h3>1.3 Setup Development Environment</h3>
+
+					<p>1. Use <a href="https://scoop.sh/"><code>scoop</code></a> To Manage Software</p>
+					<p><small>Setup Environment Variables</small></p>
+					<p><small>Add Bucket</small></p>
+					<p><small>Install vscode、mingw、cmake、xmake</small></p>
+				</section>
+
+				<section data-auto-animate>
+					<h3>1.3 Setup Development Environment</h3>
+					<p>3、Configure VSCode</p>
+					<p><small>Install <code>C/C++ Plugin</code></small></p>
+					<p><small>Install Xmake Plugin </small></p>
+				</section>
+
+				<section data-auto-animate>
+					<h3>1.3 Setup Development Environment</h3>
+					<p>Conventional Compiling Process</p>
+					<p><small>Add Third-Part Library Manually</small></p>
+					<p><small>g++ -c source.cpp</small></p>
+					<p><small>g++ source.o</small></p>
+					<p><small>Write Makefile</small></p>
+				</section>
+
+				<section data-auto-animate>
+					<h3>1.3 Setup Development Environment</h3>
+					<p>Mordern Compiling Process</p>
+					<p><small>cmake</small></p>
+					<p><small>xmake</small></p>
+					<p><small>……</small></p>
+				</section>
+
+				<section data-auto-animate>
+					<h3>1.3 Setup Development Environment</h3>
+					<p>Homework</p>
+					<p>Setup C++ Development Environment on Any Platform, Compile and Run HelloWorld Program.</p>
+				</section>
+			</section>
+
+			<section style="text-align: left;">
+				<section data-auto-animate>
+					<h3>1.4 Programming Languages and Their History</h3>
+
+					<div style="display: flex; justify-content: space-around; align-items: center;">
+						<div>
+							<img src="./imgs/lec01/比雅尼.png" alt="Bjame" style="width: 200px;">
+							<p style="text-align: center; width:200px"><small>Father of C++ <br> Bjarne Stroustrup
+								</small></p>
+						</div>
+						<div>
+							<img src="./imgs/lec01/James.png" alt="James" style="width: 200px;">
+							<p style="text-align: center; width:200px"><small>Father of Java <br> James Gosling</small></p>
+						</div>
+						<div>
+							<img src="./imgs/lec01/Guido.jpg" alt="Guido" style="width: 200px;">
+							<p style="text-align: center; width:200px"><small>Father of Python <br> Guido van Rossum</small>
+							</p>
+						</div>
+					</div>
+
+				</section>
+
+				<section data-auto-animate>
+					<h3>1.4 Programming Languages and Their History</h3>
+
+					<h4>The Old Days: Machine Language</h4>
+
+					<div style="display: flex; justify-content: space-around; align-items: center;">
+						<div>
+							<img src="./imgs/lec01/拜伦.png" alt="拜伦" style="width: 200px;">
+							<p style="text-align: center; width:200px"><small>British Poet: George Gordon Byron</small></p>
+						</div>
+						<div>
+							<img src="./imgs/lec01/埃达.png" alt="埃达" style="width: 200px;">
+							<p style="text-align: center; width:200px"><small>Augusta Ada King</small></p>
+						</div>
+						<div>
+							<img src="./imgs/lec01/巴贝奇.png" alt="巴贝奇" style="width: 200px;">
+							<p style="text-align: center; width:200px"><small>Charles Babbage</small></p>
+						</div>
+					</div>
+
+				</section>
+
+				<section data-auto-animate>
+
+					<h3>1.4 Programming Languages and Their History</h3>
+
+					<h4>The Old Days: Machine Language</h4>
+
+					<div style="display: flex; justify-content: space-around; align-items: center;">
+						<div>
+							<img src="./imgs/lec01/分析机.png" alt="分析机" style="width: 200px;">
+							<p style="text-align: center; width:200px"><small>The Difference Engine</small></p>
+						</div>
+						<div>
+							<img src="./imgs/lec01/第一段程序.png" alt="第一段程序" style="width: 500px;">
+							<p style="text-align: center; width:500px"><small>First Program in the World</small></p>
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<h3>1.4 Programming Languages and Their History</h3>
+					<h3>1930s</h3>
+
+					<div style="display: flex; justify-content: space-around; align-items: center;">
+						<div>
+							<img src="./imgs/lec01/haskell_curry.png" alt="Haskell Curry" style="width: 200px;">
+							<p style="text-align: center; width:200px"><small>Haskell Curry
+                  </br>
+                  American mathematician<br>Combinational Logic</small></p>
+						</div>
+						<div>
+							<img src="./imgs/lec01/church.png" alt="Alonzo Church" style="width: 200px;">
+							<p style="text-align: center; width:200px"><small>Alonzo Church <br> Lambda
+								Calculus</small></p>
+						</div>
+					</div>
+				</section>
+
+				<section style="text-align: center;" data-auto-animate>
+					<h3>1.4 Programming Languages and Their History</h3>
+					<img src="./imgs/lec01/图灵.png" />
+					<p>
+						<small>
+              Alan Mathison Turing <br> <br>
+							1937 Turing Machine <br>
+							1939 Deciphering German Military Codes <br>
+              Movie: The Imitation Game
+						</small>
+					</p>
+				</section>
+
+				<section style="text-align: center;" data-auto-animate>
+					<h3>1.4 Programming Languages and Their History</h3>
+					<img src="./imgs/lec01/冯诺依曼.png" />
+					<p>
+						<small>
+							John von Neumann <br> 
+							1945 Proposed the von Neumann architecture
+						</small>
+					</p>
+
+				</section>
+
+				<section data-auto-animate>
+					<h3>1.4 Programming Languages and Their History</h3>
+					<div style="display: flex; justify-content: space-around; align-items: center;">
+						<div>
+							<img src="./imgs/lec01/凯瑟琳.png" alt="凯瑟琳" style="width: 200px;">
+							<p style="text-align: center; width:200px"><small>Kathleen Hylda Valerie Booth <br>1947 Assembly Language</small></p>
+						</div>
+						<div>
+							<img src="./imgs/lec01/汇编语言.jpg" alt="汇编语言" style="width: 500px;">
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<h3>1.4 Programming Languages and Their History</h3>
+					<div style="display: flex; justify-content: space-around; align-items: center;">
+						<div>
+							<img src="./imgs/lec01/约翰巴科斯.png" alt="约翰巴科斯" style="width: 200px;">
+							<p style="text-align: center; width:200px"><small>John Warner Backus <br>
+									IBM</small></p>
+						</div>
+						<div style="width: 500px;">
+							<pre><code>
+PROGRAM TRIVIAL
+    INTEGER I
+	I = 2
+	IF(I .GE. 2) CALL PRINTIT
+	STOP
+END
+SUBROUTINE PRINTIT
+    PRINT *. 'Hola Mundo'
+	RETURN
+END
+							</code></pre>
+							<p style="text-align: center; width: 500px;"><small>Fortran Language <br> 1966 Fortran66 <br>
+									Latest: Fortran 2023</small></p>
+						</div>
+					</div>
+				</section>
+
+
+				<section data-auto-animate>
+					<h3>1.4 Programming Languages and Their History</h3>
+					<div style="display: flex; justify-content: space-around; align-items: center;">
+						<div>
+							<img src="./imgs/lec01/约翰麦卡锡.png" alt="约翰麦卡锡" style="width: 200px;">
+							<p style="text-align: center; width:200px"><small>John McCarthy <br>
+									IBM</small></p>
+						</div>
+						<div style="width: 500px;">
+							<pre><code>
+(defun all-pairs (M N)
+  (if (null M) nil
+      (append (distl (car M) N)
+	          (all-pairs (cdr M) N))))
+
+(defun distl (x N)
+  (if (null N) nil
+      (cons (list x (car N))
+	  (distl x (cdr N)))))
+							</code></pre>
+							<p style="text-align: center; width:500px;"><small>Lisp Language</small></p>
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<h3>1.4 Programming Languages and Their History</h3>
+					<ol>
+						<li>1958</li>
+            <li>Association for Computing Machinery (ACM)</li>
+            <li>USA German Society for Applied Mathematics and Mechanics (GMA)</li>
+						<li>ALGOL58</li>
+						<li>In ALGOL60, concepts such as recursion, scope, and code blocks were introduced.</li>
+					</ol>
+        </section>
+				<section data-auto-animate>
+					<h3>1.4 Programming Languages and Their History</h3>
+					<pre><code>
+BEGIN
+FILE F(KIND=REMOTE);
+  EBCDIC ARRAY E[0:11];
+  REPLACE E BY "HELLO WORLD!";
+  WRITE(F, *, E);
+END.
+					</code></pre>
+					<pre><code>
+begin
+    printf(($gl$, "Hello, World!"))
+end
+					</code></pre>
+				</section>
+
+				<section data-auto-animate>
+					<h3>1.4 Programming Languages and Their History</h3>
+					<h4>1958</h4>
+					<div style="display: flex; justify-content: space-around; align-items: center;">
+						<div>
+							<img src="./imgs/lec01/格蕾丝.png" alt="格蕾丝" style="width: 200px;">
+							<p style="text-align: center; width:200px"><small>Grace Murray Hopper <br>
+									IBM</small></p>
+						</div>
+						<div>
+							<pre style="width: 700px; align-content: center;"><code>
+IDENTIFICATION DIVISION.
+PROGRAM-ID. MAIN.
+
+DATA DIVISION.
+	WORKING-STORAGE SECTION.
+	01 WS-STUDENT-ID PIC 9(4) VALUE 1000.
+	01 WS-STUDENT-NAME PIC A(15) VALUE 'Tim'.
+
+PROCEDURE DIVISION.
+	CALL 'UTIL' USING WS-STUDENT-ID, WS-STUDENT-NAME.
+	DISPLAY 'Student Id : ' WS-STUDENT-ID
+	DISPLAY 'Student Name : ' WS-STUDENT-NAME
+STOP RUN.
+							</code></pre>
+							<p style="text-align: center; width: 700px;"><small>COBOL Language, Macro, Data Structure, Bug</small></p>
+						</div>
+					</div>
+				</section>
+
+				<section style="text-align: center;" data-auto-animate>
+					<h3>1.4 Programming Languages and Their History</h3>
+					<h4>1966</h4>
+					<div>
+						<img src="./imgs/lec01/艾伦.png" alt="艾伦·凯">
+						<p><small>Alan Curtis Kay <br>
+								The Concept of Object-Oriented Programming</small></p>
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<h3>1.4 Programming Languages and Their History</h3>
+					<h4>1970</h4>
+					<p>Niklaus Emil Wirth: Pascal Language</p>
+					<p>Kenneth Lane Thompson: B Language and Unix </p>
+				</section>
+
+				<section data-auto-animate>
+					<h3>1.4 Programming Languages and Their History</h3>
+					<h4>1972</h4>
+					<p><small>Alan Curtis Kay <br>
+							Smalltalk</small></p>
+					<pre><code>
+m1 := MyClass new.
+m2 := MyClass new.
+(m1 equals: m2) ifTrue: [
+	Transcript show: 'They are equal'
+] else: [
+	Transcript show: 'They are not equal'
+]
+						</code></pre>
+				</section>
+
+				<section data-auto-animate>
+					<h3>1.4 Programming Languages and Their History</h3>
+					<h4>1973</h4>
+
+					<div style="display: flex; justify-content: space-around; align-items: center;">
+						<div>
+							<img src="./imgs/lec01/c-author.png" alt="C语言作者" style="height: 200px;">
+							<p style="text-align: center; width: 300px;"><small>Kenneth Lane Thompson <br>Dennis MacAlistair Ritchie</small></p>
+						</div>
+						<div style="width: 400px;">
+							<pre><code>
+#include &lt;stdio&gt
+int main(void)
+{
+	printf("Hello, world!\n");
+	return 0;
+}
+</code>
+	            </pre>
+              <p style="text-align: center; width: 400px;"><small>C Language</small></p>
+						</div>
+					</div>
+				</section>
+
+				<section data-auto-animate>
+					<h3>1.4 Programming Languages and Their History</h3>
+					<h4>1975</h4>
+
+					<div style="display: flex; justify-content: space-around; align-items: center;">
+						<div>
+							<img src="./imgs/lec01/杰拉德.png" alt="杰拉德" style="width: 200px;">
+							<p style="text-align: center; width: 200px;"><small>Gerald Jay Sussman
+									<br>MIT</small></p>
+						</div>
+						<div>
+							<img src="./imgs/lec01/盖伊.png" alt="盖伊" style="width: 200px;">
+							<p style="text-align: center; width: 200px;"><small>Guy Lewis Steele Jr.
+									<br>MIT</small></p>
+						</div>
+						<div style="width: 600px;">
+							<pre><code>
+(define my-counter
+	(let ((count 0))
+		(lambda ()
+			(set! count (+ count 1))
+			count)))
+						</code></pre>
+							<p style="text-align: center; width: 600px;"><small>Scheme Language, Closure</small></p>
+						</div>
+					</div>
+				</section>
+
+				<section style="text-align: center;" data-auto-animate>
+					<h3>1.4 Programming Languages and Their History</h3>
+					<h4>1983</h4>
+					<img src="./imgs/lec01/比雅尼.png" />
+					<p><small>Bjarne Stroustrup <br>Nokia Bell Labs</small></p>
+					<p><small>C++ Language</small></p>
+
+				</section>
+
+				<section data-markdown data-auto-animate>
+					<textarea data-template data-auto-animate>
+						### 1.4 Programming Languages and Their History
+
+						- 1992
+						- The Conference on Functional Programming Languages and Computer Architecture in Portland, Oregon established a special committee to develop the first version of Haskell.
+						- Lazy Functional Programming Language
+
+					</textarea>
+        </section>
+				<section data-markdown data-auto-animate>
+					<textarea data-template data-auto-animate>
+
+						### 1.4 Programming Languages and Their History
+
+						```haskell [1-5|7-10]
+-- Sieve Method for Finding Prime Numbers
+primes = filterPrime [2..]
+  where
+    filterPrime (p : xs) =
+      p : filterPrime [x | x <- xs, x `mod` p /= 0]
+
+-- Quick Sort
+qsort [] = []
+qsort (x : xs) = qsort (filter (<= x) xs) ++ [x] ++
+                 qsort (filter (> x) xs)
+						```
+
+						---
+
+						### 1.4 Programming Languages and Their History
+
+						#### 1995
+						
+						<p>James Gosling</p>
+						<p>Java Programming Language</p>
+						<p>Sun Company</p>
+
+					</textarea>
+				</section>
+			</section>
+
+			<section>
+				<section data-auto-animate>
+					<h3>1.5 The Simplest C++ Program</h3>
+					<pre data-id="code-animation"><code data-trim data-line-numbers>
+#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+	cout << "Hello, world!" << endl;
+	return 0;
+}</code></pre>
+					<p>C++ Hello World Program</p>
+				</section>
+				<section data-auto-animate>
+					<h3>1.5 The Simplest C++ Program</h3>
+					<pre data-id="code-animation"><code data-trim data-line-numbers="1">
+#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+	cout << "Hello, world!" << endl;
+	return 0;
+}</code></pre>
+					<p>Header File: from <code>stdio.h</code> to <code>iostream</code></p>
+				</section>
+				<section data-auto-animate>
+					<h3>1.5 The Simplest C++ Program</h3>
+					<pre data-id="code-animation"><code data-trim data-line-numbers="2">
+#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+	cout << "Hello, world!" << endl;
+	return 0;
+}</code></pre>
+					<p>Using namespace to avoid name conflicts.</p>
+				</section>
+				<section data-auto-animate>
+					<h3>1.5 The Simplest C++ Program</h3>
+					<pre data-id="code-animation"><code data-trim data-line-numbers="4,6-7">
+#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+	cout << "Hello, world!" << endl;
+	return 0;
+}</code></pre>
+					<p><code>main</code> function returns int, 0 means successful.</p>
+				</section>
+				<section data-auto-animate>
+					<h3>1.5 The Simplest C++ Program</h3>
+					<pre data-id="code-animation"><code data-trim data-line-numbers="5">
+#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+	cout << "Hello, world!" << endl;
+	return 0;
+}</code></pre>
+					<p>New I/O Methods.</p>
+				</section>
+			</section>
+
+			<section style="text-align: left;">
+				<h2>Homework</h2>
+				<p style="color: red;">Simple, but Important</p>
+				<p>Setup C++ Development Environment on Any Platform, Compile and Run HelloWorld Program.</p>
+			</section>
+		</div>
+	</div>
+
+	<script src="../dist/reveal.js"></script>
+	<script src="../plugin/zoom/zoom.js"></script>
+	<script src="../plugin/notes/notes.js"></script>
+	<script src="../plugin/search/search.js"></script>
+	<script src="../plugin/markdown/markdown.js"></script>
+	<script src="../plugin/highlight/highlight.js"></script>
+	<script>
+		Reveal.initialize({
+			controls: true,
+			progress: true,
+			center: true,
+			hash: true,
+			slideNumber: true,
+			plugins: [RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight]
+		});
+
+	</script>
+</body>
+
+</html>
