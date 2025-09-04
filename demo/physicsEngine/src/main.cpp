@@ -5,7 +5,7 @@
 #include <raylib.h>
 
 int main() {
-  App app(1000, 1000, "Box2D Demo");
+  App app(1000, 500, "Box2D Demo");
   app.run();
   return 0;
 }

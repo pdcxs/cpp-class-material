@@ -17,13 +17,13 @@ Dot::Dot(b2WorldId worldId, Vector2 pos, float radius, Color color) {
 
   b2ShapeDef shapeDef = b2DefaultShapeDef();
   shapeDef.density = 1.0f;
-  shapeDef.friction = 0.0f;
 
   b2Circle circle;
   circle.center = {0.0f, 0.0f};
   circle.radius = radius;
 
-  b2CreateCircleShape(bodyId, &shapeDef, &circle);
+  b2ShapeId circleShapeId = b2CreateCircleShape(bodyId, &shapeDef, &circle);
+  b2Shape_SetFriction(circleShapeId, 0.0);
 }
 
 void Dot::draw() {

@@ -1,13 +1,16 @@
 add_rules("mode.debug", "mode.release")
-set_plat("mingw")
+if is_plat("windows") then
+	set_plat("mingw")
+end
+
 add_requires("raylib")
 add_requires("box2d")
 
 target("physicsEngine")
-    set_kind("binary")
-    add_files("src/*.cpp")
-    add_packages("raylib")
-    add_packages("box2d")
+set_kind("binary")
+add_files("src/*.cpp")
+add_packages("raylib")
+add_packages("box2d")
 -- If you want to known more usage about xmake, please see https://xmake.io
 --
 -- ## FAQ
@@ -75,4 +78,3 @@ target("physicsEngine")
 --
 -- @endcode
 --
-

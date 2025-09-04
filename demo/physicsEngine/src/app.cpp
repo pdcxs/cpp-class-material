@@ -98,7 +98,7 @@ void App::addWalls() {
   walls.push_back(std::make_unique<Wall>(worldId, obs1Pos, obs1Size, -30.0f));
 
   // obstacle 2
-  Vector2 obs2Pos{300.0f, 700.0f};
+  Vector2 obs2Pos{300.0f, 400.0f};
   Vector2 obs2Size{300.0f, 10.0f};
   walls.push_back(std::make_unique<Wall>(worldId, obs2Pos, obs2Size, 30.0f));
 }
