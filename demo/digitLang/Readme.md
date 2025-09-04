@@ -66,3 +66,73 @@
 2. 将问题1的电线a的值赋值给电线b，重新计算电线a的值。
 
 💡 提示：这个问题改编自[Advent of Code 2015 Day 7](https://adventofcode.com/2015/day/7)，可以通过构建信号传播系统来解决，需要注意处理信号依赖顺序。
+
+
+# Concise Guide to Circuit Description Language
+
+## Basic Concepts
+
+- **Wires**: Named using **lowercase letters** (e.g., `x`, `y`). Each wire can carry a **16-bit digital signal** (value range: 0–65535).
+- **Signal Sources**:
+  - 🎛️ Logic gates (AND/OR/NOT, etc.)
+  - 📡 Signals transmitted from other wires
+  - 🔢 Directly assigned numerical values
+- **Key Features**:
+  - Each wire **can have only one signal source**
+  - One wire **can supply power to multiple devices simultaneously**
+  - Logic gates do not operate until all input signals are ready
+
+## Logic Gate Operations Explained
+
+### Basic Operators
+
+| Expression Example | Description                                  |
+| ------------------ | -------------------------------------------- |
+| `123 -> x`         | Directly assigns the value 123 to wire x     |
+| `x -> y`           | Directly transmits the signal from wire x to wire y |
+
+### Bitwise Operators
+
+| Expression Example | Operation Description                        | Equivalent Programming Expression |
+| ------------------ | -------------------------------------------- | --------------------------------- |
+| `x AND y -> z`     | Performs a bitwise AND operation on signals x and y | z = x & y                         |
+| `x OR y -> z`      | Performs a bitwise OR operation on signals x and y  | z = x \| y                        |
+| `NOT x -> y`       | Performs a bitwise NOT operation on signal x (16-bit) | y = ~x & 0xFFFF                   |
+
+### Shift Operators
+
+| Expression Example | Operation Description                        | Equivalent Programming Expression |
+|-------------------|---------------------------------------------|-----------------------------------|
+| `x LSHIFT 2 -> y` | Shifts the signal from x left by 2 bits     | y = (x << 2) & 0xFFFF             |
+| `x RSHIFT 3 -> y` | Shifts the signal from x right by 3 bits    | y = (x >> 3)                      |
+
+## Practical Case Studies
+
+### Case 1: 123 -> x
+
+▸ Wire x directly receives the signal 123.
+
+### Case 2: x AND y -> z
+
+▸ When both x and y have signals, performs x & y and transmits the result to z.
+
+▸ If x=3 (0011₂), y=5 (0101₂), then z=1 (0001₂).
+
+### Case 3: p LSHIFT 2 -> q
+
+▸ Shifts the signal from p left by 2 bits (equivalent to multiplying by 4).
+
+▸ If p=5, then q=20.
+
+### Case 4: NOT e -> f
+
+▸ Performs a bitwise NOT on the signal from e (0 becomes 1, 1 becomes 0).
+
+▸ If e=0 (0000 0000 0000 0000₂), then f=65535 (1111 1111 1111 1111₂).
+
+## Challenge Problems
+
+1. Given a circuit description file (`input.txt`) containing definitions of various logic gates and connections, determine the final signal value transmitted by **wire a**.
+2. Assign the value of wire a from Problem 1 to wire b, then recalculate the value of wire a.
+
+💡 Hint: This problem is adapted from [Advent of Code 2015 Day 7](https://adventofcode.com/2015/day/7). It can be solved by building a signal propagation system, paying attention to the order of signal dependencies.
