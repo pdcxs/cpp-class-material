@@ -1,5 +1,7 @@
 add_rules("mode.debug", "mode.release")
-set_plat("mingw")
+if is_plat("widows") then
+    set_plat("mingw")
+end
 
 target("magicstone")
     set_kind("binary")

@@ -1,4 +1,7 @@
 add_rules("mode.debug", "mode.release")
+if is_plat("widows") then
+    set_plat("mingw")
+end
 
 target("list")
     set_kind("binary")

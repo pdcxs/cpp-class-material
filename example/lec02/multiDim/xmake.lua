@@ -1,5 +1,7 @@
 add_rules("mode.debug", "mode.release")
-set_plat("mingw")
+if is_plat("widows") then
+    set_plat("mingw")
+end
 
 target("multiDim")
     set_kind("binary")

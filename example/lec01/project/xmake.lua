@@ -1,5 +1,7 @@
 add_rules("mode.debug", "mode.release")
-set_plat("mingw")
+if is_plat("windows") then
+	set_plat("mingw")
+end
 
 target("project")
     set_kind("binary")
