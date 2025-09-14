@@ -1,0 +1,1314 @@
+<!doctype html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+
+    <title>Object-Oriented Programming Technology Lesson 2</title>
+
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="../dist/reset.css" />
+    <link rel="stylesheet" href="../dist/reveal.css" />
+    <link rel="stylesheet" href="../dist/theme/white-contrast.css" id="theme" />
+    <link rel="stylesheet" href="../css/layout.css" id="theme" />
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="../plugin/highlight/monokai.css" />
+  </head>
+
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            <style>
+            	.red {
+            	     color:red;
+            	}
+            </style>
+
+            ## Lecture 2: Pointer and Reference
+
+            Lecturer：<span class="red">**陈笑沙**</span>
+            </div>
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            #### Table of Contents
+
+            - 2.1 Pointer Concept
+            - 2.2 Pointer Operations
+            - 2.3 Pointers and Arrays
+            - 2.4 Heap Memory Allocation
+            - 2.5 `const` Pointers
+            - 2.6 Pointers and Functions
+            - 2.7 String Pointers
+            - 2.8 Command Line Arguments
+            - 2.9 Reference Concept
+            - 2.10 Left and Right Values
+            - 2.11 `const` References
+            </div>
+          </script>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ### 2.1 Pointer Concept
+
+              How to define?
+
+              ```cpp
+              int a = 3;
+              int *p;
+              int *pa  = &a;
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ### 2.1 Pointer Concept
+
+              The significance of pointers
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->From accessing numerical values to accessing addresses (numerical representation of address values)
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->From accessing the storage location of a name to accessing any storage location
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Achieving efficient data access while also introducing data insecurity
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ### 2.1 Pointer Concept
+
+              Pointer types
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->The type before the asterisk at definition is the pointer type
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->A pointer of a certain type points to an entity of that type
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Pointer type is:
+              	- The basis for pointer operations
+              	- The basis for compilation checks
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ### 2.1 Pointer Concept
+
+              <split even gap="2">
+
+              <div>
+
+              If we have following two variables:
+
+              ```cpp
+              int num = 123;
+              char ch = 'A';
+              ```
+              <!-- .element: data-id="pinter-basic" -->
+              </div>
+
+              <img src="./imgs/lec02/memory.png" alt="./imgs/lec02/memory.png" style="object-fit: scale-down">
+
+              </split>
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ### 2.1 Pointer Concept
+
+              <split even gap="2">
+
+              <div>
+              How to get their addresses?
+
+              ```cpp
+              int num = 123;
+              char ch = 'A';
+
+              char *pchar;
+              pchar = &ch;
+              ```
+              <!-- .element: data-id="pinter-basic" -->
+
+              </div>
+
+              <img src="./imgs/lec02/memory.png" alt="./imgs/lec02/memory. png" style="object-fit: scale-down">
+
+              </split>
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ### 2.1 Pointer Concept
+
+              `example/lec02/pointerBasic`
+
+              ```cpp
+              #include <iostream>
+              int main() {
+                int a = 100, b = 10;
+                int *pointer_1, *pointer_2;
+
+                pointer_1 = &a;
+                pointer_2 = &b;
+                std::cout << "a = " << a << ", b = " << b << std::endl;
+                std::cout << "*pointer_1 = " << *pointer_1
+                          << ", *pointer_2 = " << *pointer_2  << std::endl;
+
+                return 0;
+              }
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 25pt" absolute="true">
+
+              ### 2.1 Pointer Concept
+
+              How to define a pointer variable?
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Need a base type
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->When defining a pointer variable, pay attention to:
+                - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->The "`*`" before the pointer variable name indicates that the variable is a pointer type variable. The pointer variable name does not contain "`*`".
+                - &shy;<!-- .element: class="fragment" data-fragment-index="4" -->The base type must be specified when defining a pointer variable.
+                - &shy;<!-- .element: class="fragment" data-fragment-index="5" -->A pointer variable can only store addresses (pointers). Do not assign an integer to a pointer variable.
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ### 2.1 Pointer Concept
+
+              What is the meaning of different asterisks?
+
+              ```cpp [1|2|3]
+              int num = 16, *pNum = &num;
+              *pNum = 123;
+              num = 123;
+              ```
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ### 2.2 Pointer Operations
+
+              #### Arithmetic Operations
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Pointer addition and subtraction of integers
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Pointer increment/decrement
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Pointer step size (relationship with data type)
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ### 2.2 Pointer Operations
+
+              #### Comparison
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Pointer size comparison
+              	- `>`
+              	- `<`
+              	- `<=`
+              	- `>=`
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Pointer equality judgment
+              	- `==`
+              	- `!=`
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ### 2.2 Pointer Operations
+
+              #### Pointer Difference
+
+              - Calculate the distance between two pointers
+
+              ```cpp
+              int diff = ptr2 - ptr2;
+              ```
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ### 2.3 Pointers and Arrays
+
+              Array **mostly** will degenerate into pointer:
+
+              ```cpp
+              int a[3] = {1, 2, 3};
+              int *arr = a;
+              int *p = &a[0];
+              ```
+              <!-- .element: data-id="arr-pointer" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ### 2.3 Pointers and Arrays
+
+              - We have: `p + 1`, `p += 1`, `p++`, `++p` operations.
+              - Of course, there are corresponding subtraction operations.
+
+              `example/lec02/ptrCalc`
+
+              ```cpp
+              int a[3] = {1, 2, 3};
+              int *arr = a;
+              int *p = &a[0];
+
+              cout << p << " " << arr << " " << *arr << endl;
+              arr += 1;
+              cout << *arr << endl;
+
+              cout << *p << " " << *p++ << endl;
+              cout << *++p << endl;
+              ```
+              <!-- .element: data-id="arr-pointer" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ### 2.3 Pointers and Arrays
+
+              You can access array elements via pointers:
+
+              ```cpp
+              int a[] = {1, 2, 3, 4};
+              int *p = a;
+
+              cout << *(p + 2) << endl;
+              cout << p[2] << endl;
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ### 2.3 Pointers and Arrays
+
+              Functions can accept array pointers as arguments:
+
+              ```cpp
+              void printArray(const int* arr, const size_t n)
+              {
+              	for (int i = 0; i < n; i++)
+              	{
+              		cout << arr[i];
+              		if (i < n - 1)
+              			cout << ", ";
+              	}
+              	cout << endl;
+              }
+              ```
+              <!-- .element: data-id="compile-array" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 35px" absolute="true">
+
+              ### 2.3 Pointers and Arrays
+
+              Extended Contents<!-- .element: class="red" -->
+
+              Multi-Dimension Array： `example/lec02/multiDim`
+
+              ```cpp
+              int a[3][4] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+              // type of a: int[3][4], sometimes int(*)[4]
+              // type of a[0]: int[4], sometimes int*
+              // type of a[0][0]: int
+              cout << "sizeof(a): " << sizeof(a) / sizeof(int) << endl;
+
+              // int **p = a; wrong
+              int (*p)[4] = a;
+              cout << "sizeof(*p): " << sizeof(*p) / sizeof(int) << endl;
+
+              cout << "*(p + 1)[0]: " << *(p + 1)[0] << endl;
+              cout << "**(p + 1): " << **(p + 1) << endl;
+              cout << "p[2][1]: " << p[2][1] << endl;
+              cout << "*(*(p + 2) + 1): " << *(*(p + 2) + 1) << endl;
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 35px" absolute="true">
+
+              ### 2.3 Pointers and Arrays
+
+              Extended Contents<!-- .element: class="red" -->
+
+              Exception: For arrays whose size is determined at compile time, their size can be captured by the template.
+
+              ```cpp
+              template<size_t N>
+              void printArray(const int (&arr)[N])
+              {
+                  for (int i = 0; i < N; i++)
+                  {
+                      cout << arr[i];
+                      if (i < N - 1)
+                          cout << ", ";
+                  }
+                  cout << endl;
+              }
+              ```
+              <!-- .element: data-id="compile-array" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ### 2.3 Pointers and Arrays
+
+              `C++` Alternative: `vector`
+
+              `example/lec02/primes`
+
+              ```cpp [|2|7-11|12-14|16|17-25|27-30]
+              #include <iostream>
+              #include <vector>
+
+              using namespace std;
+
+              int main(int argc, char** argv) {
+                  if (argc < 2) {
+                      cout << "Usage: " << argv[0] << " [max number]" << endl;
+                      return EXIT_FAILURE;
+                  }
+                  int maxNum = atoi(argv[1]);
+                  if (maxNum < 2) {
+                      return 0;
+                  }
+
+                  vector<bool> primes(maxNum + 1, true);
+                  for (int i = 2; i < primes.size() - 1; i++)
+                  {
+                      if (!primes[i])
+                          continue;
+                      for (int j = i + 1; j < primes.size(); j++) {
+                          if (!primes[j])
+                              continue;
+                          if (j % i == 0)
+                              primes[j] = false;
+                      }
+                  }
+
+                  for (int i = 2; i < maxNum; i++)
+                      if (primes[i])
+                          cout << i << " ";
+                  cout << endl;
+
+                  return 0;
+              }
+              ```
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ### 2.4 Heap Memory Allocation
+
+              #### C Language
+
+              ```c [|7|8-9|10-11|13]
+              #include <stdio.h>
+              #include <stdlib.h>
+
+              int main()
+              {
+                  int size = 4, i;
+                  int *p = (int*)malloc(size * sizeof(int));
+                  for (i = 0; i < size; i++)
+                    p[i] = i + 1;
+                  for (i = 0; i < size; i++)
+                    printf("%d ", p[i]);
+
+                  free(p);
+                  return 0;
+              }
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ### 2.4 Heap Memory Allocation
+
+              #### C++ Language
+
+              ```cpp [|6|7-8|9-10|12]
+              #include <iostream>
+
+              int main()
+              {
+                  int size = 4;
+                  int *p = new int[size];
+                  for (int i = 0; i < size; i++)
+                      p[i] = i + 1;
+                  for (int i = 0; i < size; i++)
+                      std::cout << p[i] << " ";
+
+                  delete[] p;
+                  return 0;
+              }
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ### 2.4 Heap Memory Allocation
+
+              `new` and `delete` have other uses involving classes, which we'll cover later.
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ### 2.4 Heap Memory Allocation
+
+              `C++` Alternative: Smart Pointers
+
+              `example/lec02/pascalTrig`
+
+              ```cpp [|2|12|16|21-33|36-44]
+              #include <iostream>
+              #include <memory>
+              #include <vector>
+
+              using namespace std;
+
+              int main(int argc, char **argv)
+              {
+                  // in this example
+                  // pure vector is better
+                  int n = 10;
+                  vector<unique_ptr<int[]>> pascalTrig(n);
+
+                  for (int i = 0; i < n; i++)
+                  {
+                      pascalTrig[i] = make_unique<int[]>(i + 1);
+                      pascalTrig[i][0] = 1;
+
+                      if (i == 0)
+                          continue;
+                      for (int j = 1; j <= i; j++)
+                      {
+                          if (j == i)
+                          {
+                              pascalTrig[i][j] = 1;
+                          }
+                          else
+                          {
+                              pascalTrig[i][j] =
+                                  pascalTrig[i - 1][j - 1] +
+                                  pascalTrig[i - 1][j];
+                          }
+                      }
+                  }
+
+                  for (int i = 0; i < n; i++)
+                  {
+                      for (int j = 0; j <= i; j++)
+                      {
+                          cout << pascalTrig[i][j] << "\t";
+                      }
+                      cout << "\n";
+                  }
+                  cout << endl;
+
+                  return 0;
+              }
+
+              ```
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ### 2.5 const Pointers
+
+              The fundamental purpose of `const`
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Protect data from being accidentally modified
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Improve code readability
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Compiler optimization opportunities
+
+              ```cpp
+              const int size = 100;  // Constant declaration
+              ```
+              <!-- .element: class="fragment" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ### 2.5 const Pointers
+
+              #### Pointer to Constant
+
+              ```cpp
+              const int* ptr;  // Pointer mutable, data immutable
+              int const* ptr1; // Same as ptr
+
+              *ptr = 10; // wrong!
+              ```
+
+              - The pointer address can be modified
+              - Data cannot be modified via the pointer
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ### 2.5 const Pointers
+
+              #### Constant Pointer
+
+              ```cpp
+              int* const ptr = &var;  // Pointer immutable, data mutable
+              ```
+
+              - The pointer address is fixed
+              - Data can be modified via the pointer
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ### 2.5 const Pointers
+
+              #### Constant Pointer to Constant
+
+              ```cpp
+              // Pointer and data are both immutable
+              const int* const ptr = &var;
+              ```
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 25px" absolute="true">
+
+              ### 2.5 const Pointers
+
+              | Form          | Pointer Mutability | Data Mutability | Declaration Example       |
+              | ------------- | ------------------ | --------------- | ------------------------ |
+              | Regular Pointer | ✔️                 | ✔️              | `int* ptr`               |
+              | Pointer to Constant | ✔️                | ❌               | `const int* ptr`         |
+              | Constant Pointer | ❌                  | ✔️              | `int* const ptr`         |
+              | Double-const Pointer | ❌               | ❌               | `const int* const ptr`   |
+
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ### 2.5 const Pointers
+
+              ```cpp
+              // Correct: string literal is a constant
+              const char* str1 = "Hello";
+              // Error: prohibited since C++11 (requires forced conversion)
+              char* str2 = "World";
+              ```
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ### 2.6 Pointers and Functions
+
+              Functions can accept pointers as arguments and return pointers, but the following common mistakes should be avoided:
+
+              ```cpp
+              int* sum(const int* a, const int* b) {
+                  int c = *a + *b;
+              	return &c; // Wrong!
+              	// int* c = new int(*a + *b);
+              	// return c; // OK, remember to delete it.
+              }
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ### 2.6 Pointers and Functions
+
+              Function Pointers
+
+              ```cpp
+              // Function prototype declaration
+              int add(int, int);
+
+              // Function pointer declaration
+              int (*pf)(int, int) = &add;
+              int (*pf2)(int, int) = add; // also ok
+
+              // Call
+              pf(1, 2);
+              pf2(1, 2);
+              add(1, 2);
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="auto" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ### 2.6 Pointers and Functions
+
+              Example: Newton's Method
+
+              `example/lec02/newton`
+
+              ```cpp [|5|8|10-13|15-17|30-31|20-26|32-33]
+              #include <iostream>
+              #include <iomanip>
+              #include <cmath>
+
+              using Fn = double(*)(double);
+              // typedef double(*Fn)(double); // old way
+
+              double newton(Fn func, double guess = 1.0)
+              {
+                  double y = func(guess);
+                  if (std::abs(y) < 1e-10) {
+                      return guess;
+                  }
+
+                  double delta = 1e-10;
+                  double dy = (func(guess + delta) - func(guess - delta)) / (2 * delta);
+                  return newton(func, guess - y / dy);
+              }
+
+              double equation1(double x) {
+                  return x * x - 2;
+              }
+
+              double equation2(double x) {
+                  return tan(x) - 1;
+              }
+
+              int main(int argc, char** argv) {
+                  std::cout << std::setprecision(10);
+                  std::cout << newton(equation1) << std::endl;
+                  std::cout << 4 * newton(equation2) << std::endl;
+                  // using lambda function
+                  std::cout << newton([](double x) {return x * x - 2;}) << std::endl;
+                  return 0;
+              }
+              ```
+
+              ---
+
+              ### 2.6 Pointers and Functions
+
+              #### Note
+
+              Function pointers do not support arithmetic operations.
+
+              ---
+
+              ### 2.6 Pointers and Functions
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Functions can still return function pointers, but their usage is rare in C++.
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Modern C++ can combine with lambda functions.
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->In actual engineering, it is recommended to use `std::function` instead of direct function pointers.
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ### 2.7 String Pointers
+
+              Basic declaration methods
+
+              ```cpp
+              const char* str1 = "Hello";  // Recommended: explicit constant
+              char str2[] = "World";       // Character array
+              char* str3 = str2;           // Pointer to array
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ### 2.7 String Pointers
+
+              Memory Situation (Assuming first address is 0x1000)
+
+              |  Address  | Data  |
+              | :----: | :-: |
+              | 0x1000 | 'H' |
+              | 0x1001 | 'e' |
+              | 0x1002 | 'l' |
+              | 0x1003 | 'l' |
+              | 0x1004 | 'o' |
+              | 0x1005 | '\0' |
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ### 2.7 String Pointers
+
+              Core features:
+
+              - Ends with null character `'\0'`
+              - String literals are stored in read-only data segments
+              - Pointer stores the address of the first character
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ### 2.7 String Pointers
+
+              In C++, it is not recommended to use raw string pointers directly; instead, use `std::string` as an alternative.
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ### 2.8 Command Line Arguments
+
+              #### Standard Parameter Forms
+              ```cpp
+              int main(int argc, char* argv[])  // Most commonly used form
+              int main(int argc, char** argv)   // Equivalent form
+              ````
+
+              #### Other Valid Forms
+
+              ```cpp
+              int main()     // Parameterless version
+              int main(void) // C-style explicit no parameters
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ### 2.8 Command Line Arguments
+
+              Parameter Meaning
+
+              | Parameter | Name            | Description         |
+              | -------- | --------------- | ------------------ |
+              | argc     | Argument Count  | Number of command line arguments (≥1) |
+              | argv     | Argument Vector | Pointer to parameter string array   |
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ### 2.8 Command Line Arguments
+
+              Test: `example/lec02/args`
+
+              ```cpp
+              #include <iostream>
+
+              int main(int argc, char** argv) {
+              	for (int i = 0; i < argc; i++) {
+              		std::cout << argv[i] << std::endl;
+              	}
+              	return 0;
+              }
+              ```
+
+              ```bash
+              xmake run args 1 2 3 4 hello
+              .\build\windows\x64\release\args.exe 1 2 hello test
+              ./a.out 1 2 3 4
+              ```
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ### 2.9 Reference Concept
+
+              #### 1.1 Basic Definition
+
+              - **Alias Mechanism**: Creates a new name for an existing variable
+              - **Must Initialize**: Must be bound to a valid object at declaration
+              - **Cannot Rebind**: Cannot change the target after initialization
+
+              ```cpp
+              int x = 10;
+              int& ref = x;  // ref is an alias for x
+              ref = 20;      // Modifies the value of x
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ### 2.9 Reference Concept
+
+              #### Core Features
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->**Type Safety**: Strictly matches the referenced type
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->**Automatic Dereferencing**: No special symbols needed when used
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->**Address Sharing**: Shares memory addresses with the referenced object
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" style="font-size: 30px;" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ### 2.9 Reference Concept
+
+              Problems Solved by References
+
+              | Pointer Problem | Reference Solution       |
+              | -------------- | ------------------------ |
+              | Null pointer risk | Must initialize, cannot be null |
+              | Wild pointer issue | Cannot be changed after binding |
+              | Memory leak risk | Does not involve dynamic memory management |
+              | High syntax complexity | Automatic dereferencing, simple syntax |
+              | Double free risk | Naturally follows RAII<sup id="fnref:1" role="doc-noteref">1</sup> principles |
+
+
+
+              <div class="footnotes" role="doc-endnotes">
+              <ol>
+              <li id="fn:1" role="doc-endnote" class="footnote"><p>
+
+              RAII: Resource Acquisition Is Initialization, proposed by the father of C++ Bjarne Stroustrup
+
+              </p></li></ol>
+              </div>
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 25px" absolute="true">
+
+              ### 2.9 Reference Concept
+
+              Difference between References and Pointers
+
+              | Feature     | Reference | Pointer              |
+              | ---------- | --------- | -------------------- |
+              | Initialization Requirement | Must explicitly initialize | Can be delayed       |
+              | Nullability | Cannot be null | Can be `nullptr`     |
+              | Rebind     | Cannot    | Can change target    |
+              | Memory Management | Not involved | Requires manual allocation/release |
+              | Syntax     | Automatic dereferencing | Requires `*` and `->` operators |
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ### 2.10 Left and Right Values
+
+
+              #### Basic Definition
+
+              | Category | Characteristics | Example |
+              | --- | ---------- | --------- |
+              | Left Value | Persistent identity, addressable | Variable |
+              | Right Value | Temporary object, about to be destroyed | Literals, expression results |
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ### 2.10 Left and Right Values
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Only left values can create references in the alias usage of references.
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Function parameters can add two `&` to represent right value references.
+
+              ```cpp [1,6|1,7|2,8]
+              int add(int&&, int&&);
+              int constAdd(const int&, const int&);
+              int main()
+              {
+                  int a = 10;
+                  std::cout << add(1, 2) << std::endl; // ok
+                  std::cout << add(a, 2) << std::endl; // wrong
+                  std::cout << constAdd(a, 2) << std::endl; // ok
+
+                  return 0;
+              }
+              ```
+              <!-- .element: class="fragment" -->
+              </div>
+            </script>
+          </section>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ### 2.11 const Reference
+
+            #### Core Features
+
+            - **Read-only Access**: Cannot modify the original object through the reference
+            - **Extend Lifetime**: Can bind to temporary objects
+            - **Compatibility**: Accepts both `const` and non-`const` objects
+
+            ```cpp
+            // Legal, extends the lifetime of the literal
+            const int& cref = 42;
+            ```
+            </div>
+          </script>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ### Typical Applications of References
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Function parameter passing (avoid copying large objects)
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Return protective access
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Use with temporary objects
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ### Typical Applications of References
+
+              Typical Mistake:
+
+              ```cpp
+              int& add(const int& a, const int& b)
+              {
+              	int c = a + b;
+              	return c; // Wrong! Return reference of a local variable
+              }
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ### Typical Applications of References
+
+              Solving a quadratic equation (bad way):
+
+              ```cpp
+              bool solve(const double a,
+                         const double b,
+                         const double c,
+                         double& x1,
+                         double& x2)
+              {
+              	double delta = b * b - 4 * a * c;
+              	if (delta < 0 || a == 0)
+              		return false;
+              	double s = sqrt(delta);
+              	x1 = (-b - s) / (2 * a);
+              	x2 = (-b + s) / (2 * a);
+              	return true;
+              }
+              ```
+              </div>
+            </script>
+          </section>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: style="font-size: 30px" class="drop" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ### Typical Applications of References
+
+            Solving a quadratic equation (good way):
+
+            ```cpp [|1-4|6-8|10-11|13-23|24-32|35|37|39-54|55-59|60-62|65-79]
+            #include <iostream>
+            #include <utility>
+            #include <optional>
+            #include <cmath>
+
+            using namespace std;
+
+            using num = optional<double>;
+
+            pair<num, num>
+            solve(double a, double b, double c)
+            {
+                if (a == 0)
+                {
+                    if (b == 0)
+                    {
+                        return make_pair(nullopt, nullopt);
+                    }
+                    else
+                    {
+                        return make_pair(-c / b, nullopt);
+                    }
+                }
+                double delta = b * b - 4 * a * c;
+                if (delta < 0)
+                {
+                    return make_pair(nullopt, nullopt);
+                }
+                double s = sqrt(delta);
+                double x1 = (-b + s) / (2 * a);
+                double x2 = (-b - s) / (2 * a);
+                return make_pair(x1, x2);
+            }
+
+            void print_result(const pair<num, num> &result)
+            {
+                if (result.first.has_value())
+                {
+                    if (result.second.has_value())
+                    {
+                        if (result.first.value() == result.second.value())
+                        {
+                            cout << "There are two same results: "
+                                << result.first.value() << endl;
+                        }
+                        else
+                        {
+                            cout << "There are two results: "
+                                << result.first.value()
+                                << " and "
+                                << result.second.value()
+                                << endl;
+                        }
+                    }
+                    else
+                    {
+                        cout << "There is only one result: "
+                            << result.first.value() << endl;
+                    }
+                } else {
+                    cout << "There is no solution" << endl;
+                }
+            }
+
+            int main(int argc, char **argv)
+            {
+                auto r1 = solve(1, 2, 1);
+                auto r2 = solve(1, 1, 1);
+                auto r3 = solve(1, 1, -2);
+                auto r4 = solve(0, 1, 1);
+                auto r5 = solve(0, 0, 1);
+
+                print_result(r1);
+                print_result(r2);
+                print_result(r3);
+                print_result(r4);
+                print_result(r5);
+                return 0;
+            }
+            ```
+            </div>
+          </script>
+        </section>
+      </div>
+    </div>
+
+    <script src="../dist/reveal.js"></script>
+    <script src="../plugin/zoom/zoom.js"></script>
+    <script src="../plugin/notes/notes.js"></script>
+    <script src="../plugin/search/search.js"></script>
+    <script src="../plugin/markdown/markdown.js"></script>
+    <script src="../plugin/math/math.js"></script>
+    <script src="../plugin/highlight/highlight.js"></script>
+    <script>
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        center: true,
+        hash: true,
+        slideNumber: true,
+        plugins: [
+          RevealZoom,
+          RevealNotes,
+          RevealSearch,
+          RevealMarkdown,
+          RevealHighlight,
+          RevealMath.KaTeX,
+        ],
+      });
+    </script>
+  </body>
+</html>
