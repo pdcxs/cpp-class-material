@@ -1,0 +1,877 @@
+<!doctype html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+
+    <title>Object-Oriented Programming Technology Lesson 3</title>
+
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="../dist/reset.css" />
+    <link rel="stylesheet" href="../dist/reveal.css" />
+    <link rel="stylesheet" href="../dist/theme/white-contrast.css" id="theme" />
+    <link rel="stylesheet" href="../css/layout.css" id="theme" />
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="../plugin/highlight/monokai.css" />
+  </head>
+
+  <body>
+    <style>
+      .red {
+        color: red;
+      }
+    </style>
+    <div class="reveal">
+      <div class="slides">
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ## From Struct to Class
+
+            ### Understanding C++ Encapsulation
+
+            Lecturer：<span class="red">**陈笑沙**</span>
+            </div>
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ## Review
+
+            Which line of code has an error in the following program?
+
+            ```cpp [1-4|5-7|8-10]
+            int a = 100, b = 10;
+            const int *p1 = &a;
+            p1 = &b;
+            *p1 = 0;
+            int * const p2 = &a;
+            *p2 = 0;
+            p2 = &b;
+            const int * const p3 = &a;
+            *p3 = 0;
+            p3 = &b
+            ```
+            </div>
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ## Table of Contents
+
+            - 3.1 Concept and Operation of Structures
+            - 3.2 Structures and Pointers
+            - 3.3 Structures and Arrays
+            - 3.4 Linked Lists
+            - 3.5 From Structures to Classes
+            - 3.6 Member Functions
+            - 3.7 Hiding the Internal Implementation of Classes
+            </div>
+          </script>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 3.1 Concept and Operation of Structures
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->The limitation of single-value data types
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Object attributes are often not single values, and batch processing is more complex.
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->For example: dates, persons, etc.
+              - &shy;<!-- .element: class="fragment" data-fragment-index="4" -->Solution: structure
+
+              ```cpp [|1|3-5|6]
+              struct Date
+              {
+              	int month;
+              	int day;
+              	int year;
+              }; // Note: semicolon at the end
+              ```
+              <!-- .element: class="fragment" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 3.1 Concept and Operation of Structures
+
+              First declare the structure type, then define variables of that type.
+
+              ```cpp [|1|2-7|8|9]
+              struct Student {
+              	std::string id;
+              	std::string name;
+              	char gender; // 'M' or 'F'
+              	unsigned int age;
+              	double score;
+              	std::string address;
+              };
+              Student student1, student2;
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 3.1 Concept and Operation of Structures
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Structure type and structure variable are different concepts
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->What is a type? What is a variable?
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->It can be simply understood that: type is a collection, variable is an element in the collection
+              - &shy;<!-- .element: class="fragment" data-fragment-index="4" -->Member names in a structure type can be the same as variable names, but they have different meanings
+              - &shy;<!-- .element: class="fragment" data-fragment-index="5" -->Member variables can be used individually, and their role and status are equivalent to ordinary variables
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 3.1 Concept and Operation of Structures
+
+              ```cpp [|1-6|8|9-12]
+              struct Student {
+              	std::string id;
+              	std::string name;
+              	char gender;
+              	std::string address;
+              };
+
+              Student a = {"10101", "Alice", 'F', "Taiyuan"};
+              std::cout << a.id << ", "
+                        << a.name << ", "
+                        << a.gender << ", "
+                        << a.address << std::endl;
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 3.1 Concept and Operation of Structures
+
+              Another method (not recommended)
+
+              ```cpp [|]
+              struct Student {
+                std::string name;
+                char gender;
+              } stu = {"Bob", 'M'};
+              ```
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 3.2 Structures and Pointers
+
+              The structure is just a way to organize data: the actual data is stored in member variables. However, there can be pointers to structures
+
+              ```cpp [|1-3|5-9|12-13|14-16|17|18-20]
+              #include <iostream>
+
+              using namespace std;
+
+              struct Person {
+              	string name;
+              	string id;
+              	double salary;
+              };
+
+              int main() {
+              	Person person1, person2;
+              	Person *ptr1 = &person1;
+              	ptr1->name = "Eric";
+              	ptr1->id = "1234004321";
+              	ptr1->salary = 500.0;
+              	person2 = *ptr1;
+              	cout << ptr1->name << ", "
+              	     << ptr1->id << ", "
+              	     << ptr1->salary << endl;
+              	return 0;
+              }
+              ```
+              <!-- .element: class="fragment" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 3.2 Structures and Pointers
+
+              If you need to pass a structure as a function parameter, generally use pointers or references. Otherwise, performance issues may occur.
+              </div>
+            </script>
+          </section>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" data-auto-animate="true" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ## 3.3 Structures and Arrays
+
+            The same usage as basic data types.
+
+            ```cpp [|1-4|7-10|11]
+            struct Person {
+            	string name;
+            	unsigned int age;
+            };
+
+            int main() {
+            	Person group[3] = {
+            	    {"Bob", 20},
+            	    {"Alice", 30},
+            	    {"Eric", 40}};
+            	Person *p = group;
+            	return 0;
+            }
+            ```
+            </div>
+          </script>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 3.4 Linked Lists
+
+              ### What is a linked list?
+
+
+              <div class="mermaid">
+              classDiagram
+               Head --|> P1
+               P1 --|> P2
+               class Head {
+               	type data;
+               	Node* next;
+               }
+               class P1 {
+               	type data;
+               	Node* next;
+               }
+               class P2 {
+               	type data;
+               	Node* next;
+               }
+
+              </div>
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 3.4 Linked Lists
+
+              ### What is a linked list?
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->A linked list consists of several nodes
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Each node contains two members:
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Data (can be other structures)
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->Pointer to the next node
+              - &shy;<!-- .element: class="fragment" data-fragment-index="5" -->A null pointer represents an empty linked list
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 3.4 Linked Lists
+
+              ```cpp [|3]
+              struct Node {
+              	int data;
+              	Node* next;
+              };
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 3.4 Linked Lists
+
+              Create a linked list：
+
+              ```cpp
+              Node* makeList() {
+              	return nullptr; // Do Not use NULL
+              }
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 3.4 Linked Lists
+
+              prepend：
+
+              ```cpp [|1|2|3-4|5]
+              Node *prepend(Node *list, const int element) {
+                Node *head = new Node();
+                head->data = element;
+                head->next = list;
+                return head;
+              }
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 3.4 Linked Lists
+
+              print:
+
+              ```cpp [|1|2|3|4,9|5|6-8|11]
+              void printList(const Node *list) {
+                std::cout << "[";
+                const Node *head = list;
+                while (head != nullptr) {
+                  std::cout << head->data;
+                  if (head->next != nullptr) {
+                    std::cout << ", ";
+                  }
+                  head = head->next;
+                }
+                std::cout << "]";
+              }
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 3.4 Linked Lists
+
+              free:
+
+              ```cpp [|1|2|3-5]
+              void freeList(Node *list) {
+                while (list != nullptr) {
+                  Node *next = list->next;
+                  delete list;
+                  list = next;
+                }
+              }
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 3.4 Linked Lists
+
+              insert:
+
+              ```cpp [|1|2-11|4-9|10|13-14|15-21|22-24|25-27|28-29]
+              Node *insert(Node *list, int element, size_t index) {
+                if (list == nullptr) {
+                  // empty list
+                  if (index == 0) {
+                    Node *newNode = new Node();
+                    newNode->data = element;
+                    newNode->next = nullptr;
+                    return newNode;
+                  }
+                  return list; // Fail, should thrown exception
+                }
+
+                Node *prev = nullptr;
+                Node *next = list;
+                while (index > 0) {
+                  if (next == nullptr)
+                    return list; // Fail
+                  prev = next;
+                  next = next->next;
+                  --index;
+                }
+                Node *newNode = new Node();
+                newNode->data = element;
+                newNode->next = next;
+                if (prev == nullptr) {
+                  return newNode;
+                }
+                prev->next = newNode;
+                return list;
+              }
+
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 30px" absolute="true">
+
+              ## 3.4 Linked Lists
+
+              delete, length, find ...
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->If you need a linked list, it is recommended to use `std::list` (double-linked list)
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->If you need to implement it manually, it is recommended to use `std::shared_ptr` (smart pointer)
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Extended reading: [Cons List](https://en.wikipedia.org/wiki/Cons), reference implementation: `demo/consList`
+
+              `example/lec03/list` <!-- .element: class="fragment" -->
+
+              `example/lec03/smartList` <!-- .element: class="fragment" -->
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 3.5 From Structures to Classes
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Some functions need to manipulate specific data, and the data needs to be passed in each time:
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->`Node *prepend(Node *list, ...)`
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->`Node *insert(Node *list, ...)`
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->`void freeList(Node *list)`
+              - &shy;<!-- .element: class="fragment" data-fragment-index="5" -->At the language level, data and its operations are not associated
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 3.5 From Structures to Classes
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Some data do not want to be exposed to the caller (internal implementation)
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Internal changes do not affect external calls
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->External errors are easier to debug
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 3.5 From Structures to Classes
+
+              Introducing the concept of classes:
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Data and operations are bound together
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Control over data access
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 3.5 From Structures to Classes
+
+              ```cpp
+              class Point {
+                  // data field, default is private
+              	int x;
+              	int y;
+              public:
+                  // Functions in class (methods)
+              	void print() {
+              		cout << '(' << x << ", " << ')';
+              	}
+              };
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 3.5 From Structures to Classes
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->A class is a data type, and an object is an instance of the corresponding class
+                - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->An object is a variable of the corresponding data type
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->A class is a blueprint
+                - &shy;<!-- .element: class="fragment" data-fragment-index="4" -->An object is a specific entity made according to the blueprint
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 3.5 From Structures to Classes
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->For compatibility reasons, `c++` allows methods to be added to `struct`.
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Member variables in `struct` have `public` access by default.
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 3.6 Member Functions
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->A class contains member variables and member functions
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Member variables and member functions are collectively referred to as members of the class
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Member variables are sometimes called properties, and member functions are sometimes called methods
+              - &shy;<!-- .element: class="fragment" data-fragment-index="4" -->They are not required
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 3.6 Member Functions
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->In the definition of a class, use the following access range keywords to specify the accessibility of class members:
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->`private`: Private members, can only be accessed within member functions
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->`public` : Public members, can be accessed anywhere
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->`protected`: Protected members, will be explained later
+              - &shy;<!-- .element: class="fragment" data-fragment-index="5" -->The number of occurrences and order of the above three keywords are not limited.
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 3.6 Member Functions
+
+              How to define a class?
+
+              ```cpp
+              class className {
+              private:
+              	// Private properties and methods
+              public:
+              	// Public properties and methods
+              protected:
+              	// Protected properties and methods
+              }; // Remember semicolon
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 3.6 Member Functions
+
+              ```cpp [|1|2-3|4|5-7|8-10|11-14|18|19|20]
+              class Rectangle {
+              private:
+              	int w, h;
+              public:
+              	int area() {
+              		return w * h;
+              	}
+              	int perimeter() {
+              		return 2 * (w + h);
+              	}
+              	void set(int width, int height) {
+              		w = width;
+              		h = height;
+              	}
+              };
+
+              int main() {
+              	Rectangle rect;
+              	rect.set(3, 4);
+              	cout << rect.area() << ", " << rect.perimeter();
+              	cout << endl;
+              	return 0;
+              }
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 3.7 Hiding the Internal Implementation of Classes
+
+              ```cpp [|1|2-3|5-8|10-12|14-16|3]
+              class Point {
+              private:
+              	double x, y;
+              public:
+              	void set(double xCoord, double yCoord) {
+              		x = xCoord;
+              		y = yCoord;
+              	}
+
+              	double length() {
+              		return std::sqrt(x * x + y * y);
+              	}
+
+              	double angle() {
+              		return std::atan2(y, x);
+              	}
+              };
+              ```
+              <!-- .element: data-id="point" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 3.7 Hiding the Internal Implementation of Classes
+
+              ```cpp [3|5-8]
+              class Point {
+              private:
+              	double r, a;
+              public:
+              	void set(double xCoord, double yCoord) {
+              		x = xCoord;
+              		y = yCoord;
+              	}
+
+              	double length() {
+              		return std::sqrt(x * x + y * y);
+              	}
+
+              	double angle() {
+              		return std::atan2(y, x);
+              	}
+              };
+              ```
+              <!-- .element: data-id="point" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 3.7 Hiding the Internal Implementation of Classes
+
+              ```cpp [5-8|10-12]
+              class Point {
+              private:
+              	double r, a;
+              public:
+              	void set(double x, double y) {
+              		r = std::sqrt(x * x + y * y);
+              		a = std::atan2(y, x);
+              	}
+
+              	double length() {
+              		return std::sqrt(x * x + y * y);
+              	}
+
+              	double angle() {
+              		return std::atan2(y, x);
+              	}
+              };
+              ```
+              <!-- .element: data-id="point" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 3.7 Hiding the Internal Implementation of Classes
+
+              ```cpp [10-12|14-16]
+              class Point {
+              private:
+              	double r, a;
+              public:
+              	void set(double x, double y) {
+              		r = std::sqrt(x * x + y * y);
+              		a = std::atan2(y, x);
+              	}
+
+              	double length() {
+              		return r;
+              	}
+
+              	double angle() {
+              		return std::atan2(y, x);
+              	}
+              };
+              ```
+              <!-- .element: data-id="point" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 3.7 Hiding the Internal Implementation of Classes
+
+              ```cpp [14-16]
+              class Point {
+              private:
+              	double r, a;
+              public:
+              	void set(double x, double y) {
+              		r = std::sqrt(x * x + y * y);
+              		a = std::atan2(y, x);
+              	}
+
+              	double length() {
+              		return r;
+              	}
+
+              	double angle() {
+              		return a;
+              	}
+              };
+              ```
+              <!-- .element: data-id="point" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 3.7 Hiding the Internal Implementation of Classes
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Internal changes, interface unchanged, will not affect external programs
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Decoupling
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Easier to locate errors
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->No need to consider that external programs may have changed private properties without knowing
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## Homework
+
+              Create a linked list that stores chars with structures. Need to implement following methods:
+
+              - `void display(List*)`
+              - `void prepend(List*, char c)`
+              - `void append(List*, char c)`
+              - `int size(List*)`
+              - `void delete(List*, int index)`
+              - `void free(List*)`
+
+              Do not use AI, I can tell the differences between AI generate codes and yours. Do not copy.
+
+              </div>
+            </script>
+          </section>
+        </section>
+      </div>
+    </div>
+
+    <script src="../dist/reveal.js"></script>
+    <script src="../plugin/zoom/zoom.js"></script>
+    <script src="../plugin/notes/notes.js"></script>
+    <script src="../plugin/search/search.js"></script>
+    <script src="../plugin/markdown/markdown.js"></script>
+    <script src="../plugin/mermaid/mermaid.js"></script>
+    <script src="../plugin/highlight/highlight.js"></script>
+    <script>
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        center: true,
+        hash: true,
+        slideNumber: true,
+        plugins: [
+          RevealZoom,
+          RevealNotes,
+          RevealSearch,
+          RevealMarkdown,
+          RevealHighlight,
+          RevealMermaid,
+        ],
+      });
+    </script>
+  </body>
+</html>
