@@ -1,0 +1,876 @@
+<!doctype html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+
+    <title>Object-Oriented Programming Technology Lesson 4</title>
+
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="../dist/reset.css" />
+    <link rel="stylesheet" href="../dist/reveal.css" />
+    <link rel="stylesheet" href="../dist/theme/white-contrast.css" id="theme" />
+    <link rel="stylesheet" href="../css/layout.css" id="theme" />
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="../plugin/highlight/monokai.css" />
+  </head>
+
+  <body>
+    <style>
+      .red {
+        color: red;
+      }
+    </style>
+    <div class="reveal">
+      <div class="slides">
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ## Constructors
+
+            Lecturer：<span class="red">**陈笑沙**</span>
+            </div>
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ## Table of Contents
+
+            - 4.1 Classes and Objects
+            - 4.2 The Necessity of Constructors
+            - 4.3 Using Constructors
+            - 4.4 Destructors
+            - 4.5 Constructors with Parameters
+            - 4.6 Overloading Constructors
+            - 4.7 Default Constructors
+            - 4.8 Class Member Initialization
+            - 4.9 Order of Object Construction
+            </div>
+          </script>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 4.1 Classes and Objects
+
+
+              Classes are custom data types in `C++`—describing data organization and operations
+
+              ```cpp
+              class Point {
+              	int x, y; // data organization
+              public:
+              	void set(int ix, int iy) { // operations
+              		x = ix;
+              		y = iy;
+              	}
+              };
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 4.1 Classes and Objects
+
+              Objects are entities of classes
+
+              Variables are entities of basic types
+
+              ```cpp
+              int a = 3; // basic type variable
+              struct Date { // structure variable
+              	int year, month, day;
+              };
+              Point w;
+              w.set(3, 5);
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 35px" absolute="true">
+
+              ## 4.1 Classes and Objects
+
+              ### C++ is a hybrid programming language
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Simple data structures, pure compound control statements, function (module) design, forming procedural programming
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Based on classes and objects, with procedural programming as the framework, forming object-oriented programming
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Based on class hierarchy polymorphism as the main object of data processing, with object-oriented design as the framework, forming object-oriented programming
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 4.2 The Necessity of Constructors
+
+              All data entities have an initialization requirement
+
+              ```cpp
+              int a = 3;     // Integer variable initialization
+              int a; a = 3;  // Integer variable assignment
+              double t[] = {1.3, 2.5}; // Array initialization
+              struct Date {int year, month, day; };
+              Date d = {1998, 5, 23}; // Structure variable initialization
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 4.2 The Necessity of Constructors
+
+              For objects, initialization is a complex problem
+
+              ```cpp
+              class Point {
+              	int x, y;
+              public:
+              	void set(int ix, int iy) {
+              		x = ix;
+              		y = iy;
+              	}
+              };
+              int main() {
+                  // Error, directly assigning to private variables
+              	Point t = {3, 4};
+              	Point d; // Produces an uninitialized object
+              	d.set(3, 4); // Assign values, not initialization
+              }
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 4.2 The Necessity of Constructors
+
+              If all variables are public, you can do this:
+
+              ```cpp [|2-3|7]
+              class Point {
+              public:
+              	int x, y;
+              };
+
+              int main() {
+              	Point t = {3, 4};
+                  return 0;
+              }
+              ```
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 4.3 Using Constructors
+
+              The design of object initialization
+
+              Should be completed during object construction, regardless of access permissions
+
+              ```cpp
+              class A {
+              	int a, b;
+              };
+              A x = {2, 3}; // OK
+              A y{2, 3}; // OK
+              A z(2, 3); // OK
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 4.3 Using Constructors
+
+              Constructor syntax:
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->No return type (not even `void`)
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Name matches the class name (case-sensitive)
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Can be any access privilege, not necessarily `public`
+              - &shy;<!-- .element: class="fragment" data-fragment-index="4" -->A class can have multiple constructors
+
+              ```cpp [|4|5|6|]
+              class A {
+              	int a, b;
+              public:
+              	void A(int ia, int ib); // Wrong
+              	construct(int ia, int ib); // Wrong
+              	A(int ia, int ib); // Right
+              };
+              ```
+              <!-- .element: class="fragment" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 4.3 Using Constructors
+
+              Example: Adding a constructor to the `Clock` class
+
+              ```cpp
+              class Clock {
+              	int hour, minute, second;
+              public:
+              	Clock(int h, int m, int s) {
+              		...
+              	}
+              };
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 4.3 Using Constructors
+
+              Implementing Constructors: Initializing Member Variables
+
+              ```cpp
+              Clock(int h, int m, int s) {
+              	hour = h;
+              	minute = m;
+              	second = s;
+              }
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 4.3 Using Constructors
+
+              Implementing Constructors: Initializing Member Variables
+
+              ```cpp
+              Clock(int h, int m, int s) : hour(h), minute(m), second(s) {}
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 4.3 Using Constructors
+
+              Constructor Call:
+
+              ```cpp [|2-3|8|8-12|14]
+              class Desk {
+              public:
+              	Desk();
+              private:
+              	int height, width;
+              };
+
+              Desk::Desk() {
+              	cout << "Constructor of Desk." << endl;
+              	height = 3;
+              	width = 2;
+              }
+
+              Desk desk; // call the constructor
+              ```
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 4.4 Destructors
+
+              In class design, if there is a pointer member, the constructor will allocate heap memory and assign it to the pointer, allowing member functions to share the resource
+
+              ```cpp
+              class A {
+              	int* aa;
+              	int num;
+              public:
+                  A(int n) {
+                  	num = n;
+                  	aa = new int[n];
+                  	// delete[] aa; ???
+                  }
+              };
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 4.4 Destructors
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Sometimes when we release a class object, we may need to do some cleanup work, but we may also encounter problems due to forgetting to call these cleanup functions. How can we solve this?
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->C++ also considers this for us. Opposite to the constructor, it provides a destructor specifically for handling cleanup work when an object is destroyed.
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 4.4 Destructors
+
+              - Destructors have no return type, no parameters, and the function name is the class name prefixed with "~". Destructors will be automatically called when the object's lifespan ends.
+              - Destructors can also be private, although this is uncommon.
+
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 4.4 Destructors
+
+              ```cpp [|7|9-11]
+              class A {
+              	int* aa;
+              	int num;
+              public:
+                  A(int n) {
+                  	num = n;
+                  	aa = new int[n];
+                  }
+                  ~A() { // Cannot have parameters
+                  	delete[] aa;
+                  }
+              };
+              ```
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 4.5 Constructors with Parameters
+
+              By passing parameters to the constructor, you can specify the values of member variables.
+
+              ```cpp
+              class Student {
+              	std::string name;
+              	char gender;
+              	double gpa;
+              public:
+              	Student(const std::string& name, char gender, double gpa):
+              	name(name), gender(gender), gpa(gpa) {}
+              };
+
+              Student stu("Eric", 'M', 4.5);
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 4.5 Constructors with Parameters
+
+              ```cpp [|2-3|5-7|12-15|17-20]
+              class Teacher {
+                  std::string name;
+                  uint8_t age;
+              public:
+                  Teacher(const std::string& name, uint8_t age) {
+                      this->name = name;
+                      this->age = age;
+                  }
+              };
+
+              class Student {
+                  std::string name;
+                  char gender;
+                  double gpa;
+                  Teacher t;
+              public:
+                  Student(const std::string& name, char gender, double gpa):
+                  name(name), gender(gender), gpa(gpa) {
+                      t(name, 30); // Wrong
+                  }
+              };
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 35px" absolute="true">
+
+              ## 4.5 Constructors with Parameters
+
+              If a constructor only has one parameter, you can also initilize the object like this: <!-- .element: class="fragment" -->
+
+              ```cpp
+              className obj = parameter;
+              ```
+              <!-- .element: class="fragment" -->
+
+              To abandon this feature, you can do this: <!-- .element: class="fragment" -->
+
+              ```cpp [|4|8|]
+              class A{
+                  int a;
+              public:
+                  explicit A(int n):a(n){} // 注意新的关键字
+              };
+
+              int main() {
+                  A a = 1; // Wrong
+                  return 0;
+              }
+              ```
+              <!-- .element: class="fragment" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 40px" absolute="true">
+
+              ## 4.5 Constructors with Parameters
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Aside: What type should string parameters of functions be?
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->`const char*`
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->`const std::string&`
+              - &shy;<!-- .element: class="fragment" data-fragment-index="4" -->Generally speaking, `const char*` is more performant but less safe.
+              - &shy;<!-- .element: class="fragment" data-fragment-index="5" -->Most of the time, it's unnecessary to consider performance to this extreme.
+              - &shy;<!-- .element: class="fragment" data-fragment-index="6" -->In most cases, choose `const std::string&`.
+              - &shy;<!-- .element: class="fragment" data-fragment-index="7" -->After `c++17`, you can use `std::string_view`.
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center;" absolute="true">
+
+              ## 4.5 Constructors with Parameters
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Sometimes, when the constructor parameters have the same name as the member variables, you can:
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Use the `this` pointer
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Use the member initialization list
+              - &shy;<!-- .element: class="fragment" data-fragment-index="4" -->The `this` pointer is an implicit pointer in class member functions that points to the current object instance, used to access the object's members.
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 4.5 Constructors with Parameters
+
+              ```cpp
+              class Point {
+              	int x, y;
+              public:
+              	Point(int x, int y) : x(x), y(y) {}
+              };
+              ```
+              <!-- .element: data-id="this-pointer" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 4.5 Constructors with Parameters
+
+              ```cpp
+              class Point {
+              	int x, y;
+              public:
+              	Point(int x, int y){
+              		this->x = x;
+              		this->y = y;
+              	}
+              };
+              ```
+              <!-- .element: data-id="this-pointer" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 4.5 Constructors with Parameters
+
+              The following two ways to call constructors are equivalent:
+
+              ```cpp
+              Point p(3, 4); // Traditional way
+              // If the constructor is explicit, compilation will fail
+              Point p = {3, 4};
+              // Recommended way, after C++11,
+              // distinguishes from function calls
+              Point p{3, 4};
+              ```
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 4.6 Overloading Constructors
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->`C++` member functions can be overloaded, and constructors can also be overloaded
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->A class can provide multiple constructors, i.e., constructor overloading.
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->The purpose of overloading is to meet different initialization needs.
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 4.6 Overloading Constructors
+
+              ```cpp [|4-8|13-15]
+              class Clock
+              {
+              private:
+              	int hour, minute, second;
+              public:
+              	Clock(int h, int m, int s);
+              	Clock();
+              	Clock(const std::string& timestr);
+              };
+
+              int main( )
+              {
+              	Clock clock1{23, 12, 0};
+              	Clock clock2{};
+              	Clock clock3{“14:45:32”};
+              }
+
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 4.6 Overloading Constructors
+
+              How to implement a class with multiple construction methods?
+
+              ```cpp
+              int main()
+              {
+                  Date date1{2000, 3, 4};
+                  Date date2{2000, 3};
+                  Date date3{2000};
+                  Date date4{};
+                  return 0;
+              }
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 4.6 Overloading Constructors
+
+              ### Scheme 1 (Overloading)
+
+              ```cpp
+              class Date{
+                int year, month, day;   // default private
+              public:
+                // The following four overloaded functions,
+                // each corresponding to a way to build an object
+                Date();
+                Date(int d);
+                Date(int m, int d);
+                Date(int y, int m, int d);
+              };
+              Date::Date(){ year=1900; month=1; day=1; }
+              Date::Date(int y){ month=4; day=d; year=1996; }
+              Date::Date(int y, int m){ month=m; day=1; year=1900; }
+              Date::Date(int y, int m, int d){ month=m; day=d; year=y; }
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 4.6 Overloading Constructors
+
+              ### Scheme 2 (C++11)
+
+              ```cpp
+              class Date {
+                  int year, month, day;
+              public:
+                  Date(int year, int month, int day)
+                    : year(year), month(month), day(day) {}
+                  Date(int year, int month) : Date(year, month, 1) {}
+                  Date(int year) : Date(year, 1, 1) {}
+                  Date() : Date(1900, 1, 1) {}
+              };
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 4.6 Overloading Constructors
+
+              ### Scheme 3 (Default Parameters, Recommended)
+
+              ```cpp
+              class Date
+              {
+                  int year, month, day;
+              public:
+                  Date(int year = 1900, int month = 1, int day = 1)
+                      : year(year), month(month), day(day)
+                  {
+                  }
+              };
+              ```
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 35px" absolute="true">
+
+              ## 4.7 Default Constructors
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Default constructor is not a constructor with default parameters
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Creating an object definitely requires a constructor
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Default constructor: If no constructor is defined in the class, the system will default to a parameterless constructor to fulfill the mission of creating an object
+              - &shy;<!-- .element: class="fragment" data-fragment-index="4" -->As long as the programmer defines a constructor (regardless of how many), the system will no longer provides a default constructor
+              - &shy;<!-- .element: class="fragment" data-fragment-index="5" -->The default constructor must be a parameterless constructor, and the parameterless constructor can be customized
+              - &shy;<!-- .element: class="fragment" data-fragment-index="6" -->In fact, there is also a corresponding default destructor that exists
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 4.7 Default Constructors
+
+              ```cpp [|1-3|7|8|9]
+              class Date
+              {
+              };
+
+              int main()
+              {
+                  Date date{}; // ok
+                  Date date2; // ok
+                  Date date3(); // ok
+                  return 0;
+              }
+              ```
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 4.8 Class Member Initialization
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Constructors always create object space first, then execute constructor body statements
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->If the class contains object members, when the constructor creates object space, it calls the default constructor of the object member, then executes the constructor body statements
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->If object members do not have a default constructor, use the member initialization list method
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 4.8 Class Member Initialization
+
+              ```cpp [|5-8|15|17-19]
+              class Teacher {
+                  std::string name;
+                  uint8_t age;
+              public:
+                  Teacher(const std::string& name, uint8_t age) {
+                      this->name = name;
+                      this->age = age;
+                  }
+              };
+
+              class Student {
+                  std::string name;
+                  char gender;
+                  double gpa;
+                  Teacher t;
+              public:
+                  Student(const std::string& name, char gender, double gpa):
+                  name(name), gender(gender), gpa(gpa), t("no name", 100) { // ok
+                  }
+              };
+              ```
+              </div>
+            </script>
+          </section>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" data-auto-animate="true" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ## 4.9 Order of Object Construction
+
+            Members are constructed in the order they are declared in the class
+
+            ```cpp
+            class A {
+            	int num, age; // First construct num, then construct age
+            public:
+                // The order here does not matter
+            	A(int n) : age(n), num(age + 1) {}
+            };
+            ```
+            </div>
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ## Example: Josephus Problem
+
+            <iframe src="https://www.geogebra.org/classic/a9nqmhpt?embed" width="800" height="600" allowfullscreen style="border: 1px solid #e4e4e4;border-radius: 4px;" frameborder="0"></iframe>
+            </div>
+          </script>
+        </section>
+      </div>
+    </div>
+
+    <script src="../dist/reveal.js"></script>
+    <script src="../plugin/zoom/zoom.js"></script>
+    <script src="../plugin/notes/notes.js"></script>
+    <script src="../plugin/search/search.js"></script>
+    <script src="../plugin/markdown/markdown.js"></script>
+    <script src="../plugin/mermaid/mermaid.js"></script>
+    <script src="../plugin/math/math.js"></script>
+    <script src="../plugin/highlight/highlight.js"></script>
+    <script>
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        center: true,
+        hash: true,
+        slideNumber: true,
+        plugins: [
+          RevealZoom,
+          RevealNotes,
+          RevealSearch,
+          RevealMarkdown,
+          RevealHighlight,
+          RevealMermaid,
+          RevealMath.KaTeX,
+        ],
+      });
+    </script>
+  </body>
+</html>
