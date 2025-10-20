@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+
+    <title>Object-Oriented Programming Technology Lesson 5</title>
+
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="../dist/reset.css" />
+    <link rel="stylesheet" href="../dist/reveal.css" />
+    <link rel="stylesheet" href="../dist/theme/white-contrast.css" id="theme" />
+    <link rel="stylesheet" href="../css/layout.css" id="theme" />
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="../plugin/highlight/monokai.css" />
+  </head>
+
+  <body>
+    <style>
+      .red {
+        color: red;
+      }
+    </style>
+    <div class="reveal">
+      <div class="slides">
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ## Object-Oriented Programming Technology
+
+            ## Constructors
+
+            Lecturer：<span class="red">**陈笑沙**</span>
+            </div>
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ## Table of Contents
+
+            - 5.1 Abstraction
+            - 5.2 Classification
+            - 5.3 Design and Efficiency
+            - 5.4 Josephus Problem Revisited
+            	- 5.4.1 Procedural Approach
+            	- 5.4.2 Functional Approach
+            	- 5.4.3 Object-Oriented Approach
+            </div>
+          </script>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 5.1 Abstraction
+
+              The abstraction capability of code is a crucial core capability in programming, as it determines the maintainability, extensibility, and reusability of the code.
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 5.1 Abstraction
+
+              Every powerful language provides three mechanisms:
+
+              - **Basic expression forms**: Used to represent the simplest individuals that the language is concerned with.
+              - **Methods of combination**: Through which one can construct compound elements from simpler things.
+              - **Abstraction methods**: Through which one can name compound objects and treat them as units.
+
+              <p style="text-align:right;">—<i>Structure and Interpretation of Computer Programs</i></p>
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 5.1 Abstraction
+
+              The philosophical essence: abstraction is logical modeling of reality
+
+              - Abstraction is the first principle of computer science, building the essential model of things by selectively ignoring details
+              - Similar to map drawing: retaining main roads, omitting trees and streetlights
+              - Examples: use coordinate system to represent city traffic, use nodes and edges to represent social network relationships
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 5.1 Abstraction
+
+              The Three Levels of Technical Implementation
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Basic Abstraction: Code Encapsulation
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Example: Function Abstraction
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Intermediate Abstraction: Structure Modeling
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->Example: Class Abstraction
+              - &shy;<!-- .element: class="fragment" data-fragment-index="5" -->Advanced Abstraction: Patterns and Paradigms
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="6" -->Design Patterns
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="7" -->MVC Layered Abstraction
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="8" -->Monad Abstraction in Functional Programming
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 5.1 Abstraction
+
+              Abstraction Capability Evolution Path
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Beginner: Identify duplicate code
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Advanced: Design domain models
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Expert: Create DSLs (Domain-Specific Languages)
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 5.2 Classification
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Object-oriented programming design custom data types, which are self-contained, hide data composition and operations, and reflect abstraction in programming design
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Custom data types are not isolated (we will see inheritance later), but rather systematic hierarchical structures
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Classification is a means of designing and dividing class objects, serving as entities for each category, distinguishing different classes, different data attributes, different scopes, and different operations
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 5.2 Classification
+
+              Example
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->`Student` class
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Primary school student
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Middle school student
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->College student
+              		- &shy;<!-- .element: class="fragment" data-fragment-index="5" -->Different majors
+              		- &shy;<!-- .element: class="fragment" data-fragment-index="6" -->Different colleges
+              		- &shy;<!-- .element: class="fragment" data-fragment-index="7" -->Different grades
+              </div>
+            </script>
+          </section>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" data-auto-animate="true" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 30px" absolute="true">
+
+            ## 5.3 Design and Efficiency
+
+            - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Software efficiency is divided into runtime efficiency and development (production) efficiency
+            - &shy;<!-- .element: class="fragment" data-fragment-index="2" --><span style="color: red;">Runtime efficiency</span> includes time consumption and space consumption, which are related to program design strategies, data structures, storage management, and algorithms (code optimization)
+            - &shy;<!-- .element: class="fragment" data-fragment-index="3" --><span style="color: red;">Design efficiency</span> is related to design methods and management mechanisms
+            - &shy;<!-- .element: class="fragment" data-fragment-index="4" -->Design methods refer to program design methods, and viewing problems from the perspective of layering and abstraction helps to clarify the data processing logic
+            - &shy;<!-- .element: class="fragment" data-fragment-index="5" -->Object-oriented programming design methods can concisely use the language to express layering and abstraction (development efficiency), and the class mechanism of the C++ language can well play the runtime efficiency of the program
+            </div>
+          </script>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 5.4 Josephus Problem Revisited
+
+              ### 5.4.1 Procedural Approach
+
+              An approach leaning towards functional programming:
+
+              Abstract the problem into a general data structure, then process it
+
+              `example/lec05/josephus1`
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 5.4 Josephus Problem Revisited
+
+              ### 5.4.2 Functional Approach
+
+              Consider only the last one:
+
+              ```cpp
+              int josephus(int n, int k) {
+              	if (n == 1)
+              		return 0;
+              	int r = josephus(n - 1, k);
+              	return (k + r) % n;
+              }
+              ```
+              <!-- .element: data-id="recursion" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 5.4 Josephus Problem Revisited
+
+              ### 5.4.2 Functional Approach
+
+              Consider only the last one:
+
+              ```cpp
+              int josephus(int n, int k) {
+              	return n == 1 ? 0 : (k + josephus(n - 1, k)) % n;
+              }
+              ```
+              <!-- .element: data-id="recursion" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 5.4 Josephus Problem Revisited
+
+              ### 5.4.2 Functional Approach
+
+
+              <div style="font-size:25px">
+              $f(n,k)=(k + f(n-1,k)) \bmod n$
+              </div>
+              <!-- .element: class="fragment" -->
+
+              <div style="font-size:25px">
+              $f(1,k)=0$
+              </div>
+              <!-- .element: class="fragment" -->
+
+              <div style="font-size:25px">
+              $f(2,k)=(k+f(1,k)) \bmod 2 = (k+0) \bmod 2 $
+              </div>
+              <!-- .element: class="fragment" -->
+
+              <div style="font-size:25px">
+              $f (3, k)=(k+f (2, k)) \bmod 3 = ((k+0) \bmod 2 + k) \bmod 3 $
+              </div>
+              <!-- .element: class="fragment" -->
+
+              <div style="font-size:25px" data-id="equation">
+              $f (n, k)= (((k+0) \bmod 2 + k) \bmod 3 + k \cdots ) \bmod n $
+              </div>
+              <!-- .element: class="fragment" -->
+
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 5.4 Josephus Problem Revisited
+
+              ### 5.4.2 Functional Approach
+
+              <div style="font-size:25px" data-id="equation">
+              $f (n, k)= (((k+0) \bmod 2 + k) \bmod 3 + k \cdots ) \bmod n $
+              </div>
+
+              ```cpp
+              int josephus(int n, int k) {
+                  int r = 0;
+                  for (int i = 2; i <= n; i++) {
+                  	r = (r + k) % i;
+                  }
+                  return r + 1;
+              }
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 30px" absolute="true">
+
+              ## 5.4 Josephus Problem Revisited
+
+              ### 5.4.2 Functional Approach
+
+              Extended reading: Several pure functional approaches (Haskell version)
+
+              ```Haskell
+              josephus n k =
+                let loop xs = let d:r = drop (k-1) xs
+                              in d : loop (filter (/= d) r)
+                in take n (loop (cycle [1..n]))
+              ```
+
+              ```Haskell
+              josephus 1 k = 0
+              josephus n k = (k + josephus (n - 1) k) `mod` n
+              ```
+
+              ```Haskell
+              josephus n k = 1 + foldl go 0 [2..n]
+               where
+                go r i = (r + k) `mod` i
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 5.4 Josephus Problem Revisited
+
+              ### 5.4.3 Object-Oriented Approach
+
+              `example/lec04/joseph`
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate="true" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 5.4 Josephus Problem Revisited
+
+              ### Extended Reading: APL Language
+
+              Uiua Language<sup id="fnref:uiua" role="doc-noteref">1</sup> Version
+
+              ```uiua
+              Joseph ← ◌:◌:⍥(⊙:⊂⊙(⊃(⊢|↘1)⤚↻)):[]⊙::⟜⧻+1⇡⊙(-1)
+              Joseph 41 2
+              ```
+              <div class="footnotes" role="doc-endnotes">
+              <ol>
+              <li id="fn:uiua" role="doc-endnote" class="footnote"><p>
+
+              <https://www.uiua.org></https>
+
+              </p></li></ol>
+              </div>
+              </div>
+            </script>
+          </section>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" data-auto-animate="true" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 30px" absolute="true">
+
+            ## Homework
+
+            Try to use fomular:
+
+            $f (n, k)= ((k \bmod 2 + k) \bmod 3 + k \cdots ) \bmod n $
+ 
+            To write a Joseph Problem Solver class.
+
+            - It has two members: $n$ and $k$.
+            - It has a constructor to initialize these members.
+            - It has a method to re-set these members.
+            - It has a method called `solve` to get the answer.
+
+            </div>
+          </script>
+        </section>
+      </section>
+      </div>
+    </div>
+
+    <script src="../dist/reveal.js"></script>
+    <script src="../plugin/zoom/zoom.js"></script>
+    <script src="../plugin/notes/notes.js"></script>
+    <script src="../plugin/search/search.js"></script>
+    <script src="../plugin/markdown/markdown.js"></script>
+    <script src="../plugin/mermaid/mermaid.js"></script>
+    <script src="../plugin/math/math.js"></script>
+    <script src="../plugin/highlight/highlight.js"></script>
+    <script>
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        center: true,
+        hash: true,
+        slideNumber: true,
+        plugins: [
+          RevealZoom,
+          RevealNotes,
+          RevealSearch,
+          RevealMarkdown,
+          RevealHighlight,
+          RevealMermaid,
+          RevealMath.KaTeX,
+        ],
+      });
+    </script>
+  </body>
+</html>
