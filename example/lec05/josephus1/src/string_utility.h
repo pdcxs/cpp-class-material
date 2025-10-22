@@ -1,9 +1,9 @@
 #ifndef __STRING_UTILITY_H__
 #define __STRING_UTILITY_H__
 
-#include <vector>
-#include <string>
 #include <optional>
+#include <string>
+#include <vector>
 
 // seperate a string into words
 std::vector<std::string> words(const std::string &s);
