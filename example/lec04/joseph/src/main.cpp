@@ -89,7 +89,7 @@ int main() {
     istringstream is(line);
     is >> n >> k;
 
-    JosephusRing ring(n, k);
+    JosephusRing ring{n, k};
     while (true) {
       if (ring.isLast()) {
         cout << ring.current() << endl;
