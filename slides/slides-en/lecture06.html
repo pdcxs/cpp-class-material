@@ -1,0 +1,957 @@
+<!doctype html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+
+    <title>面向对象程序设计技术X 第六课</title>
+
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="../dist/reset.css" />
+    <link rel="stylesheet" href="../dist/reveal.css" />
+    <link rel="stylesheet" href="../dist/theme/white-contrast.css" id="theme" />
+    <link rel="stylesheet" href="../css/layout.css" id="theme" />
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="../plugin/highlight/monokai.css" />
+  </head>
+
+  <body>
+    <style>
+      .red {
+        color: red;
+      }
+    </style>
+    <div class="reveal">
+      <div class="slides">
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ## Heap and Copy Constructor
+
+            Lecturer：<span class="red">**陈笑沙**</span>
+            </div>
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ## Table of Contents
+
+            - 6.1 About the Heap
+            - 6.2 The Need for `new` and `delete`
+            - 6.3 Allocating Heap Objects
+            - 6.4 Copy Constructor
+            - 6.5 Shallow Copy vs. Deep Copy
+            - 6.6 Temporary Objects
+            - 6.7 Constructors for Type Conversion
+            - 6.8 Further Reading
+            </div>
+          </script>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 6.1 About the Heap
+
+              The program resides in memory to run, with its memory layout consisting of four regions:
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->`Code` region
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->`Data` region (global data area)
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->`Heap` region
+              - &shy;<!-- .element: class="fragment" data-fragment-index="4" -->`Stack` region
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec1" -->
+              <div class="" style="font-size:35px; position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 30px" absolute="true">
+
+              ## 6.1 About the Heap
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->**Code area** stores executable instructions
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Read-only, possibly shared by multiple processes (such as dynamic libraries), fixed size, loaded at runtime
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->**Global data area** saves global variables and static variables, constant strings
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->Read and write, lifecycle consistent with the program
+              - &shy;<!-- .element: class="fragment" data-fragment-index="5" -->**Heap area** dynamic memory allocation and storage area
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="6" -->Manual management, address from low to high, variable size, dynamically allocated at runtime, fragmentation problems may be relatively severe
+              - &shy;<!-- .element: class="fragment" data-fragment-index="7" -->**Stack area** stores local variables, function parameters, return addresses, and saves function call context (such as register status)
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="8" -->Automatic management, address from high to low, limited size, fast access
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 6.1 About the Heap
+
+              C language heap allocation and release
+
+              ```c [|4|8|8-12|14]
+              #include <stdlib.h>
+              #include <stdio.h>
+
+              int num = 10; // Data area
+
+              int main()
+              {
+                  int* arr = (int*)malloc(sizeof(int) * num); // Heap area application
+                  for (int i = 0; i < num; i++) {
+                      arr[i] = i; // arr and i are stack variables
+                      printf("%d\n", arr[i]);
+                  }
+
+                  free(arr); // Release
+                  return 0;
+              }
+              ```
+
+              <small>You can view the assembly code on <https://godbolt.org></https> to intuitively feel the underlying principles (it is best to clear the `Compiler options` option)</small>
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 30px" absolute="true">
+
+              ## 6.2 The Need for `new` and `delete`
+
+              `C++` contains many object data, and when applying for the heap, you also need to initialize the memory (constructor); when releasing memory, you need to call the destructor.
+
+              ```cpp [|]
+              class Point {
+              public:
+              	Point() { x = 1; y = 1; } // No parameter constructor
+              	void print() { cout << x << ", " << y; }
+              	void set(int x, int y) {
+              		this->x = x;
+              		this->y = y;
+              	}
+              	~Point() { // do something ... }
+              private:
+              	int x, y;
+              };
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 6.2 The Need for `new` and `delete`
+
+              The shortcomings of `malloc` and `free`.
+
+              ```cpp [|2-3|4-5|6]
+              int main() {
+              	// No constructor called
+              	Point* pd = (Point*)malloc(10 * sizeof(Point));
+              	for (int i = 0; i < 10; i++)
+              		pd[i].set(1, 1); // Need to initialize like this
+              	free(pd); // No destructor called
+              	return 0;
+              }
+              ```
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 6.3 Allocating Heap Objects
+
+              ```cpp [|2|3|4|5|7|8|]
+              int main() {
+              	Point* pd = new Point; // Allocate a single object
+              	Point* pds = new Point[10]; // Allocate an array
+              	pd->print(); // Already initialized, no need to set again
+              	pds[2].print();
+
+              	delete pd; // Release a single object
+              	delete[] pds; // Release multiple objects
+
+              	return 0;
+              }
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 6.3 Allocating Heap Objects
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" --> `new` and `delete` are `C++` operators, no need to introduce new header files
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Its functionality covers C language, can apply for basic data types
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Performance is the same as C language, automatic type matching, no need to convert
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 6.3 Allocating Heap Objects
+
+              You can pass constructor parameters when using `new`:
+
+              ```cpp [|3|12|13|14|]
+              class Point {
+              public:
+              	Point(int x, int y): x(x), y(y){}
+              	void print() { cout << x << ", " << y; }
+              	void set(int x, int y) {
+              		this->x = x;
+              		this->y = y;
+              	}
+              };
+
+              int main() {
+              	Point* p = new Point(3, 4);
+              	p->print();
+              	delete p; // cannot have parameters
+              	return 0;
+              }
+              ```
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 6.4 Copy Constructor
+
+              Common operations on objects:
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Creation (constructor)
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Comparison
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Assignment
+              - &shy;<!-- .element: class="fragment" data-fragment-index="4" -->Copy constructor
+              - &shy;<!-- .element: class="fragment" data-fragment-index="5" -->Destruction (destructor)
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 6.4 Copy Constructor
+
+              ### Beyond the Topic
+
+              In essence, not all objects support these operations, and there is no strict limitation in `C++` on which objects need to support which operations. After `C++ 20`, the concept of `concept` has been introduced to address this issue.
+
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 6.4 Copy Constructor
+
+              When a class does not customize these operations, the compiler will automatically add a default operation.
+
+              ```cpp
+              class Student {
+              public:
+              	Student(); // Default constructor
+              	Student(const Student& other); // Default copy constructor
+              	~Student(); // Default destructor
+              	Student& operator=(const Student& other); // Default assignment function
+              	bool operator==(const Student& other) const; // Default comparison function
+              };
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 6.4 Copy Constructor
+
+              We can customize copy constructors:
+
+              ```cpp [|7-10|11-16|17-19|28-30|31]
+              #include <iostream>
+
+              using namespace std;
+
+              class Student {
+              public:
+                Student(const string &name, int age)
+                  : name(name), age(age) {
+                  cout << "Constructing Student " << name << endl;
+                }
+                Student(const Student &other) {
+                  cout << "Constructing copy of Student "
+                       << other.name << endl;
+                  name = other.name;
+                  age = other.age;
+                }
+                ~Student() {
+                  cout << "Destructing Student " << name << endl;
+                }
+                void setName(const string &name) { this->name = name; }
+
+              private:
+                int age;
+                string name;
+              };
+
+              int main() {
+                Student s{"Eric", 12};
+                Student s2 = s;
+                Student s3{"Alice", 20};
+                s3 = s; // this will not call copy constructor
+                s2.setName("Bob");
+                return 0;
+              }
+
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 6.4 Copy Constructor
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->If the same class object's reference is used as a parameter, then this constructor is called a copy constructor.
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Features of the copy constructor
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->It is a constructor, which will be automatically called by the system when creating an object.
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->It takes an already created object as a parameter and assigns the data members of the object to the new object as needed.
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 6.4 Copy Constructor
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->If no copy constructor is defined, the compiler will generate a default copy constructor for the class.
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->The default copy constructor uses bitwise copying to complete the copying of objects to objects.
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec5" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 6.5 Shallow Copy vs. Deep Copy
+
+              Consider the following situation, what is the problem?
+
+              ```cpp [|25-27|7-10|11-14|15-16|17-22|30-37]
+              #include <iostream>
+
+              using namespace std;
+
+              class Array {
+              public:
+                explicit Array(int size) {
+                  this->size = size;
+                  arr = new int[size];
+                }
+                Array(const Array &other) {
+                  this->size = other.size;
+                  this->arr = other.arr;
+                }
+                void set(int i, int value) { arr[i] = value; }
+                int get(int i) const { return arr[i]; }
+                void print() {
+                  cout << "[";
+                  for (int i = 0; i < size - 1; i++)
+                    cout << arr[i] << ", ";
+                  (size>0 ? cout<<arr[size - 1] : cout) << "]" << endl;
+                }
+                ~Array() { delete[] arr; }
+
+              private:
+                int *arr;
+                int size;
+              };
+
+              int main() {
+                Array a{10};
+                Array b = a;
+                a.set(2, 100);
+                a.print();
+                b.print();
+                return 0;
+              }
+
+              ```
+              <!-- .element: data-id="shallow" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec5" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 6.5 Shallow Copy vs. Deep Copy
+
+              A change in one object also affects another object because they share the same memory space.
+
+              ```cpp [30-37|11-14]
+              #include <iostream>
+
+              using namespace std;
+
+              class Array {
+              public:
+                explicit Array(int size) {
+                  this->size = size;
+                  arr = new int[size];
+                }
+                Array(const Array &other) {
+                  this->size = other.size;
+                  this->arr = other.arr;
+                }
+                void set(int i, int value) { arr[i] = value; }
+                int get(int i) const { return arr[i]; }
+                void print() {
+                  cout << "[";
+                  for (int i = 0; i < size - 1; i++)
+                    cout << arr[i] << ", ";
+                  (size>0 ? cout<<arr[size - 1] : cout) << "]" << endl;
+                }
+                ~Array() { delete[] arr; }
+
+              private:
+                int *arr;
+                int size;
+              };
+
+              int main() {
+                Array a{10};
+                Array b = a;
+                a.set(2, 100);
+                a.print();
+                b.print();
+                return 0;
+              }
+
+              ```
+              <!-- .element: data-id="shallow" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec5" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 6.5 Shallow Copy vs. Deep Copy
+
+              How to modify?
+
+              ```cpp [11-14]
+              #include <iostream>
+
+              using namespace std;
+
+              class Array {
+              public:
+                explicit Array(int size) {
+                  this->size = size;
+                  arr = new int[size];
+                }
+                Array(const Array &other) {
+                  this->size = other.size;
+                  this->arr = other.arr;
+                }
+                void set(int i, int value) { arr[i] = value; }
+                int get(int i) const { return arr[i]; }
+                void print() {
+                  cout << "[";
+                  for (int i = 0; i < size - 1; i++)
+                    cout << arr[i] << ", ";
+                  (size>0 ? cout<<arr[size - 1] : cout) << "]" << endl;
+                }
+                ~Array() { delete[] arr; }
+
+              private:
+                int *arr;
+                int size;
+              };
+
+              int main() {
+                Array a{10};
+                Array b = a;
+                a.set(2, 100);
+                a.print();
+                b.print();
+                return 0;
+              }
+
+              ```
+              <!-- .element: data-id="shallow" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec5" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 6.5 Shallow Copy vs. Deep Copy
+
+              How to modify?
+
+              ```cpp [11-16]
+              #include <iostream>
+
+              using namespace std;
+
+              class Array {
+              public:
+                explicit Array(int size) {
+                  this->size = size;
+                  arr = new int[size];
+                }
+                Array(const Array &other) {
+                  this->size = other.size;
+                  this->arr = new int[this->size];
+                  for (int i = 0; i < this->size; i++)
+                  	this->arr[i] = other.arr[i];
+                }
+                void set(int i, int value) { arr[i] = value; }
+                int get(int i) const { return arr[i]; }
+                void print() {
+                  cout << "[";
+                  for (int i = 0; i < size - 1; i++)
+                    cout << arr[i] << ", ";
+                  (size>0 ? cout<<arr[size - 1] : cout) << "]" << endl;
+                }
+                ~Array() { delete[] arr; }
+
+              private:
+                int *arr;
+                int size;
+              };
+
+              int main() {
+                Array a{10};
+                Array b = a;
+                a.set(2, 100);
+                a.print();
+                b.print();
+                return 0;
+              }
+
+              ```
+              <!-- .element: data-id="shallow" -->
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec6" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 6.6 Temporary Objects
+
+              Consider following situation (`example/lec06/tempObject`)：
+
+              ```cpp[|5-16|18-23|26|27|28]
+              #include <iostream>
+
+              using namespace std;
+
+              class A {
+              public:
+                A(string id) : id(id) {
+                  cout << "Constructing A with id " << id << endl;
+                }
+                A(const A &other) : id(other.id) {
+                  cout << "Copy " << other.id << endl;
+                }
+
+              private:
+                string id;
+              };
+
+              A returnValueFunc(A a) {
+                A b = a;
+                // If there is no return value optimization,
+                // a copy will occur here
+                return b;
+              }
+
+              int main() {
+                A a("a1");
+                A b = a;
+                A c = returnValueFunc(b);
+                return 0;
+              }
+              ```
+              <!-- .element: data-id="tempobj" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec6" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 6.6 Temporary Objects
+
+              How many copies occurred?
+              <!-- .element: class="fragment" -->
+
+              ```cpp[28|18-23]
+              #include <iostream>
+
+              using namespace std;
+
+              class A {
+              public:
+                A(string id) : id(id) {
+                  cout << "Constructing A with id " << id << endl;
+                }
+                A(const A &other) : id(other.id) {
+                  cout << "Copy " << other.id << endl;
+                }
+
+              private:
+                string id;
+              };
+
+              A returnValueFunc(A a) {
+                A b = a;
+                // If there is no return value optimization,
+                // a copy will occur here
+                return b;
+              }
+
+              int main() {
+                A a("a1");
+                A b = a;
+                A c = returnValueFunc(b);
+                return 0;
+              }
+              ```
+              <!-- .element: data-id="tempobj" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec6" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 6.6 Temporary Objects
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->In `C++`, if function parameters are passed by value, a copy will occur
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->If function parameters are returned by value, it will be considered a temporary object and optimized
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->You can add the `-fno-elide-constructors` parameter to disable return value optimization
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec6" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 6.6 Temporary Objects
+
+              Consider the following situation:
+
+              ```cpp
+              A a = A("a");
+              ```
+
+              At this point, it seems like an **unnamed object** is created using `A("a")`, and then the copy constructor is called to initialize `a`. However, in reality, the constructor will still be called.
+              <!-- .element: class="fragment" -->
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec7" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 6.7 Constructors for Type Conversion
+
+              A constructor with only one parameter can perform type conversion
+
+              ```cpp [|1-5|7|9-10|7]
+              class Student {
+              	Student(const string& name) : name(name) {}
+              private:
+              	string name;
+              };
+
+              void f(Student stu) {...}
+
+              // can be called like this
+              f("Trump");
+              ```
+              <!-- .element: data-id="implicit" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec7" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 6.7 Constructors for Type Conversion
+
+              A constructor with only one parameter can perform type conversion
+
+              ```cpp [7]
+              class Student {
+              	Student(const string& name) : name(name) {}
+              private:
+              	string name;
+              };
+
+              void f(Student& stu) {...} // cannot do this
+
+              // can be called like this
+              f("Trump");
+              ```
+              <!-- .element: data-id="implicit" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec7" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 6.7 Constructors for Type Conversion
+
+              A constructor with only one parameter can perform type conversion
+
+              ```cpp [7]
+              class Student {
+              	Student(const string& name) : name(name) {}
+              private:
+              	string name;
+              };
+
+              void f(const Student& stu) {...} // this is ok
+
+              // can be called like this
+              f("Trump");
+              ```
+              <!-- .element: data-id="implicit" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec7" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 6.7 Constructors for Type Conversion
+
+              A constructor with only one parameter can perform type conversion
+
+              ```cpp [7]
+              class Student {
+              	Student(const string& name) : name(name) {}
+              private:
+              	string name;
+              };
+
+              void f(Student&& stu) {...} // this is also ok
+
+              // can be called like this
+              f("Trump");
+              ```
+              <!-- .element: data-id="implicit" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec7" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 6.7 Constructors for Type Conversion
+
+              Consider the following situation:
+              <!-- .element: class="fragment" -->
+
+              ```cpp [|1-5|7-11|13-14|17]
+              class A {
+              public:
+                int i;
+                A(int n) : i(n) {}
+              };
+
+              class B {
+              public:
+                int i;
+                B(int n) : i(n) {}
+              };
+
+              void f(A a) {}
+              void f(B b) {} // overload
+
+              int main() {
+                f(10); // compile error!
+                return 0;
+              }
+              ```
+              <!-- .element: class="fragment" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec7" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 6.7 Constructors for Type Conversion
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->This situation is usually not needed
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->And it's harmful (implicit type conversion should be avoided as much as possible, as it can easily cause ambiguity)
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Good programming style:
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->If the constructor has only one parameter
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="5" -->Then add the `explicit` keyword before the constructor
+              </div>
+            </script>
+          </section>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec8" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+
+            ## 6.8 Further Reading
+
+            - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->In fact, function passing values by copy is a performance issue. Modern `C++` introduced `std::move` to solve this problem.
+            - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Similarly, to solve this problem, the `Rust` language introduced the `Onwership` concept.
+            - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Reference materials:
+            	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->[lvalues and rvalues in C++ - Youtube](https://www.youtube.com/watch?v=fbYknr-HPYE)
+            	- &shy;<!-- .element: class="fragment" data-fragment-index="5" -->[Understanding Onwership - The Rust Programming Language](https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html)
+            </div>
+          </script>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="challenge"-->
+              <div class="" style="font-size: 35px; position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## Challenge
+
+              Implement your own `vector`
+
+              - Do not use generics, only for `int` type
+              - Initial memory size is 8
+              - If memory is insufficient, automatically expand memory (current memory quantity multiplied by 2)
+              - `capacity` returns memory size
+              - `size` returns the number of elements
+              - `int get(int index) const` and `std::optional<int> safe_get(int index) const`
+              - `bool set(int index, int value)`
+              - `std::string to_string() const`
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="challenge" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## Challenge
+
+              Implement your own `vector`
+
+              ### Advanced
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Copy constructor
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Copy constructor for right value reference
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Test these two constructors using `std::move`
+              - &shy;<!-- .element: class="fragment" data-fragment-index="4" -->Implement `push_back`: automatically expand memory when `capacity` is insufficient
+
+              </div>
+            </script>
+          </section>
+        </section>
+      </div>
+    </div>
+
+    <script src="../dist/reveal.js"></script>
+    <script src="../plugin/zoom/zoom.js"></script>
+    <script src="../plugin/notes/notes.js"></script>
+    <script src="../plugin/search/search.js"></script>
+    <script src="../plugin/markdown/markdown.js"></script>
+    <script src="../plugin/mermaid/mermaid.js"></script>
+    <script src="../plugin/math/math.js"></script>
+    <script src="../plugin/highlight/highlight.js"></script>
+    <script>
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        center: true,
+        hash: true,
+        slideNumber: true,
+        plugins: [
+          RevealZoom,
+          RevealNotes,
+          RevealSearch,
+          RevealMarkdown,
+          RevealHighlight,
+          RevealMermaid,
+          RevealMath.KaTeX,
+        ],
+      });
+    </script>
+  </body>
+</html>
