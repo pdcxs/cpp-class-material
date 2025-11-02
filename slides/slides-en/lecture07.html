@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+
+    <title>Object-Oriented Programming Technology Lesson 7</title>
+
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="../dist/reset.css" />
+    <link rel="stylesheet" href="../dist/reveal.css" />
+    <link rel="stylesheet" href="../dist/theme/white-contrast.css" id="theme" />
+    <link rel="stylesheet" href="../css/layout.css" id="theme" />
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="../plugin/highlight/monokai.css" />
+  </head>
+
+  <body>
+    <style>
+      .red {
+        color: red;
+      }
+    </style>
+    <div class="reveal">
+      <div class="slides">
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ## Static Members and Friends
+
+            Lecturer：<span class="red">**陈笑沙**</span>
+            </div>
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ## Table of Contents
+
+            - 7.1 Why do we need static members
+            - 7.2 How to use static members
+            - 7.3 Static member variables
+            - 7.4 Static member functions
+            - 7.5 Why do we need friends
+            - 7.6 How to use friends
+            </div>
+          </script>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 7.1 Why do we need static members
+
+              ### What are static members?
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->When a class member is declared with the keyword `static`, it becomes a static member.
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Static members are divided into:
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Static member variables
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->Static member functions
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 7.1 Why do we need static members
+
+              Static member variable definition and initialization
+
+              ```cpp [|3|6|]
+              class A {
+              public:
+              	static int property;
+              };
+
+              int A::property = 1;
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 7.1 Why do we need static members
+
+              Static member variable characteristics
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->All objects of the class share the static member variable, so regardless of how many objects of the class are created, there is only one copy of the static member variable.
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->The static member variable belongs to the class, not to a specific object.
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->The lifecycle of the static member variable is the same as that of a global variable.
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 7.1 Why do we need static members
+
+              Some attributes describe the commonality of all objects
+
+              ```cpp []
+              class EnemySlime {
+              	int maxHealth;
+              	float maxSpeed;
+              };
+              ```
+
+              But so far, the syntax only allows classes to describe object properties, not shared properties.
+              <!-- .element: class="fragment" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 7.1 Why do we need static members
+
+              Can we use global variables?
+              <!-- .element: class="fragment" -->
+
+              ```cpp []
+              int slimeMaxHealth;
+              float slimeMaxSpeed;
+              class Slime {...};
+              ```
+              <!-- .element: class="fragment" -->
+
+              - Easy to cause naming conflicts<!-- .element: class="fragment" -->
+              - Unable to control accessibility (code is visible anywhere)<!-- .element: class="fragment" -->
+              - Avoid using global variables (not a good coding style)<!-- .element: class="fragment" -->
+              </div>
+            </script>
+          </section>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-2" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ## 7.2 How to use static members
+
+            - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Static data members also have `public` and `private` attributes
+            	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Only `public` attribute static data members can be accessed outside the class
+            	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->All attribute static data members can be accessed inside the class
+            - &shy;<!-- .element: class="fragment" data-fragment-index="4" -->Static data members belong to the class
+            	- &shy;<!-- .element: class="fragment" data-fragment-index="5" -->Access method: `ClassName::StaticMember`
+            - &shy;<!-- .element: class="fragment" data-fragment-index="6" -->Class static data members can also be accessed when no objects exist
+            </div>
+          </script>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 7.3 Static member variables
+
+              ```cpp [|2-3|4-5|]
+              class Slime {
+              	static int maxHealth;
+              	static int maxSpeed;
+              	int health;
+              	int speed;
+              };
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 7.3 Static member variables
+
+              ```cpp [|3-5|7-13|9,11|]
+              class Slime {
+              public:
+              	void heal(int amount) {
+              		health = std::min(health + amount, maxHealth);
+              	}
+
+              	void acc(int amount) {
+              		speed += amount;
+              		if (speed > maxSpeed)
+              			speed = maxSpeed;
+              		else if (speed < -maxSpeed)
+              			speed = -maxSpeed;
+              	}
+              };
+              ```
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 7.4 Static member functions
+
+              Definition of static member functions:
+
+              ```cpp []
+              class A {
+                static void func() { ...}
+              };
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 7.4 Static member functions
+
+              Look at the following example:
+
+              ```cpp [|3|5|6-10|9|12-16]
+              class Vector2D {
+              private:
+              	double x, y;
+              public:
+              	Vector2D(x = 0.0, y = 0.0) : x(x), y(y) {}
+              	Vector2D& add(const Vector2D& other) {
+              		x += other.x;
+              		y += other.y;
+              		return *this; // why this?
+              	}
+
+              	std::string to_string() const {
+                      std::ostringstream oss;
+                      oss << "{" << x << ", " << y << "}";
+                      return oss.str();
+                  }
+              };
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 7.4 Static member functions
+
+              Returning itself can achieve chain calls:
+
+              ```cpp [|1|4-5|8|9|10|]
+              #include "vector2d.hpp"
+              #include <iostream>
+
+              using std::cout;
+              using std::endl;
+
+              int main(int argc, char **argv) {
+                Vector2D v;
+                v.add({1, 2}).add({3, 4});
+                cout << v.to_string() << endl;
+                return 0;
+              }
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 7.4 Static member functions
+
+              But does addition have to be performed on one vector to another?
+
+              ```cpp [|2|3-4]
+              class Vector2D {
+                static Vector2D add(const Vector2D& v1, const Vector2D& v2) {
+                  Vector2D v(v1.x + v2.x, v1.y + v2.y);
+                  return v;
+                }
+              };
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 7.4 Static member functions
+
+              But does addition have to be performed on one vector to another?
+
+              ```cpp [8-10|12-14]
+              #include "vector2d.hpp"
+              #include <iostream>
+
+              using std::cout;
+              using std::endl;
+
+              int main(int argc, char **argv) {
+                Vector2D v;
+                v.add({1, 2}).add({3, 4});
+                cout << v.to_string() << endl;
+
+                Vector2D v2{100, 200};
+                Vector2D v3 = Vector2D::add(v, v2);
+                cout << v3.to_string() << endl;
+                return 0;
+              }
+
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 7.4 Static member functions
+
+              Another example: `/example/lec07/itemManage`
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-5" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 7.5 Why do we need friends
+
+              Think about a question:
+
+              If there is a `List` class and a `Node` class, how to implement `list.append(Node&)`
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-5" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 7.5 Why do we need friends
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->`Node` class has `next` as a `private` member.
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->`List` class has `head` as a `private` member.
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->However, we need to modify `next` of `node` in `list`.
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-5" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 7.5 Why do we need friends
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->The purpose of encapsulation is to achieve information hiding.
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Private members of an object can only be accessed by its own members. When external objects or functions need to access the private members of a class, they can only do so indirectly through the public members provided by the class.
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->C++ provides a friend mechanism to break through the boundaries of privatization, meaning that a class's friend can access its private members.
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-6" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 7.6 How to use friends
+
+              Example: `/example/lec07/list`
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-6" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 7.6 How to use friends
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Friends have the following properties:
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Friends of a class can directly access all its members.
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Friend declarations must be placed inside the class, but it doesn't matter which segment they are in.
+              - &shy;<!-- .element: class="fragment" data-fragment-index="4" -->Friendship is not symmetric, meaning if X is a friend of Y, Y may not necessarily be a friend of X.
+              - &shy;<!-- .element: class="fragment" data-fragment-index="5" -->Friendship is not transitive, meaning if X is a friend of Y and Y is a friend of Z, X may not necessarily be a friend of Z.
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-6" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 7.6 How to use friends
+
+              Good code style: avoid using friends as much as possible!
+              </div>
+            </script>
+          </section>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" -->
+            <div class="" style="font-size: 30px; position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ## Exercises
+
+            - Implement the following methods for `Vector2D` in both **static** and **non-static** versions
+            	- `sub`
+            	- `dot`
+            	- `cross`
+            - Implement `Matrix2D` using `vector`, and implement the following methods:
+            	- `add`
+            	- `scale` (matrix and scalar multiplication)
+            	- `mult` (matrix and matrix multiplication)
+            - Implement the following methods for `vector`
+            	- Non-static member function: `applyTransform(const Matrix2D&)`
+            	- Static member function: `mult(const Matrix2D&, const Vector2D&)`
+            </div>
+          </script>
+        </section>
+      </div>
+    </div>
+
+    <script src="../dist/reveal.js"></script>
+    <script src="../plugin/zoom/zoom.js"></script>
+    <script src="../plugin/notes/notes.js"></script>
+    <script src="../plugin/search/search.js"></script>
+    <script src="../plugin/markdown/markdown.js"></script>
+    <script src="../plugin/mermaid/mermaid.js"></script>
+    <script src="../plugin/math/math.js"></script>
+    <script src="../plugin/highlight/highlight.js"></script>
+    <script>
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        center: true,
+        hash: true,
+        slideNumber: true,
+        plugins: [
+          RevealZoom,
+          RevealNotes,
+          RevealSearch,
+          RevealMarkdown,
+          RevealHighlight,
+          RevealMermaid,
+          RevealMath.KaTeX,
+        ],
+      });
+    </script>
+  </body>
+</html>
