@@ -1,0 +1,1083 @@
+<!doctype html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+
+    <title>Object-Oriented Programming Technology Lesson 8</title>
+
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="../dist/reset.css" />
+    <link rel="stylesheet" href="../dist/reveal.css" />
+    <link rel="stylesheet" href="../dist/theme/white-contrast.css" id="theme" />
+    <link rel="stylesheet" href="../css/layout.css" id="theme" />
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="../plugin/highlight/monokai.css" />
+  </head>
+
+  <body>
+    <style>
+      .red {
+        color: red;
+      }
+    </style>
+    <div class="reveal">
+      <div class="slides">
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ## Inheritance
+
+            Lecturer：<span class="red">**陈笑沙**</span>
+            </div>
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ## Review
+
+            Which of the following descriptions is incorrect?
+
+            - A. Non-static methods can call static methods and attributes
+            - B. Static methods can call other static methods and attributes
+            - C. Static methods can call non-static methods and attributes
+            - D. Non-static methods can call other non-static methods and attributes
+            </div>
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ## Table of Contents
+
+            - 8.1 Concept of Inheritance
+            - 8.2 How Inheritance Works
+            - 8.3 Inheritance vs Composition
+            - 8.4 How Multiple Inheritance Works
+            - 8.5 Ambiguity in Multiple Inheritance
+            - 8.6 Virtual Inheritance
+            - 8.7 Construction Orderin Multiple Inheritance
+            </div>
+          </script>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.1 Concept of Inheritance
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Classes describe the commonality of groups, creating different objects from classes realizes code reuse. However, this reuse is insufficient.
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->For example, the `Car` class has functions such as starting, braking, shifting gears, and changing direction. When the `Car` class needs to be extended to the `Transformer` class, adding the "transform" function, how to do it?
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.1 Concept of Inheritance
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Method one:
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Create a new class `Transformer`, paste the `Car` class code inside it.
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Add a new method `void transform(){...}`, and if the `Car` class adds a new feature: automatic parking `void stop()`, then we need to modify both the `Car` class and the `Transformer` class.
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.1 Concept of Inheritance
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Method two:
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->The `Transofomer` class "uses" the features of the `Car` class, so it doesn't need to copy and paste, and the `Transformer` class automatically has all the features of the `Car` class.
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->The better part is that whenever the `Car` class is modified, the `Transformer` class can apply this modification. This is called <span class="red">**inheritance and derivation**</span>.
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.1 Concept of Inheritance
+
+              #### Inheritance in Reality
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Cats and dogs are both mammals, possessing characteristics such as viviparity, lactation, and homeothermy, but also have their own unique traits.
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->This is an important property of "inheritance" relationships.
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->The two classes forming an inheritance relationship have an `IS_A` relationship.
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.1 Concept of Inheritance
+
+              #### Inheritance in Reality
+
+
+              <div class="mermaid">
+              classDiagram
+                Mammal <|-- Cat
+                Mammal <|-- Dog
+                Mammal: Viviparous
+                Mammal: void Lactation()
+                Mammal: Homeothermy
+
+                class Cat {
+                  Eating Fish
+                  void Meowing()
+                }
+
+                class Dog {
+                  Chewing Bones
+                  void Barking()
+                }
+
+              </div>
+
+              </div>
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.1 Concept of Inheritance
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Things are related to each other through classification and stratification
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Upper-level things have the commonality of lower-level things
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->For example
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->Sichuanese and Zhejiangese are classified as Chinese people
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="5" -->They have the common characteristics of yellow skin, black hair, and speaking Chinese
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.1 Concept of Inheritance
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Programming needs to handle layered things (data)
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->With upper-level data or objects, use inheritance to describe lower-level data and objects
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Both shared the upper-level data and code to get the benefits of code reuse, while maintaining the encapsulation of the class structure
+              - &shy;<!-- .element: class="fragment" data-fragment-index="4" -->So that the inherited entity can also be inherited as upper-level data and code
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.1 Concept of Inheritance
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" --><span class="red">**Inheritance**</span>
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Once the essential characteristics of a parent are specified, its children will automatically possess those qualities.
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->This is a naive and reusable concept.
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->Inheritance involves creating a new class based on an existing one.
+              - &shy;<!-- .element: class="fragment" data-fragment-index="5" --><span class="red">**Derivation**</span>
+                  - &shy;<!-- .element: class="fragment" data-fragment-index="6" -->Children can have characteristics that their parents don't have, which is an extensible concept.
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.1 Concept of Inheritance
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->The main features of the derived class are demonstrated through the following means
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Absorbing base class members
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Adding new members
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->Modifying base class members
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.1 Concept of Inheritance
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->From a coding perspective, derived classes gain significant flexibility from base classes at a relatively low cost
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Derived classes can extend, restrict, or modify inherited properties
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Once a reliable base class is established, only the modifications made in the derived class need to be debugged
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.2 How Inheritance Works
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Single inheritance: Derived class has only one direct base class
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Multiple inheritance: Derived class has multiple direct base classes
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.2 How Inheritance Works
+
+              #### Single Inheritance
+
+              <div class="mermaid">
+              classDiagram
+                A <|-- B
+                B <|-- C
+                A <|-- D
+                D <|-- E
+
+              </div>
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.2 How Inheritance Works
+
+              #### Multiple Inheritance
+
+              <div class="mermaid">
+              classDiagram
+                B <|-- C
+                A <|-- C
+                A <|-- D
+                B <|-- E
+                D <|-- E
+
+              </div>
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.2 How Inheritance Works
+
+              Define the syntax format for single inheritance derived class
+
+              ```cpp []
+              class DerivedClassName : <InheritanceMode> BaseClassName{
+                  ...//Derived class modifies base class members
+              };
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.2 How Inheritance Works
+
+              - Although all members of the base class are inherited, the derived class does not necessarily have access to all members of the base class. The inheritance mode affects the derived class's access to various members of the base class.
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.2 How Inheritance Works
+
+              | Inheritance Mode | Public Member | Protected Member | Private Member |
+              | :--: | :--: | :--: | :----: |
+              | Public Inheritance | Public Member | Protected Member | Inaccessible Member |
+              | Private Inheritance | Private Member | Private Member | Inaccessible Member |
+              | Protected Inheritance | Protected Member | Protected Member | Inaccessible Member |
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.2 How Inheritance Works
+
+              ```cpp [|2-6|8-12|14-18|]
+              class Base {
+              public:
+                  int publicVar = 1;
+                  void publicFunc() {
+                      cout << "Base::publicFunc()" << endl;
+                  }
+
+              protected:
+                  int protectedVar = 2;
+                  void protectedFunc() {
+                      cout << "Base::protectedFunc()" << endl;
+                  }
+
+              private:
+                  int privateVar = 3;
+                  void privateFunc() {
+                      cout << "Base::privateFunc()" << endl;
+                  }
+              };
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.2 How Inheritance Works
+
+              ```cpp [|1|3-8|5|6|7|]
+              class PublicDerived : public Base {
+              public:
+                  void accessBaseMembers() {
+                      cout << "PublicDerived access base class members:" << endl;
+                      publicFunc();          // ✔️ Accessible (public→public)
+                      protectedFunc();       // ✔️ Accessible (protected→protected)
+                      // privateFunc();  // ❌ Compilation error: base class private member inaccessible
+                  }
+              };
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.2 How Inheritance Works
+
+              ```cpp [|1|3-8|5|6|7|]
+              class ProtectedDerived : protected Base {
+              public:
+                  void accessBaseMembers() {
+                      cout << "ProtectedDerived access base class members:" << endl;
+                      publicFunc();          // ✔️ Accessible (public→protected)
+                      protectedFunc();       // ✔️ Accessible (protected→protected)
+                      // privateFunc();     // ❌ Compilation error: base class private member inaccessible
+                  }
+              };
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.2 How Inheritance Works
+
+              ```cpp [|1|3-8|5|6|7|]
+              class PrivateDerived : private Base {
+              public:
+                  void accessBaseMembers() {
+                      cout << "PrivateDerived access base class members:" << endl;
+                      publicFunc();          // ✔️ Accessible (public→private)
+                      protectedFunc();       // ✔️ Accessible (protected→private)
+                      // privateFunc();  // ❌ Compilation error: base class private member inaccessible
+                  }
+              };
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.2 How Inheritance Works
+
+              ```cpp [|2-7|9-13|15-19]
+              int main() {
+                  // Public inheritance object
+                  PublicDerived pubObj;
+                  // ✔️ External can access base class public members
+                  pubObj.publicFunc();
+                  // ❌ External cannot access base class protected members
+                  // pubObj.protectedFunc();
+
+                  // Protected inheritance object
+                  // ❌ External cannot access
+                  // base class public members become protected in derived class
+                  ProtectedDerived proObj;
+                  // proObj.publicFunc();
+
+                  // Private inheritance object
+                  PrivateDerived priObj;
+                  // ❌ External cannot access
+                  // base class public members become private in derived class
+                  // priObj.publicFunc();
+
+                  return 0;
+              }
+              ```
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.3 Inheritance vs Composition
+
+              ```cpp [|1-5|7-13|15-19|21-31]
+              // Inheritance example (is-a relationship)
+              class Vehicle {  // Base class
+              public:
+                  virtual void start() { cout << "Vehicle Starts" << endl; }
+              };
+
+              class Car : public Vehicle {  // Public inheritance
+              public:
+                  void start() override {  // Override base class method
+                      cout << "Car starting: Press the clutch pedal" << endl;
+                  }
+                  void drive() { cout << "Car in motion" << endl; }
+              };
+
+              // Composition example (has-a relationship)
+              class Engine {  // Independent component class
+              public:
+                  void startEngine() { cout << "Engine Starts" << endl; }
+              };
+
+              class ElectricCar {  // Composition class
+              private:
+                  Engine engine;    // Embedded Engine object
+                  Vehicle vehicle;  // Compose other class objects
+              public:
+                  void start() {
+                      engine.startEngine();  // Call component functionality
+                      vehicle.start();       // Reuse base class logic
+                      cout << "ElectricCar Starts Finished" << endl;
+                  }
+              };
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.3 Inheritance vs Composition
+
+              #### Inheritance vs Composition
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Both methods can reuse existing class functionality:
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Inheritance calls base class methods directly through the derived class (e.g., `Car` calls `Vehicle::start()`)
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Composition calls its interface by holding an object (e.g., `ElectricCar` calls `Engine::startEngine()`)
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 25px" absolute="true">
+
+              ## 8.3 Inheritance vs Composition
+
+              #### Inheritance vs Composition
+
+              | Feature        | Inheritance                          | Composition                      |
+              | ------------ | -------------------------- | ----------------------------- |
+              | **Relationship Type** | `is-a`                     | `has-a`                       |
+              | **Coupling**  | High coupling (subclasses depend on base class implementation details, base class modifications may affect subclasses) | Low coupling (only interact through interfaces, internal modifications to component classes do not affect composite classes)    |
+              | **Reuse Method** | White-box reuse (can override base class methods) | Black-box reuse (only use public interfaces of component classes) |
+              | **Dynamic**  | Determined at compile time, cannot switch base class at runtime | Can dynamically switch components at runtime (such as replacing different types of engines) |
+              | **Design Principle** | Violates the single responsibility principle (subclasses may inherit unrelated features) | Follows the single responsibility principle (each component is independently encapsulated) |
+              <!-- .element: style="font-size: 25px" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.3 Inheritance vs Composition
+
+              Good coding style
+
+              **Composition is better than inheritance!**
+              <!-- .element: style="color: red; font-size: 70px" class="fragment" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.3 Inheritance vs Composition
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->In the following scenarios, inheritance is prioritized:
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Need to extend base class functionality (e.g., `Car` overrides the `start()` method)
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Need polymorphic features (e.g., operate different derived class objects through base class pointers)
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.3 Inheritance vs Composition
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->In the following scenarios, inheritance is prioritized:
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Need to dynamically replace components (such as freely switching between fuel engines and electric engines)
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Avoid excessive hierarchical nesting (composition can replace complex multiple inheritance scenarios)
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.4 How Multiple Inheritance Works
+
+              - Multiple different parent classes derive the same child class
+              - Or a child class inherits multiple different parent classes
+              - According to the relationship between composition and inheritance, since classes can have multiple member objects, classes can also inherit multiple parent classes to have the characteristics of multiple parent classes
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.4 How Multiple Inheritance Works
+
+              Syntax:
+
+              ```cpp
+              class Derived : public Base1, protected Base2, private Base3, ... {
+               ...
+              };
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.4 How Multiple Inheritance Works
+
+              ```cpp [|4-10|12-18|20-28|30-31|33-35|37-38]
+              #include <iostream>
+              using namespace std;
+
+              // Base class 1: Flying ability
+              class Flyable {
+              public:
+                  void fly() {
+                      cout << "Using jet engine to fly" << endl;
+                  }
+              };
+
+              // Base class 2: Swimming ability
+              class Swimmable {
+              public:
+                  void swim() {
+                      cout << "Using propeller to navigate" << endl;
+                  }
+              };
+
+              // Derived class: Multiple inheritance of two base classes
+              class AmphibiousAircraft : public Flyable, public Swimmable {
+              public:
+                  void showMode() {
+                      cout << "=== Switch Mode ===" << endl;
+                      fly();  // Call the first base class method
+                      swim(); // Call the second base class method
+                  }
+              };
+
+              int main() {
+                  AmphibiousAircraft aa;
+
+                  // Directly access member functions of different base classes
+                  aa.fly();    // Output: Using jet engine to fly
+                  aa.swim();   // Output: Using propeller to navigate
+
+                  // Call the derived class's own method
+                  aa.showMode();
+
+                  return 0;
+              }
+              ```
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-5" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.5 Ambiguity in Multiple Inheritance
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Multiple inheritance must face the problem of parent class name conflicts
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->The member functions of the subclass from parent class A and parent class B may be completely identical in form
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Application programming must understand the details of multiple inheritance, which is contrary to the purpose of object-oriented programming
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-5" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.5 Ambiguity in Multiple Inheritance
+
+              ```cpp [|4-10|12-18|20-33|35-40|43-46|48-50]
+              #include <iostream>
+              using namespace std;
+
+              // Base class 1: Electronic device
+              class ElectronicDevice {
+              public:
+                  void powerOn() { // Same name member function
+                      cout << "Electronic device power on" << endl;
+                  }
+              };
+
+              // Base class 2: Mechanical device
+              class MechanicalDevice {
+              public:
+                  void powerOn() { // Same name member function
+                      cout << "Mechanical device power on" << endl;
+                  }
+              };
+
+              // Derived class: Smart robot (multiple inheritance)
+              class Robot : public ElectronicDevice, public MechanicalDevice {
+              public:
+                  void startup() {
+                      // Direct call will cause ambiguity
+                      // powerOn();  // ❌ Compilation error: 'powerOn' is ambiguous
+
+                      // Solution 1: Use scope qualifier
+                      ElectronicDevice::powerOn();  // Explicitly call the specified base class version
+                      MechanicalDevice::powerOn();
+
+                      // Solution 2: Redefine unified interface in derived class
+                      combinedPowerOn();
+                  }
+
+                  // Solution 2: Create unified interface
+                  void combinedPowerOn() {
+                      cout << "==== System startup ====" << endl;
+                      ElectronicDevice::powerOn();
+                      MechanicalDevice::powerOn();
+                  }
+              };
+
+              int main() {
+                  // Basic multiple inheritance conflict resolution
+                  Robot bot;
+                  bot.startup();
+
+                  // Need to explicitly specify scope when calling externally
+                  bot.ElectronicDevice::powerOn();
+                  bot.MechanicalDevice::powerOn();
+
+                  return 0;
+              }
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-5" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.5 Ambiguity in Multiple Inheritance
+
+              #### Diamond Inheritance Problem
+
+
+              <div class="mermaid">
+              classDiagram
+                A <|-- B
+                A <|-- C
+                B <|-- D
+                C <|-- D
+
+              </div>
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-5" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.5 Ambiguity in Multiple Inheritance
+
+              ```cpp [|4-9|11-15|17-21|23-27|30|32-34|36-38|40-44]
+              #include <iostream>
+              using namespace std;
+
+              // Public base class
+              class Animal {
+              public:
+                  int age;
+                  void eat() { cout << "Animal eating" << endl; }
+              };
+
+              // First Inheritance Path
+              class Mammal : public Animal {
+              public:
+                  void breathe() { cout << "Mammal breathing" << endl; }
+              };
+
+              // Second Inheritance Path
+              class Bird : public Animal {
+              public:
+                  void fly() { cout << "Bird flying" << endl; }
+              };
+
+              // Derived class of diamond inheritance
+              class Platypus : public Mammal, public Bird {
+              public:
+                  void layEggs() { cout << "Platypus laying eggs" << endl; }
+              };
+
+              int main() {
+                  Platypus perry;
+
+                  // Ambiguous access
+                  // perry.age = 2; // ❌ Compilation error: ambiguous access of 'age'
+                  // perry.eat(); // ❌ Compilation error: ambiguous access of 'eat'
+
+                  // Explicit path specification can solve the problem
+                  perry.Mammal::age = 2;  // ✅ Explicitly use the age of the Mammal path
+                  perry.Bird::eat();      // ✅ Explicitly use the eat of the Bird path
+
+                  // Verify the existence of two base class copies
+                  cout << "Mammal's age: " << perry.Mammal::age << endl;
+                  perry.Mammal::age = 3;
+                  // Output different values
+                  cout << "Bird's age: " << perry.Bird::age << endl;
+
+                  return 0;
+              }
+              ```
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-6" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.6 Virtual Inheritance
+
+              **Core problem of diamond inheritance**：
+
+              - The derived class contains two copies of the `Animal` member
+              - The compiler cannot determine which copy to use when directly accessing common base class members
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-6" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.6 Virtual Inheritance
+
+              ```cpp [|1-3|5-11|13-18]
+              // Change inheritance to virtual inheritance
+              class Mammal : virtual public Animal {};  // Virtual inheritance
+              class Bird : virtual public Animal {};     // Virtual inheritance
+
+              class Platypus : public Mammal, public Bird {
+              public:
+                  void layEggs() {
+                      age = 2;         // ✅ Can directly access (unique copy)
+                      eat();           // ✅ No ambiguity
+                  }
+              };
+
+              int main() {
+                  Platypus perry;
+                  perry.age = 5;       // ✅ Normal access
+                  cout << perry.age;   // Output 5 (unique value)
+                  return 0;
+              }
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-6" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.6 Virtual Inheritance
+
+              ```cpp [|1-3|5-7|9-11]
+              class A {};
+              class B1 : public A {};
+              class B2 : public A {};
+
+              class C1 : public B1, public B2 {
+                // B1 is real base, B2 is fake base.
+              }
+
+              class C2 : public B2, public B1 {
+                // B2 is real base, B1 is fake base.
+              }
+              ```
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-7" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.7 Construction Orderin Multiple Inheritance
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->First complete the construction of virtual inheritance
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Otherwise follow inheritance rules
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Construct non-virtual base classes first
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->Then construct member objects
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="5" -->Finally construct the derived class's own data
+              - &shy;<!-- .element: class="fragment" data-fragment-index="6" -->If there are multiple virtual base classes in the same layer, the construction of virtual base classes is called in the order they are declared
+              - &shy;<!-- .element: class="fragment" data-fragment-index="7" -->The order of destruction is the opposite
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-7" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.7 Construction Orderin Multiple Inheritance
+
+              ```cpp [|4-9|11-16|18-23|25-32|34-41|43-48|50-59|61-71]
+              #include <iostream>
+              using namespace std;
+
+              // Base class
+              class Base {
+              public:
+                  Base() { cout << "Base constructor" << endl; }
+                  ~Base() { cout << "Base destructor" << endl; }
+              };
+
+              // Ordinary inheritance of intermediate class 1
+              class Derived1 : public Base {
+              public:
+                  Derived1() { cout << "Derived1 constructor" << endl; }
+                  ~Derived1() { cout << "Derived1 destructor" << endl; }
+              };
+
+              // Ordinary inheritance of intermediate class 2
+              class Derived2 : public Base {
+              public:
+                  Derived2() { cout << "Derived2 constructor" << endl; }
+                  ~Derived2() { cout << "Derived2 destructor" << endl; }
+              };
+
+              // Virtual inheritance of intermediate class 1
+              class VirtualDerived1 : virtual public Base {
+              public:
+                  VirtualDerived1() { cout << "VirtualDerived1 constructor" << endl; }
+                  ~VirtualDerived1() {
+                  	cout << "VirtualDerived1 destructor" << endl;
+                  }
+              };
+
+              // Virtual inheritance of intermediate class 2
+              class VirtualDerived2 : virtual public Base {
+              public:
+                  VirtualDerived2() { cout << "VirtualDerived2 constructor" << endl; }
+                  ~VirtualDerived2() {
+                  	cout << "VirtualDerived2 destructor" << endl;
+                  }
+              };
+
+              // Ordinary diamond inheritance of final derived class
+              class Diamond : public Derived1, public Derived2 {
+              public:
+                  Diamond() { cout << "Diamond constructor" << endl; }
+                  ~Diamond() { cout << "Diamond destructor" << endl; }
+              };
+
+              // Final derived class using virtual inheritance
+              class VirtualDiamond : public VirtualDerived1, public VirtualDerived2 {
+              public:
+                  VirtualDiamond() : Base() {  // Explicitly call virtual base class constructor
+                      cout << "VirtualDiamond constructor" << endl;
+                  }
+                  ~VirtualDiamond() {
+                  	cout << "VirtualDiamond destructor" << endl;
+                  }
+              };
+
+              int main() {
+                  cout << "========== Ordinary diamond inheritance ==========\n";
+                  Diamond d;
+
+                  cout << "\n========== Virtual inheritance diamond inheritance ==========\n";
+                  VirtualDiamond vd;
+
+                  cout << "\n========== Destructor call ==========\n";
+
+                  return 0;
+              }
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-7" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 8.7 Construction Orderin Multiple Inheritance
+
+              Output content
+
+              ```txt [|1-6|8-12|14-23]
+              ========== Ordinary diamond inheritance ==========
+              Base constructor
+              Derived1 constructor
+              Base constructor
+              Derived2 constructor
+              Diamond constructor
+
+              ========== Virtual inheritance diamond inheritance ==========
+              Base constructor
+              VirtualDerived1 constructor
+              VirtualDerived2 constructor
+              VirtualDiamond constructor
+
+              ========== Destructor call ==========
+              VirtualDiamond destructor
+              VirtualDerived2 destructor
+              VirtualDerived1 destructor
+              Base destructor
+              Diamond destructor
+              Derived2 destructor
+              Base destructor
+              Derived1 destructor
+              Base destructor
+              ```
+              </div>
+            </script>
+          </section>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ## Additional Reading
+
+            Modern GUI programming frameworks have largely abandoned inheritance, opting instead for composition, functional approaches, and more.
+
+            Reference materials:
+
+            - Reactive (`JavaScript` frontend framework)
+            - ftxui (`C++` modern TUI framework)
+            </div>
+          </script>
+        </section>
+      </div>
+    </div>
+
+    <script src="../dist/reveal.js"></script>
+    <script src="../plugin/zoom/zoom.js"></script>
+    <script src="../plugin/notes/notes.js"></script>
+    <script src="../plugin/search/search.js"></script>
+    <script src="../plugin/markdown/markdown.js"></script>
+    <script src="../plugin/mermaid/mermaid.js"></script>
+    <script src="../plugin/math/math.js"></script>
+    <script src="../plugin/highlight/highlight.js"></script>
+    <script>
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        center: true,
+        hash: true,
+        slideNumber: true,
+        plugins: [
+          RevealZoom,
+          RevealNotes,
+          RevealSearch,
+          RevealMarkdown,
+          RevealHighlight,
+          RevealMermaid,
+          RevealMath.KaTeX,
+        ],
+      });
+    </script>
+  </body>
+</html>
