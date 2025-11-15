@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+
+    <title>Object-Oriented Programming Technology Lesson 9</title>
+
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="../dist/reset.css" />
+    <link rel="stylesheet" href="../dist/reveal.css" />
+    <link rel="stylesheet" href="../dist/theme/white-contrast.css" id="theme" />
+    <link rel="stylesheet" href="../css/layout.css" id="theme" />
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="../plugin/highlight/monokai.css" />
+  </head>
+
+  <body>
+    <style>
+      .red {
+        color: red;
+      }
+    </style>
+    <div class="reveal">
+      <div class="slides">
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ## Polymorphism
+
+            Lecturer：<span class="red">**陈笑沙**</span>
+            </div>
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ## Table of Contents
+
+            - 9.1 Polymorphism
+            - 9.2 How Polymorphism Works
+            - 9.3 Improper Virtual Functions
+            - 9.4 Restrictions on Virtual Functions
+            - 9.5 Abstract Classes and Pure Virtual Functions
+            </div>
+          </script>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 9.1 Polymorphism
+
+              The basic meaning of polymorphism:
+
+              **The same content, in different contexts, expresses different meanings.**
+              <!-- .element: class="fragment" -->
+
+              ```cpp
+              int b = 0;
+              Object b = Object();
+              // Equal sign handles different types of data
+              // Can be considered a form of polymorphism
+              ```
+              <!-- .element: class="fragment" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 9.1 Polymorphism
+
+              ```cpp []
+              int max(int a, int b) {
+                return a > b ? a : b;
+              }
+
+              int max(int a, int b, int c) {
+                return max(max(a, b), c);
+              }
+
+              int x = max(3, 6);
+              int y = max(3, 6, 9);
+              ```
+
+              The same `max`, with different actual execution content, can also be considered a naive form of polymorphism.
+              <!-- .element: class="fragment" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 9.1 Polymorphism
+
+              ```cpp
+              Base *b1 = new Derived1();
+              Base *b2 = new Derived2();
+              b1->print();
+              b2->print();
+              ```
+
+              **Narrowly speaking, polymorphism in object-oriented programming design, the same pointer, different execution effects.**
+              <!-- .element: class="fragment" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 35px" absolute="true">
+
+              ## 9.1 Polymorphism
+
+              ### Assignment Compatibility Rules
+
+              - In public inheritance, derived class objects can be used as base class objects in the following ways:
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Derived class objects can be directly assigned to base class objects
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Base class object references can reference a derived class object
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Base class object pointers can point to a derived class object
+              - &shy;<!-- .element: class="fragment" data-fragment-index="4" -->This rule can be simply understood as: All dogs are animals. But not all animals are dogs — all child class objects are base class objects.
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 9.1 Polymorphism
+
+              ```cpp [|6-11|13-18|20-24]
+              #include <iostream>
+
+              using std::cout;
+              using std::endl;
+
+              class Animal {
+              public:
+                void bark() const {
+                  cout << "Some animal is barking!" << endl;
+                }
+              };
+
+              class Dog : public Animal {
+              public:
+                void bark() const {
+                  cout << "Wang wang!" << endl;
+                }
+              };
+
+              int main(int argc, char** argv) {
+                Animal *animal = new Dog();
+                animal->bark();
+                return 0;
+              }
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 9.1 Polymorphism
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Through base class references or pointers, what you can see is a base class object
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Members of the derived class are "invisible" to base class references or pointers
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->We can use the virtual function mechanism of `C++` to declare the relevant functions of the base class as virtual functions
+              - &shy;<!-- .element: class="fragment" data-fragment-index="4" -->This allows you to access the relevant functions in the derived class through base class references or pointers.
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 9.1 Polymorphism
+
+              - Different objects in the class hierarchy can exhibit different behaviors for the same operation
+              - Once the class hierarchy is included in unified processing, the polymorphic behavior in the class hierarchy cannot be demonstrated
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 35px" absolute="true">
+
+              ## 9.1 Polymorphism
+
+              - Overloading ordinary member functions in two ways:
+              	- Overloading within the same class: Overloaded functions are distinguished by parameter characteristics.
+              	- Derived classes overload member functions of the base class.
+              - Since overloaded functions are in different classes, their prototypes can be completely identical. When calling, use the "ClassName::FunctionName" method to distinguish.
+              - The matching of the above two overloads is statically completed at compile time.
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 9.1 Polymorphism
+
+              - Overloading is a simple form of polymorphism.
+              - C++ provides another more flexible polymorphic mechanism: virtual functions.
+              - Virtual functions allow the matching of function calls and function bodies to be determined at runtime.
+              - Virtual functions provide a dynamic binding mechanism.
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 9.2 How Polymorphism Works
+
+              ### Virtual Functions
+
+              - Member functions declared with the virtual keyword in the base class are called virtual functions.
+              - Virtual functions can be redefined in one or more derived classes, but the prototype of the virtual function (including return value type, function name, and parameter list) must be exactly the same when redefined. Otherwise, the function will lose its virtual nature.
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 9.2 How Polymorphism Works
+
+              ### Virtual Functions
+
+              - Declare functions as virtual functions using virtual in the base class.
+              - Overload the virtual function consistently in the public derived class.
+              - Define a base class reference or pointer to refer to or point to a derived class object.
+              - When calling a virtual function through this reference or pointer, the function will exhibit its virtual nature.
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 9.2 How Polymorphism Works
+
+              ### Virtual Functions
+
+              In C++, the base class must indicate which functions it expects derived classes to redefine. Functions declared as virtual are those that the base class expects derived classes to redefine, while functions that the base class expects derived classes to inherit should not be declared as virtual.
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 9.2 How Polymorphism Works
+
+              Example project:
+
+              `/example/lec09/particle`
+              </div>
+            </script>
+          </section>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec3" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ## 9.3 Improper Virtual Functions
+
+            Improper Virtual Functions
+
+            ```cpp [|3-8|9-16|18-29|30-37]
+            #include <iostream>
+            using namespace std;
+            class Base {
+            public:
+              virtual void fn(int x) {
+                cout << "In Base class, int x = " << x << endl;
+              } // Base class virtual function
+            };
+            class SubClass : public Base {
+            public:
+              // Subclass virtual function,
+              // not a virtual function passed to the subclass
+              virtual void fn(float x) {
+                cout << "In SubClass, float x = " << x << endl;
+              }
+            };
+
+            // When b refers to a base class object,
+            // fn is a base class function,
+            // and since there is no virtual function passed
+            // to the subclass, polymorphism is not displayed
+            void test(Base &b) {
+              // When b refers to a subclass object,
+              // all visible functions are base class functions
+              b.fn(2);
+              // When b refers to a base class object,
+              // all visible functions are base class functions
+              b.fn(2.2f);
+            }
+            int main() {
+              cout << "Calling test(bc)\n";
+              Base b;
+              test(b); // Passing a base class object
+              cout << "Calling test(sc)\n";
+              SubClass sc;
+              test(sc); // Passing a subclass object
+            }
+
+            ```
+            </div>
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec4" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 30px" absolute="true">
+
+            ## 9.4 Restrictions on Virtual Functions
+
+            If the return type is the class itself, the subclass can return a subclass entity, and the virtual function continues to pass to the subclass
+
+            ```cpp [|3-9|10-16|17-21|22-27]
+            #include <iostream>
+            using namespace std;
+            class Base {
+            public:
+              virtual Base *afn() {
+                cout << "This is Base class.\n";
+                return this;
+              }
+            };
+            class SubClass : public Base {
+            public:
+              SubClass *afn() {
+                cout << "This is SubClass.\n";
+                return this;
+              }
+            };
+            void test(Base &x) {
+              Base *b = x.afn();
+              cout << "Return value calling:" << endl;
+              b->afn();
+            }
+            int main() {
+              Base b;
+              test(b); // 传递基类对象
+              SubClass sc;
+              test(sc); // 传递子类对象
+            }
+            ```
+            </div>
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec5" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 35px" absolute="true">
+
+            ## 9.5 Abstract Classes and Pure Virtual Functions
+
+            - Only member functions can be declared as virtual functions
+            - Virtual functions cannot be declared as global functions
+            - Virtual functions cannot be declared as friend functions
+            - Static member functions cannot be virtual functions
+            - Inline functions cannot be virtual functions
+            - Constructors cannot be virtual functions (destructors are usually virtual functions)
+            </div>
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec5" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 35px" absolute="true">
+
+            ## 9.5 Abstract Classes and Pure Virtual Functions
+
+            - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->The base class represents an abstract concept, providing some common interfaces representing the common operations that objects of this class have.
+            - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->These common interfaces in the base class only need to be declared without implementation, i.e., pure virtual functions.
+            - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Pure virtual functions outline the protocols that derived classes should follow, with the specific implementations determined by the derived classes.
+            </div>
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec5" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 35px" absolute="true">
+
+            ## 9.5 Abstract Classes and Pure Virtual Functions
+
+            - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->If a class contains pure virtual functions (possibly more than one), then the class is an abstract class
+            - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->If a class is an abstract class, it must contain pure virtual functions
+            - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Abstract classes cannot create objects
+            - &shy;<!-- .element: class="fragment" data-fragment-index="4" -->If the subclass of an abstract class has all its virtual functions defined (i.e., no longer has pure virtual functions), it becomes a concrete class
+            </div>
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec5" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ## 9.5 Abstract Classes and Pure Virtual Functions
+
+            Example: Change `Shape` in the `particle` project to an abstract class.
+            </div>
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+                                    <!-- .slide: class="drop" -->
+                                    <div class="" style="font-size: 30px; position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+                                    ## Homework
+
+                                    - Create a `Shape` class, which only includes `double getArea()` and `double getPerimeter()` pure virtual functions.
+                                    - Create three sub-classes of `Shape`: `Rectangle`, `Circle` and `Triangle`.
+                                    - Implement `getArea` and `getPerimeter` for these sub classes.
+                                    - Create a `std::vector` that contains `Shape` objects.
+                                    - Put some subclasses into that vector (should include all shape types).
+                                    - Print the area and perimeter of each shape in that vector.
+
+
+                                    <div class="footnotes" role="doc-endnotes">
+                                    <ol>
+                                    <li id="fn:math" role="doc-endnote" class="footnote"><p>
+                        If a triangle's side lengths are $a, b, c$, then its area is: $\sqrt{p(p-a)(p-b)(p-c)}$, where $p=(a+b+c)/2$
+                                    </p></li>
+                                    <li id="fn:submit" role="doc-endnote" class="footnote"><p>
+            Submit your homework in website: https://pdcxs.github.io/homework
+                                    </p></li></ol>
+                      </ol>
+
+                                    </div>
+          </script>
+        </section>
+      </div>
+    </div>
+
+    <script src="../dist/reveal.js"></script>
+    <script src="../plugin/zoom/zoom.js"></script>
+    <script src="../plugin/notes/notes.js"></script>
+    <script src="../plugin/search/search.js"></script>
+    <script src="../plugin/markdown/markdown.js"></script>
+    <script src="../plugin/mermaid/mermaid.js"></script>
+    <script src="../plugin/math/math.js"></script>
+    <script src="../plugin/highlight/highlight.js"></script>
+    <script>
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        center: true,
+        hash: true,
+        slideNumber: true,
+        plugins: [
+          RevealZoom,
+          RevealNotes,
+          RevealSearch,
+          RevealMarkdown,
+          RevealHighlight,
+          RevealMermaid,
+          RevealMath.KaTeX,
+        ],
+      });
+    </script>
+  </body>
+</html>
