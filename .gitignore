@@ -2,3 +2,5 @@
 **/.vscode/
 **/*.exe
 **/.cache/
+
+.DS_Store
