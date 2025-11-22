@@ -1,0 +1,621 @@
+<!doctype html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+
+    <title>Object-Oriented Programming Technology Lesson 10</title>
+
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="../dist/reset.css" />
+    <link rel="stylesheet" href="../dist/reveal.css" />
+    <link rel="stylesheet" href="../dist/theme/white-contrast.css" id="theme" />
+    <link rel="stylesheet" href="../css/layout.css" id="theme" />
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="../plugin/highlight/monokai.css" />
+  </head>
+
+  <body>
+    <style>
+      .red {
+        color: red;
+      }
+    </style>
+    <div class="reveal">
+      <div class="slides">
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ## Operator Overloading
+
+            Lecturer：<span class="red">**陈笑沙**</span>
+            </div>
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ## Table of Contents
+
+            - 10.1 Necessity of Operators
+            - 10.2 How to Overload Operators
+            - 10.3 Return Value vs. Return Reference
+            - 10.4 Overloading Increment Operators
+            - 10.5 Conversion Operators
+            - 10.6 Assignment Operators
+            </div>
+          </script>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 10.1 Necessity of Operators
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->In `C++`, we not only need to use basic data types, but also to design new data types—class types.
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->In general, operations on basic data types are expressed using operators, which are intuitive and have simple semantics.
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->`a = b + c`
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->Internal data types all have predefined operators (operands)
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 10.1 Necessity of Operators
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->`C++` can define custom data types and their operations through member functions.
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Matrix `a + b` implementation calls `a.add(b)`.
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Alternatively, `Matrix::add(a, b)`.
+              - &shy;<!-- .element: class="fragment" data-fragment-index="4" -->`C++` allows defining operators within custom classes.
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="5" -->Define the `+` operator for matrices.
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 10.1 Necessity of Operators
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->If the operator is directly applied to a class type, what happens?
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->`Complex ret, c1,c2; ret=c1+c2;`
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->The compiler will not recognize the semantics of the operator.
+              - &shy;<!-- .element: class="fragment" data-fragment-index="4" -->A mechanism is needed to redefine the meaning of the operator acting on class types.
+              - &shy;<!-- .element: class="fragment" data-fragment-index="5" -->This mechanism is operator overloading.
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 10.2 How to Overload Operators
+
+              ```cpp [|26-28|4-12|14-24|30-36]
+              #include <sstream>
+              #include <iostream>
+
+              class Complex {
+              public:
+                Complex(double r = 0.0, double i = 0.0) : re(r), im(i) {}
+                static Complex add(const Complex &c1, const Complex &c2) {
+                  Complex r;
+                  r.re = c1.re + c2.re;
+                  r.im = c1.im + c2.im;
+                  return r;
+                }
+
+                std::string to_string() const {
+                  std::ostringstream oss;
+                  oss << re << " + ";
+                  if (im != 0) {
+                    if (im != 1) {
+                      oss << im;
+                    }
+                    oss << "i";
+                  }
+                  return oss.str();
+                }
+
+              private:
+                double re, im;
+              };
+
+              int main() {
+                Complex c1{1, 2};
+                Complex c2{3, 4};
+                auto c3 = Complex::add(c1, c2);
+                std::cout << c3.to_string() << std::endl;
+                return 0;
+              }
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 10.2 How to Overload Operators
+
+              Example Interpretation: `example/lec10/complex`
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 10.2 How to Overload Operators
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Actually, you can also:
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Declare `Complex operator+(Complex& c1, Complex &c2)` as a class member function.
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->`c2 = c1 + 27` is equivalent to `c2 = c1.operator+(Complex{27})`
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->At this point, `c2 = 27 + c1` will result in an error
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 10.2 How to Overload Operators
+
+              You can also use friends:
+
+              ```cpp []
+              class  Complex{
+                double re, im;
+                friend Complex operator+(const Complex& c1, const Complex& c2);
+              };
+              ```
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 10.3 Return Value vs. Return Reference
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->If you want to output a complex number object, what should you do?
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->`cout << c.to_string() << endl`
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Can we directly `cout << c << endl`?
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 10.3 Return Value vs. Return Reference
+
+              ```cpp [|6-16|10,12|18-20|22-34|36-43]
+              #include <iostream>
+              #include <ostream>
+
+              using namespace std;
+
+              class Complex {
+              public:
+                Complex(double r = 0.0, double i = 0.0) : re(r), im(i) {}
+
+                friend Complex operator+(const Complex &c1, const Complex &c2);
+
+                friend ostream &operator<<(ostream &out, const Complex &c);
+
+              private:
+                double re, im;
+              };
+
+              Complex operator+(const Complex &c1, const Complex &c2) {
+                return {c1.re + c2.re, c1.im + c2.im};
+              }
+
+              ostream &operator<<(ostream &out, const Complex &c) {
+                if (c.re != 0)
+                  out << c.re;
+                if (c.im != 0) {
+                  if (c.re != 0)
+                    out << " + ";
+                  if (c.im != 1) {
+                    out << c.im;
+                  }
+                  out << "i";
+                }
+                return out;
+              }
+
+              int main(int argc, char **argv) {
+                cout << Complex{1, 2} + Complex{-1, 2} << endl;
+                cout << Complex{1, 0} << endl;
+                cout << Complex{1, 1} << endl;
+                cout << Complex{0, 1} << endl;
+                cout << Complex{0, 4} << endl;
+                return 0;
+              }
+
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 10.3 Return Value vs. Return Reference
+
+              Thinking: Why does `std::ostream` need to return a reference? Why can't the function parameter be `const`?
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 10.4 Overloading Increment Operators
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Class objects need to implement self-increment, self-decrement operations, and also need to perform operator overloading.
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->How to distinguish between prefix and postfix?
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->What are the function prototypes for self-increment and self-decrement?
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 25pt" absolute="true">
+
+              ## 10.4 Overloading Increment Operators
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Increment operators include prefix increment, postfix increment, prefix decrement, and postfix decrement
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->`int a=3;`
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->`a++;  //postfix increment`
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->`++a;  //prefix increment`
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="5" -->`--a;  //prefix decrement`
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="6" -->`a--;  //postfix decrement`
+              - &shy;<!-- .element: class="fragment" data-fragment-index="7" -->Applying prefix increment results in a left-value expression
+              - &shy;<!-- .element: class="fragment" data-fragment-index="8" -->Applying postfix increment results in a right-value expression
+              - &shy;<!-- .element: class="fragment" data-fragment-index="9" -->Overloading prefix++ and postfix++, both have only one operand, hence corresponding to one parameter.
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 10.4 Overloading Increment Operators
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Operators are all `operator++`
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Overload prefix++ to return reference, overload postfix++ to return value
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->C++ distinguishes between prefix++ and postfix++ overloads by adding an integer parameter for postfix++
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->`T &operator++(T& a); // prefix++`
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="5" -->`T operator++(T& a, int); // postfix++`
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 10.4 Overloading Increment Operators
+
+
+              ```cpp [|4-8|9-12|14-20|22|25-35]
+              #include <iostream>
+              using namespace std;
+
+              class Increase {
+                int value;
+
+              public:
+                Increase(int x) : value(x) {}
+                Increase &operator++() { // Prefix increment (no parameters)
+                  value++;               // Increment first
+                  return *this;          // Return the original object
+                }
+
+                Increase operator++(int) {
+                  // Post-increment (only one marker parameter int)
+                  Increase temp(value);
+                  // Construct a temporary object to store the original object value
+                  value++;     // Change the original object value
+                  return temp; // Return the original object value
+                }
+
+                void display() { cout << "the value is " << value << endl; }
+              };
+
+              int main() {
+                Increase n(20);
+                n.display();
+
+                (n++++).display();
+                n.display();
+
+                ++(++n);
+                n.display();
+                return 0;
+              }
+
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 30px" absolute="true">
+
+              ## 10.4 Overloading Increment Operators
+
+              ### The Use of the `this` Pointer
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->The `this` pointer of an object is not part of the object itself and does not affect the result of `sizeof(object)`.
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->The scope of `this` is within the class. When accessing non-static members of the class in non-static member functions, the compiler automatically passes the address of the object itself as an implicit parameter to the function.
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->In other words, even if you don't write the `this` pointer, the compiler adds it during compilation. It serves as an implicit formal parameter for non-static member functions and accesses all members through `this`.
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 30px" absolute="true">
+
+              ## 10.4 Overloading Increment Operators
+
+              ### The Use of the `this` Pointer
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->One case is when returning a class object itself in a non-static member function of the class, using `return *this;` directly
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Another case is when the parameter name is the same as the member variable name, such as `this->n = n`
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 30px" absolute="true">
+
+              ## 10.4 Overloading Increment Operators
+
+              ### General Function Form
+
+              ```cpp [|3-10|12-15|17-21]
+              #include<iostream>
+              using namespace std;
+              class Increase{
+                int value;
+              public:
+                Increase(int x) : value(x) {}
+                friend Increase &operator++(Increase& a);
+                friend Increase operator++(Increase &a, int);
+                void display() { cout<< "the value is " << value << endl; }
+              };
+
+              Increase& operator++(Increase& a){ 
+                a.value++;
+                return a;
+              }
+
+              Increase operator++(Increase& a, int){
+                Increase temp(a);
+                a.value++;
+                return temp;
+              }
+              ```
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec5" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 10.5 Conversion Operators
+
+              ```cpp [|4-13|15-19|21-25|27-33]
+              #include<iostream>
+              using namespace std;
+
+              class RMB {
+                unsigned int yuan, jf;  // yuan jiao fen
+              public:
+                RMB(double d=0) : yuan(d) , jf(int(d*100+0.5)%100){}
+
+                RMB(int y, int f):yuan(y), jf(f) {}
+                friend RMB operator+(const RMB&, const RMB&); 
+                friend RMB& operator++(RMB&);
+                void display(){ cout<<(yuan + jf / 100.0)<<endl; }
+              };
+
+              RMB operator+(const RMB& s1, const RMB& s2){
+                unsigned int x = s1.jf + s2.jf;
+                unsigned int yuan = s1.yuan + s2.yuan + x/100;
+                return RMB(yuan, x % 100);
+              }
+
+              RMB& operator++(RMB& s){
+                s.yuan += ++s.jf/100;
+                s.jf %= 100;
+                return s;
+              }
+
+              int main(){
+                //Convert floating point number to RMB object
+                // (floating point type to RMB class)
+                RMB w(12.567);
+                ++w;
+                w.display();
+              }
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec5" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 10.5 Conversion Operators
+
+              ```cpp [|1-12|7-9|14-22]
+              class RMB{
+                unsigned int yuan, jf;  // yuan jiao fen
+              public:
+                RMB(double value = 0.0) : yuan(value) {
+                  jf = (value - yuan) * 100 + 0.5;
+                }
+                operator double(){  //conversion operator converts to
+                  return yuan + jf/100.0;
+                }
+
+                void display(){ cout<<(yuan + jf/100.0)<<endl; }
+              };
+
+              int main(){
+                RMB d1(2.0), d2(1.5), d3; //constructor converts to RMB
+                // (explicit) convert to floating point number for + operation
+                d3 = RMB((double)d1 + (double)d2);
+                // (implicit) d1 and d2 do not overload +, 
+                // but have conversion operator to convert to floating point number
+                d3 = d1 + d2;
+                d3.display();
+              }
+              ```
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec6" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 10.6 Assignment Operators
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Classes always have a default assignment operator, which usually does not need to be overloaded
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->When class objects are copied with deep copy properties, you need to customize:
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->`ClassName(const ClassName &other)`
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->`ClassName& operator=(const ClassName &other)`
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="5" -->Constructor
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="6" -->Destructor
+              - &shy;<!-- .element: class="fragment" data-fragment-index="7" -->The first parameter of the assignment operator is usually an object, so it is always designed as a member function
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec6" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 10.6 Assignment Operators
+
+              Question: How many default functions does `class A{};` have?
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->`A()` Default constructor
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->`A(const A&)` Copy constructor
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->`~A()` Destructor
+              - &shy;<!-- .element: class="fragment" data-fragment-index="4" -->`A& operator=(const A&)` Copy assignment operator
+              - &shy;<!-- .element: class="fragment" data-fragment-index="5" -->`A* operator&()` Address-of operator
+              - &shy;<!-- .element: class="fragment" data-fragment-index="6" -->`const A* operator&()` Const address-of operator
+              - &shy;<!-- .element: class="fragment" data-fragment-index="7" -->`A(A&&)` Move constructor
+              - &shy;<!-- .element: class="fragment" data-fragment-index="8" -->`A& operator=(A&&)` Move assignment operator
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec6" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 10.6 Assignment Operators
+
+              Example: `example/lec10/myvector`
+
+              Example: `example/lec10/smart_ptr`
+              </div>
+            </script>
+          </section>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ## Summary
+
+            - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Operators can be overloaded as member functions or as ordinary functions
+            - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->After operator overloading, associativity, precedence, etc. remain unchanged
+            - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Most operations can be overloaded, but a few operators cannot be overloaded
+            - &shy;<!-- .element: class="fragment" data-fragment-index="4" -->Inexistent operators cannot be overloaded
+            - &shy;<!-- .element: class="fragment" data-fragment-index="5" -->Good programming style: try not to overload operators unless they are conventional.
+            </div>
+          </script>
+        </section>
+      </div>
+    </div>
+
+    <script src="../dist/reveal.js"></script>
+    <script src="../plugin/zoom/zoom.js"></script>
+    <script src="../plugin/notes/notes.js"></script>
+    <script src="../plugin/search/search.js"></script>
+    <script src="../plugin/markdown/markdown.js"></script>
+    <script src="../plugin/mermaid/mermaid.js"></script>
+    <script src="../plugin/math/math.js"></script>
+    <script src="../plugin/highlight/highlight.js"></script>
+    <script>
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        center: true,
+        hash: true,
+        slideNumber: true,
+        plugins: [
+          RevealZoom,
+          RevealNotes,
+          RevealSearch,
+          RevealMarkdown,
+          RevealHighlight,
+          RevealMermaid,
+          RevealMath.KaTeX,
+        ],
+      });
+    </script>
+  </body>
+</html>
