@@ -10,5 +10,8 @@ int main() {
   (c3 += c1) += c2;
   c3.add(c1).add(c2);
   std::cout << c3.to_string() << std::endl;
+
+  std::cout << c3 << std::endl;
+  std::cout << Complex{100, 100} << std::endl;
   return 0;
 }

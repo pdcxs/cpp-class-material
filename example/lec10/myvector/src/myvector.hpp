@@ -1,7 +1,6 @@
 #ifndef __MY_VECTOR_H__
 #define __MY_VECTOR_H__
 
-#include <cstdlib>
 #include <sstream>
 #include <string>
 
@@ -15,7 +14,7 @@ public:
   Vector() {
     capacity = 8;
     size = 0;
-    content = new Elem[size];
+    content = new Elem[capacity];
   }
 
   Vector(const Vector &other) { copy(other); }
@@ -79,7 +78,7 @@ private:
     size = other.size;
     capacity = size;
     delete[] content;
-    content = new Elem[size];
+    content = new Elem[capacity];
     for (int i = 0; i < size; i++) {
       content[i] = other.content[i];
     }
@@ -105,7 +104,7 @@ private:
     for (int i = 0; i < size; i++) {
       newContent[i] = content[i];
     }
-    delete content;
+    delete[] content;
     content = newContent;
   }
 };
