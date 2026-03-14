@@ -14,17 +14,18 @@ class JosephusRing {
   Node *cur;
   Node *prev;
   int stepSize;
+  int count;
 
 public:
   JosephusRing(int n, int k) {
+    stepSize = k;
+    count = n;
     if (n == 1) {
       cur = new Node{1, nullptr};
       cur->next = cur;
       prev = cur;
-      stepSize = k;
       return;
     }
-    stepSize = k;
     cur = new Node{1, nullptr};
     Node *next = cur;
     for (int i = 2; i <= n; i++) {
@@ -41,11 +42,12 @@ public:
     }
   }
 
-  bool isLast() { return cur->next == cur; }
-
   int step() {
-    if (isLast()) {
-      return cur->id;
+    if (count == 1) {
+      int r = cur->id;
+      delete cur;
+      count--;
+      return r;
     }
     for (int i = 1; i < stepSize; i++) {
       prev = cur;
@@ -54,21 +56,22 @@ public:
     int r = cur->id;
     prev->next = cur->next;
     delete cur;
+    count--;
     cur = prev->next;
     return r;
   }
 
   int current() { return cur->id; }
 
+  int size() { return count; }
+
   ~JosephusRing() {
-    while (true) {
-      Node *n = cur->next;
-      if (n == cur) {
-        delete cur;
-        break;
-      }
+    while (count > 0) {
+      Node *tmp = cur->next;
+      // cout << "Delete node " << cur->id << "\n";
       delete cur;
-      cur = n;
+      cur = cur->next;
+      count--;
     }
   }
 };
@@ -90,14 +93,12 @@ int main() {
     is >> n >> k;
 
     JosephusRing ring{n, k};
-    while (true) {
-      if (ring.isLast()) {
-        cout << ring.current() << endl;
-        break;
-      }
+    while (ring.size() > 0) {
       cout << ring.step();
-      cout << ", ";
+      if (ring.size() > 0)
+        cout << ", ";
     }
+    cout << "\n";
   }
   return 0;
 }
