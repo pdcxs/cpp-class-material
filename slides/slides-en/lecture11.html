@@ -1,0 +1,686 @@
+<!doctype html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+
+    <title>Object-Oriented Programming Technology Lesson 11</title>
+
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="../dist/reset.css" />
+    <link rel="stylesheet" href="../dist/reveal.css" />
+    <link rel="stylesheet" href="../dist/theme/white-contrast.css" id="theme" />
+    <link rel="stylesheet" href="../css/layout.css" id="theme" />
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="../plugin/highlight/monokai.css" />
+  </head>
+
+  <body>
+    <style>
+      .red {
+        color: red;
+      }
+    </style>
+    <div class="reveal">
+      <div class="slides">
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ## const Keyword and Templates
+
+            Lecturer：<span class="red">**陈笑沙**</span>
+            </div>
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            <!-- .slide: class="drop" -->
+            <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+            ## Table of Contents
+
+            - 11.1 const Keyword
+            - 11.2 const and Class
+            - 11.3 Why Do We Need Templates?
+            - 11.4 How to Define Templates?
+            - 11.5 Iterators
+            </div>
+          </script>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.1 const Keyword
+
+              The `const` keyword indicates that a variable, function, or parameter is immutable.
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.1 const Keyword
+
+              ```cpp [|1-4|6-9]
+              std::vector<int> vec{1, 2, 3};
+              const std::vector<int> c_vec{7, 8};
+              std::vector<int>& ref = vec;
+              const std::vector<int>& c_ref = vec;
+
+              vec.push_back(3);
+              c_vec.push_back(3);
+              ref.push_back(3);
+              c_ref.push_back(3);
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.1 const Keyword
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->If a method in a class is marked as `const`
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->If this method is marked as `const`, it can be used in `const` variables, references, and pointers.
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->For example:
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->For the method `void f() const`, it can only be called by constant objects
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="5" -->For the method `void f()`, constant objects cannot call it
+              - &shy;<!-- .element: class="fragment" data-fragment-index="6" -->Member functions (methods) can be distinguished by constant and non-constant
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.1 const Keyword
+
+              ```cpp [|3-8|9-14|15-20]
+              class vector {
+              ...
+                iterator begin() {
+                  return iterator(data);
+                }
+                iterator end() {
+                  return iterator(data + m_size);
+                }
+                const_iterator begin() const {
+                  return const_iterator(data);
+                }
+                const_iterator end() const {
+                  return const_iterator(data + m_size);
+                }
+                const_iterator cbegin() const {
+                  return const_iterator(data);
+                }
+                const_iterator cend() const {
+                  return const_iterator(data + m_size);
+                }
+              ...
+              };
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.1 const Keyword
+
+              ### Benefits of Using `const`
+
+              ```cpp []
+              void f(int x, int y) {
+                if ((x == 2 && y == 3) || (x == 1))
+                  cout << 'a' << endl;
+                if (y = -1) // in most time, this is not we want
+                  cout << 'b' << endl;
+                if ((x == 3) && (y == 2 * x))
+                  cout << 'c' << endl;
+              }
+              ```
+              <!-- .element: data-id="const" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-1" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.1 const Keyword
+
+              ### Benefits of Using `const`
+
+              ```cpp []
+              void f(const int x, const int y) {
+                if ((x == 2 && y == 3) || (x == 1))
+                  cout << 'a' << endl;
+                if (y = -1) // compile error!
+                  cout << 'b' << endl;
+                if ((x == 3) && (y == 2 * x))
+                  cout << 'c' << endl;
+              }
+              ```
+              <!-- .element: data-id="const" -->
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.2 const and Class
+
+              ```cpp []
+              class Student {
+              public:
+                std::string getName();
+                void setName(const std::string& name);
+                int getAge();
+                void setAge(int age);
+              private:
+                std::string name;
+                int age;
+              };
+              ```
+              <!-- .element: class="fragment" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.2 const and Class
+
+              ```cpp []
+              std::ostream& operator<<(std::ostream& out, const Student& stu) {
+                out << stu.getName << ": " << stu.getAge() << endl;
+              }
+              ```
+
+              <span class="fragment" style="color: red; font-weight: bold;">Compilation Error!</span>
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.2 const and Class
+
+
+              ```cpp []
+              std::ostream& operator<<(std::ostream& out, const Student& stu) {
+                out << stu.getName << ": " << stu.getAge() << endl;
+              }
+              ```
+
+              The compiler does not know that the `getName()` and `getAge()` methods do not change the `Student`
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.2 const and Class
+
+              ```cpp []
+              class Student {
+              public:
+                std::string getName() const;
+                void setName(const std::string& name);
+                int getAge() const;
+                void setAge(int age);
+              private:
+                std::string name;
+                int age;
+              };
+              ```
+              <!-- .element: class="fragment" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-2" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.2 const and Class
+
+              Also add `const` when implementing related member functions
+
+              ```cpp []
+              std::string Student::getName() const {
+                return name;
+              }
+              void Student::setName(const std::string& name) {
+                this->name = name;
+              }
+              ```
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.3 Why Do We Need Templates?
+
+              ```cpp []
+              class IntVector {
+              private:
+                int* ptr;
+                unsigned int size;
+              public:
+                ...
+              };
+              ```
+              <!-- .element: class="fragment" -->
+
+              Need to create different container classes for different element types.
+              <!-- .element: class="fragment" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.3 Why Do We Need Templates?
+
+              ```cpp []
+              class Vector {
+              using T = int;
+              private:
+                T* ptr;
+                unsigned int size;
+              public:
+                ...
+              };
+              ```
+
+              Each time the content is changed, you need to modify the code inside `Vector`.
+              <!-- .element: class="fragment" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.3 Why Do We Need Templates?
+
+              ```cpp []
+              #define VECTOR_DEFINE(T) \
+              typedef T##Vector { \
+              private:\
+                  T* data; \
+                  size_t size; \
+                  size_t capacity; \
+                  ...\
+              }; \
+              ```
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Easy to make mistakes
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Programming tools will not provide syntax checking
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-3" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.3 Why Do We Need Templates?
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->For basic data types, it is possible to traverse by creating `IntVector` `DoubleVector`, etc.
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->However, if you want to store user-defined classes, it is impossible to enumerate all cases.
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->A tool is needed that allows users to customize the element type of the container class.
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.4 How to Define Templates?
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" --><span style="color: red; font-weight: bold">Template classes</span> are a class definition pattern centered on **type parameterization**.
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->By replacing **some** specific types (such as `int`, `string`, etc.) in the class with placeholder type parameters (such as `T`), you can support multiple data types with the same code without modifying the class logic.
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->The compiler will instantiate specific classes based on the actual type during compilation.
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.4 How to Define Templates?
+
+              ```cpp []
+              class MyPair {
+              public:
+                int getFirst() const;
+                int getSecond() const;
+
+                void setFirst(int f);
+                void setSecond(int s);
+
+              private:
+                int first;
+                int second;
+              };
+              ```
+              <!-- .element: data-id="mypair" -->
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.4 How to Define Templates?
+
+              ```cpp []
+              template<typename First, typename Second>
+              class MyPair {
+              public:
+                First getFirst() const;
+                Second getSecond() const;
+
+                void setFirst(First f);
+                void setSecond(Second s);
+
+              private:
+                First first;
+                Second second;
+              };
+              ```
+              <!-- .element: data-id="mypair" -->
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->`First` and `Second` are generic types, which can be any type!
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.4 How to Define Templates?
+
+              - `typename` can also be written as `class`
+              - In most cases, they are equivalent
+              - It is more recommended to use `typename`, as it has clearer semantics
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.4 How to Define Templates?
+
+              - Besides classes, there are also template functions
+
+              ```cpp [|4-9|11-14|17-21|23-27|30-32]
+              #include <iostream>
+              using namespace std;
+
+              template <typename T>
+              void swapValues(T &a, T &b) {
+                T temp = a;
+                a = b;
+                b = temp;
+              }
+
+              template <typename T>
+              void print(const string &prompt, const T &a, const T &b) {
+                cout << prompt << ": " << a << ", " << b << endl;
+              }
+
+              int main() {
+                int x = 10, y = 20;
+                print("before swap", x, y);
+                swapValues(x, y);
+                print("after swap", x, y);
+                cout << endl;
+
+                double a = 3.14, b = 2.718;
+                print("before swap", a, b);
+                swapValues(a, b);
+                print("after swap", a, b);
+                cout << endl;
+
+                string s1 = "Hello", s2 = "World";
+                print("before swap", s1, s2);
+                swapValues(s1, s2);
+                print("after swap", s1, s2);
+
+                return 0;
+              }
+
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.4 How to Define Templates?
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->The compiler needs to generate corresponding classes of different types based on the template definition and compile them.
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Therefore, do not put the definition of the template class in the source file.
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Instead, it needs to be placed in the header file together with the declaration of the template class.
+              - &shy;<!-- .element: class="fragment" data-fragment-index="4" -->The same applies to template functions.
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.4 How to Define Templates?
+
+              - Template is a very complex branch of `C++` programming. Before confirming familiarity, try not to implement complex template libraries on your own.
+              - Try compiling the following code:
+
+              ```cpp []
+              #include <algorithm>
+              #include <vector>
+
+              int main() {
+                int a;
+                std::vector<std::vector<int>> v;
+                std::vector<std::vector<int>>::const_iterator it =
+                    std::find(v.begin(), v.end(), a);
+                return 0;
+              }
+              ```
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-4" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.4 How to Define Templates?
+
+              - Templates have many more contents:
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Even a Turing-complete language
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->The content is too complex, and this course does not discuss it in depth
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->For in-depth learning, you can refer to: [Cpp Templates 2nd](https://github.com/Walton1128/CPP-Templates-2nd--)
+              - &shy;<!-- .element: class="fragment" data-fragment-index="4" -->Recommended reading: Advanced Programming in C++20 (Luo Neng, Mechanical Industry Press)
+              - &shy;<!-- .element: class="fragment" data-fragment-index="5" -->Before fully mastering templates, it is not recommended to **overuse** them
+              </div>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-5" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.5 Iterators
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->If you want to add `foreach` syntax support to our custom containers:
+              - &shy;<!-- .element: class="fragment" data-fragment-index="2" -->That is: `for(auto& elem : myContainer)`
+              - &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Then you need to implement **iterators**
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-5" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center;" absolute="true">
+
+              ## 11.5 Iterators
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->The purpose of iterators:
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Unified traversal method, change the container type without changing the traversal code.
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Eliminate index checking, avoid out-of-bounds errors.
+              - &shy;<!-- .element: class="fragment" data-fragment-index="4" -->Uniform interface of iterators:
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="5" -->Container: `begin()`, `end()`
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="6" -->Iterator: `++`, `*`, `!=`
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="7" -->Iterator type: `value_type`, `difference_type`, `pointer`, `reference`
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="8" -->Iterator category: `iterator_category`
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-5" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 25pt;" absolute="true">
+
+              ## 11.5 Iterators
+
+              - &shy;<!-- .element: class="fragment" data-fragment-index="1" -->`iterator_category` includes:
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->`std::input_iterator`: exclusive to `istream`
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->`std::output_iterator`: exclusive to `ostream`
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="4" -->`std::forward_iterator`
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="5" -->`std::bidirectional_iterator`
+              	- &shy;<!-- .element: class="fragment" data-fragment-index="6" -->`std::random_access_iterator`
+              - &shy;<!-- .element: class="fragment" data-fragment-index="7" -->All related definitions are in the `<iterator>` header file
+              - &shy;<!-- .element: class="fragment" data-fragment-index="8" -->Since `C++` does not support interfaces, the compiler does not provide compile-time syntax checking. The correctness is guaranteed by the programmer.
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-5" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.5 Iterators
+
+              `/example/lec11/vector`
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-5" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.5 Iterators
+
+              | Iterator Type         | Can it be incremented/decremented? | Can it change the content it points to? |
+              | -------------------- | --------------------------------- | ---------------------------------------- |
+              | iterator             | Yes                               | Yes                                     |
+              | const_iterator       | Yes                               | No                                      |
+              | const iterator       | No                                | Yes                                     |
+              | const const_iterator | No                                | No                                      |
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              <!-- .slide: class="drop" data-auto-animate data-auto-animate-id="sec-5" -->
+              <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+              ## 11.5 Iterators
+
+              | Iterator Type         | Comparison with Pointer Type          |
+              | -------------------- | ---------------- |
+              | iterator             | int*             |
+              | const_iterator       | const int*       |
+              | const iterator       | int const*       |
+              | const const_iterator | const int const* |
+              </div>
+            </script>
+          </section>
+        </section>
+      </div>
+    </div>
+
+    <script src="../dist/reveal.js"></script>
+    <script src="../plugin/zoom/zoom.js"></script>
+    <script src="../plugin/notes/notes.js"></script>
+    <script src="../plugin/search/search.js"></script>
+    <script src="../plugin/markdown/markdown.js"></script>
+    <script src="../plugin/mermaid/mermaid.js"></script>
+    <script src="../plugin/math/math.js"></script>
+    <script src="../plugin/highlight/highlight.js"></script>
+    <script>
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        center: true,
+        hash: true,
+        slideNumber: true,
+        plugins: [
+          RevealZoom,
+          RevealNotes,
+          RevealSearch,
+          RevealMarkdown,
+          RevealHighlight,
+          RevealMermaid,
+          RevealMath.KaTeX,
+        ],
+      });
+    </script>
+  </body>
+</html>
