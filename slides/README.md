@@ -26,6 +26,8 @@ npm start
 
 然后在浏览器中打开 http://localhost:8000/ 即可浏览所有课件。
 
+如果发现无法运行，可以尝试删除本目录下的 `node_modules` 文件夹以及 `package-lock.json` 文件，并重新运行 `npm install` 和 `npm start`。
+
 # Object-Oriented Programming Course Slides
 
 These course slides are built using the Reveal.js framework. There are two ways to run them:
@@ -51,5 +53,7 @@ npm start
 ```
 
 Then open http://localhost:8000/ in your browser to view all the slides.
+
+If you find `npm start` cannot be runned correctly, you can try to delete `node_modules` folder in current directory and the `package-lock.json` file, then try to re-run `npm install` and `npm start`.
 
 Note: All slide content will be exported as PDF files to the `pdf/en` folder in the current directory for easy review.
